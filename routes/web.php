@@ -37,3 +37,6 @@ Route::get('/profile', function () {
 Route::get('/task', function () {
     return view('student.task');
 });
+Route::get('/profile', function () {
+    return view('profile');
+});
