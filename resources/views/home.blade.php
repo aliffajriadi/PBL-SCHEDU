@@ -21,10 +21,138 @@
             transition: background-color 0.3s ease;
         }
 
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOutLeft {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+        }
+
+        .slide-down {
+            animation: slideDown 0.5s ease-in-out;
+        }
+
+        .fade-in-right {
+            animation: fadeInRight 2s ease-out forwards;
+        }
+
+        .fade-out-right {
+            animation: fadeOutRight 1.5s ease-out forwards;
+        }
+
+        .fade-in-left {
+            animation: fadeInLeft 1.5s ease-out forwards;
+        }
+
+        .fade-out-left {
+            animation: fadeOutLeft 0.5s ease-out forwards;
+        }
+
+
         .navbar-white {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        details[open] .animate-smooth {
+            animation: slideDown 0.3s ease-in-out;
+        }
+
+        details .animate-smooth {
+            display: block;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        details[open] .animate-smooth {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Menghilangkan marker default dan menambahkan gaya kustom */
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after {
+            content: '\25BC';
+            /* Simbol panah ke bawah */
+            float: right;
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+            /* Panah berputar saat dibuka */
         }
     </style>
 </head>
@@ -35,14 +163,13 @@
         <div class="mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
-                <div class="flex text-2xl sm:text-4xl">
+                <div class="flex text-2xl fade-in-left sm:text-4xl">
                     <a href="#" class="w-full h-auto rounded-lg hover:opacity-80 items-center">
                         <img src="image/image4.png" alt="SchedU Logo" class="w-32 h-auto items-center" />
                     </a>
                 </div>
 
                 <!-- Mobile menu button -->
-                <!-- Tombol Mobile Menu -->
                 <div class="md:hidden">
                     <button id="menu-button" onclick="toggleMenu()"
                         class="text-black hover:text-green-500 focus:outline-none" aria-label="Toggle menu">
@@ -101,22 +228,22 @@
     <!-- Hero section -->
     <main id="home"
         class="flex flex-col items-center md:items-start justify-center h-screen p-8 md:p-16 text-center md:text-left pt-12">
-        <h1 class="text-5xl sm:text-6xl lg:text-6xl font-bold text-black">
+        <h1 class="text-5xl sm:text-6xl slide-down lg:text-6xl font-bold text-black">
             Your Daily <span class="text-green-500">Plans</span>,<br />
             All In <span class="text-yellow-300">One</span> Place
         </h1>
-        <h2 class="text-lg font-semibold sm:text-2xl mt-4 text-green-500">
+        <h2 class="text-lg fade-in-right font-semibold sm:text-2xl mt-4 text-green-500">
             Manage your tasks, events, and notes without the clutter.
         </h2>
         <a href="#"
-            class="mt-6 inline-block bg-green-500 text-white px-6 py-2 rounded-[20px] hover:bg-green-600 transition duration-300">Get
+            class="mt-6 inline-block fade-in-left bg-green-500 text-white px-6 py-2 rounded-[20px] hover:bg-green-600 transition duration-300">Get
             Started</a>
     </main>
 
     <!-- About section -->
     <section id="about"
-        class="bg-white py-24 px-8 md:p-32 flex flex-col lg:flex-row items-center gap-16 min-h-screen">
-        <div class="flex-1 text-left">
+        class="bg-white fade-in-left py-24 px-8 md:p-32 flex flex-col lg:flex-row items-center gap-16 min-h-screen">
+        <div class="flex-1 fade-in-left text-left">
             <h1 class="text-3xl md:text-5xl font-bold text-green-500 mb-6">
                 About Us
             </h1>
@@ -124,12 +251,12 @@
                 <img src="./image/image2.jpg" alt="SchedU Dashboard"
                     class="w-full max-w-md object-contain rounded-lg" />
             </div>
-            <p class="text-lg md:text-2xl text-black">
+            <p class="text-lg md:text-xl text-black">
                 Selamat datang di SchedU, platform yang dirancang khusus untuk
                 membantu mahasiswa dalam mengelola jadwal perkuliahan, tugas, dan
                 kolaborasi akademik secara efektif.
             </p>
-            <p class="text-lg md:text-2xl text-black mt-4">
+            <p class="text-lg md:text-xl text-black mt-4">
                 Kami memahami betapa pentingnya manajemen waktu dalam kehidupan
                 perkuliahan, itulah sebabnya kami menyediakan fitur pengingat otomatis
                 untuk jadwal kuliah, deadline tugas, serta sistem kolaborasi yang
@@ -137,57 +264,69 @@
             </p>
         </div>
         <div class="flex-1 flex justify-center hidden md:block">
-            <img src="./image/image2.jpg" alt="SchedU Dashboard" class="w-full max-w-md object-contain rounded-lg" />
+            <img src="./image/image2.jpg" alt="SchedU Dashboard" class="w-full max-w-md object-contain rounded-lg">
         </div>
     </section>
 
     <!-- Features section -->
     <section id="features"
         class="relative bg-green-600 min-h-screen p-8 md:p-16 lg:p-32 flex flex-col justify-center items-center gap-6">
-        <div class="text-center w-full mb-12">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Features</h1>
+        <div class="text-center w-full mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-white tracking-wide">Features</h1>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-            <div class="bg-white shadow-lg rounded-2xl py-4 p-6 hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-bold text-green-500">Task</h2>
-                <p class="text-black mt-2">
-                    Task is a specific job or work that needs to be completed, usually
-                    with a goal, steps, and a deadline.
+        <div class="w-full max-w-4xl space-y-4">
+            <!-- Task Dropdown -->
+            <details class="bg-white shadow-lg rounded-2xl hover:shadow-xl transition duration-300">
+                <summary class="text-2xl font-bold text-green-500 py-4 px-6 cursor-pointer outline-none">
+                    Task
+                </summary>
+                <p class="text-black text-base px-6 pb-4 animate-smooth">
+                    Task is a specific job or work that needs to be completed, usually with a goal, steps, and a
+                    deadline.
                 </p>
-            </div>
-            <div class="bg-white shadow-lg rounded-2xl py-4 p-6 hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-bold text-green-500">Notes</h2>
-                <p class="text-black mt-2">
-                    Notes are short writings or records that contain important
-                    information, summaries, or ideas to help remember or understand
-                    something.
+            </details>
+
+            <!-- Notes Dropdown -->
+            <details class="bg-white shadow-lg rounded-2xl hover:shadow-xl transition duration-300">
+                <summary class="text-2xl font-bold text-green-500 py-4 px-6 cursor-pointer outline-none">
+                    Notes
+                </summary>
+                <p class="text-black text-base px-6 pb-4 animate-smooth">
+                    Notes are short writings or records that contain important information, summaries, or ideas to help
+                    remember or understand something.
                 </p>
-            </div>
-        </div>
-        <div class="flex justify-center w-full max-w-sm">
-            <div class="bg-white shadow-lg rounded-2xl py-4 p-6 w-full hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-bold text-green-500">Notification</h2>
-                <p class="text-black mt-2">
-                    Notification is a notice or message that informs the user about
-                    specific information or events.
+            </details>
+
+            <!-- Notification Dropdown -->
+            <details class="bg-white shadow-lg rounded-2xl hover:shadow-xl transition duration-300">
+                <summary class="text-2xl font-bold text-green-500 py-4 px-6 cursor-pointer outline-none">
+                    Notification
+                </summary>
+                <p class="text-black text-base px-6 pb-4 animate-smooth">
+                    Notification is a notice or message that informs the user about specific information or events.
                 </p>
-            </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-            <div class="bg-white shadow-lg rounded-2xl py-4 p-6 hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-bold text-green-500">Schedule</h2>
-                <p class="text-black mt-2">
-                    Schedule is a time plan that organizes when specific activities or
-                    tasks are carried out.
+            </details>
+
+            <!-- Schedule Dropdown -->
+            <details class="bg-white shadow-lg rounded-2xl hover:shadow-xl transition duration-300">
+                <summary class="text-2xl font-bold text-green-500 py-4 px-6 cursor-pointer outline-none">
+                    Schedule
+                </summary>
+                <p class="text-black text-base px-6 pb-4 animate-smooth">
+                    Schedule is a time plan that organizes when specific activities or tasks are carried out.
                 </p>
-            </div>
-            <div class="bg-white shadow-lg rounded-2xl py-4 p-6 hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-bold text-green-500">Group</h2>
-                <p class="text-black mt-2">
-                    Group is a collection of individuals who share a common goal or
-                    interest, interact, and collaborate to achieve that goal.
+            </details>
+
+            <!-- Group Dropdown -->
+            <details class="bg-white shadow-lg rounded-2xl hover:shadow-xl transition duration-300">
+                <summary class="text-2xl font-bold text-green-500 py-4 px-6 cursor-pointer outline-none">
+                    Group
+                </summary>
+                <p class="text-black text-base px-6 pb-4 animate-smooth">
+                    Group is a collection of individuals who share a common goal or interest, interact, and collaborate
+                    to achieve that goal.
                 </p>
-            </div>
+            </details>
         </div>
     </section>
 
@@ -261,6 +400,7 @@
         let iconMenu = document.getElementById("icon-menu");
         let iconClose = document.getElementById("icon-close");
         menu.classList.toggle("hidden"); // Tampilkan/sembunyikan menu
+        menu.classList.toggle("slide-down"); // Tampilkan/sembunyikan menu
         iconMenu.classList.toggle("hidden"); // Ganti ikon hamburger
         iconClose.classList.toggle("hidden"); // Ganti ikon X (close)
     }

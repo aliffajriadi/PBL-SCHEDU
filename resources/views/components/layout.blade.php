@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ $title }}</title>
     @vite('resources/css/app.css')
+    <link rel="icon" class="" href="/image/logoP.png" type="image/png" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,6 +16,22 @@
     <style>
         * {
             font-family: "Poppins", sans-serif;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-down {
+            animation: slideDown 0.5s ease-in-out;
         }
 
         /* Scrollbar for sidebar */
@@ -91,62 +108,119 @@
         <!-- MENU -->
         <p class="text-sm py-2 text-emerald-100 font-medium">MENU</p>
         <div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/Home.svg" class="w-5 h-auto" />
-                <a href="/dashboard" class="font-semibold">Dashboard</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/bx-notepad 2.svg" class="w-5 h-auto" />
-                <a href="/notes" class="font-semibold">Notes</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/bx-task (1) 2.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Task</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/calender-white.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Schedule</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/notifications.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Notification</a>
-            </div>
-        </div>
+            <a href="/dashboard"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
+                <p class="font-semibold">Dashboard</p>
+            </a>
 
-        <!-- GROUP -->
-        <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">GROUP</p>
-        <div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/bx-group (1) 3.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Group</a>
-            </div>
-            <div class="ps-5">
-                <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                    <img src="assets/bx-notepad 2.svg" class="w-5 h-auto" />
-                    <a href="#" class="font-semibold">Group Notes</a>
+            @if ($role == 'teacher' or $role == 'student')
+                <a href="/notes"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="{{ asset('assets/bx-notepad 2.svg') }}" class="w-5 h-auto" />
+                    <p class="font-semibold">Notes</p>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="{{ asset('assets/bx-task (1) 2.svg') }}" class="w-5 h-auto" />
+                    <p class="font-semibold">Task</p>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="{{ asset('assets/calender-white.svg') }}" class="w-5 h-auto" />
+                    <p class="font-semibold">Schedule</p>
+                </a>
+            @endif
+
+            <a href="#"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('assets/notifications.svg') }}" class="w-5 h-auto" />
+                    <p class="font-semibold">Notification</p>
                 </div>
-                <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                    <img src="assets/bx-task (1) 2.svg" class="w-5 h-auto" />
-                    <a href="#" class="font-semibold">Group Task</a>
-                </div>
-                <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                    <img src="assets/calender-white.svg" class="w-5 h-auto" />
-                    <a href="#" class="font-semibold">Group Schedule</a>
-                </div>
-            </div>
+                <p class="text-xs text-emerald-50 bg-red-500 rounded-full px-2 py-1">3</p>
+
+            </a>
+
         </div>
+        @if (in_array($role, ['student', 'teacher']))
+            <!-- GROUP -->
+            <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">GROUP</p>
+            <div>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/bx-group (1) 3.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Group</p>
+                </a>
+                <div class="ps-5">
+                    <a href="#"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="assets/Home.svg" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Dashboard</p>
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="assets/bx-notepad 2.svg" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Notes</p>
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="assets/bx-task (1) 2.svg" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Task</p>
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="assets/calender-white.svg" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Schedule</p>
+                    </a>
+                    @if ($role == 'teacher')
+                        <a href="#"
+                            class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                            <img src="assets/setting.svg" class="w-5 h-auto" />
+                            <p class="font-semibold">Group Settings</p>
+                        </a>
+                    @endif
+
+                </div>
+
+            </div>
+        @endif
+
+
+
+        <!-- MANAGE ACCOUNT BY STAFF -->
+        @if ($role == 'staff')
+            <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">MANAGE</p>
+            <div>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/bx-group (1) 3.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Manage Account</p>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/bx-group (1) 3.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Manage Group</p>
+                </a>
+
+            </div>
+        @endif
+
 
         <!-- SETTING -->
         <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">SETTING</p>
         <div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/profile-user-avatar-man-person-svgrepo-com 1.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Edit Profile</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/Log out.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Logout</a>
-            </div>
+            <a href="#"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <img src="assets/profile.svg" class="w-5 h-auto" />
+                <p class="font-semibold">Edit Profile</p>
+            </a>
+            <a href="#"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <img src="assets/log out.svg" class="w-5 h-auto" />
+                <p class="font-semibold">Logout</p>
+            </a>
+
         </div>
     </aside>
 
@@ -188,62 +262,120 @@
         <!-- MENU -->
         <p class="text-sm py-2 text-emerald-100 font-medium">MENU</p>
         <div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="#"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="assets/Home.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Dashboard</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/bx-notepad 2.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Notes</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/bx-task (1) 2.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Task</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/calender-white.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Schedule</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/notifications.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Notification</a>
-            </div>
+                <p class="font-semibold">Dashboard</p>
+            </a>
+
+            @if ($role == 'student' or $role == 'teacher')
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/bx-notepad 2.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Notes</p>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/bx-task (1) 2.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Task</p>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/calender-white.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Schedule</p>
+                </a>
+            @endif
+
+            <a href="#"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <div class="flex items-center gap-2">
+                    <img src="assets/notifications.svg" class="w-5 h-auto" />
+                <p class="font-semibold">Notification</p>
+                </div>
+                <p class="text-xs text-emerald-50 bg-red-500 rounded-full px-2 py-1">3</p>                
+            </a>
+
+
         </div>
 
-        <!-- GROUP -->
-        <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">GROUP</p>
-        <div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/bx-group (1) 3.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Group</a>
+        @if ($role == 'student' or $role == 'teacher')
+            <!-- GROUP -->
+            <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">GROUP</p>
+            <div>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/bx-group (1) 3.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Group</p>
+                </a>
+
+                <div class="ps-5">
+                    <a href="#"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="assets/Home.svg" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Dashboard</p>
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="assets/bx-notepad 2.svg" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Notes</p>
+                    </a>
+
+                    <a href="#"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="assets/bx-task (1) 2.svg" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Task</p>
+                    </a>
+
+                    <a href="#"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="assets/calender-white.svg" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Schedule</p>
+                    </a>
+                    @if ($role == 'teacher')
+                        <a href="#"
+                            class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                            <img src="assets/setting.svg" class="w-5 h-auto" />
+                            <p class="font-semibold">Group Settings</p>
+                        </a>
+                    @endif
+
+                </div>
             </div>
-            <div class="ps-5">
-                <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                    <img src="assets/bx-notepad 2.svg" class="w-5 h-auto" />
-                    <a href="#" class="font-semibold">Group Notes</a>
-                </div>
-                <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                    <img src="assets/bx-task (1) 2.svg" class="w-5 h-auto" />
-                    <a href="#" class="font-semibold">Group Task</a>
-                </div>
-                <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                    <img src="assets/calender-white.svg" class="w-5 h-auto" />
-                    <a href="#" class="font-semibold">Group Schedule</a>
-                </div>
+        @endif
+        <!-- MANAGE ACCOUNT BY STAFF -->
+        @if ($role == 'staff')
+            <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">MANAGE</p>
+            <div>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/bx-group (1) 3.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Manage Account</p>
+                </a>
+                <a href="#"
+                    class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <img src="assets/bx-group (1) 3.svg" class="w-5 h-auto" />
+                    <p class="font-semibold">Manage Group</p>
+                </a>
             </div>
-        </div>
+        @endif
+
+
 
         <!-- SETTING -->
         <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">SETTING</p>
         <div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="assets/profile-user-avatar-man-person-svgrepo-com 1.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Edit Profile</a>
-            </div>
-            <div class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="#"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <img src="assets/profile.svg" class="w-5 h-auto" />
+                <p class="font-semibold">Edit Profile</p>
+            </a>
+
+            <a href="#"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="assets/Log out.svg" class="w-5 h-auto" />
-                <a href="#" class="font-semibold">Logout</a>
-            </div>
+                <p class="font-semibold">Logout</p>
+            </a>
+
         </div>
     </aside>
 
@@ -257,22 +389,26 @@
                 {{ $title }}
             </h1>
             <img src="image/Ryan-gosling.jpg" id="dropdownButton" onclick="dropdown('dropdownMenu')"
-                class="w-12 hidden md:block h-12 cursor-pointer hover:w-14 hover:h-14 transition-all duration-700 rounded-full border-2 border-green-600" alt="profile" />
+                class="w-12 hidden md:block h-12 cursor-pointer hover:w-14 hover:h-14 transition-all duration-700 rounded-full border-2 border-green-600"
+                alt="profile" />
         </div>
         <div id="dropdownMenu"
-            class="hidden origin-top-right right-0 md:mt-12 h-auto me-6 w-56 rounded-md text-sm text-emerald-900 text-center shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2 z-30 fixed md:absolute">
+            class="hidden slide-down origin-top-right right-0 md:mt-12 h-auto me-6 w-56 rounded-md text-sm text-emerald-900 text-center shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2 z-30 fixed md:absolute">
             <p class="text-md font-semibold">Ryan Gosling</p>
             <p style="font-size: smaller">ryangosling@gmail.com</p>
-            <p>Student</p>
+            <p>{{ ucfirst($role) }}</p>
             <hr class="my-2">
             <div class="flex-col flex text-start px-2 space-y-2">
                 <a class="flex gap-x-1 hover:bg-emerald-300 cursor-pointer rounded-lg py-1 px-3">
                     <img src="assets/profile-green.svg" alt="avatar" class="w-5 h-auto">
-                    <p class="text-sm font-semibold text-emerald-800 transition-all duration-500 hover:text-emerald-600">Profile</p>
+                    <p
+                        class="text-sm font-semibold text-emerald-800 transition-all duration-500 hover:text-emerald-600">
+                        Profile</p>
                 </a>
                 <a class="flex gap-x-1 hover:bg-red-300 rounded-lg cursor-pointer py-1 px-3">
                     <img src="assets/Log out (1).svg" alt="avatar" class="w-5 h-auto">
-                    <p class="text-sm font-semibold text-red-600 transition-all duration-500 hover:text-red-600 ">Logout</p>
+                    <p class="text-sm font-semibold text-red-600 transition-all duration-500 hover:text-red-600 ">
+                        Logout</p>
                 </a>
             </div>
         </div>
@@ -300,6 +436,7 @@
                 menuOverlay.style.opacity = 0;
                 setTimeout(() => {
                     menuOverlay.classList.add("hidden");
+
                 }, 300);
             }
         }
