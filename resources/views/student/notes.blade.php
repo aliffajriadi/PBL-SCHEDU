@@ -1,152 +1,121 @@
 <x-layout title="Notes" role="teacher">
-    <!-- Header Section -->
-    <div class="bg-white flex flex-col sm:flex-row items-center justify-between p-4 mt-3 mb-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-        <button id="openModalBtn" class="bg-emerald-500 text-white text-sm px-4 py-2 rounded-xl hover:bg-emerald-600 transition-all flex items-center">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Add Note
+    <!-- Header dengan Search dan Tombol Add -->
+    <div class="bg-white mb-3 flex flex-row-reverse md:flex-row justify-between p-3 shadow-md rounded-2xl items-center">
+        <button onclick="openModal()"
+            class="bg-emerald-400 text-white hover:opacity-75 cursor-pointer rounded-2xl py-1 px-2 text-sm transition-all duration-300">
+            + Add Notes
         </button>
-        <div class="flex items-center space-x-3 mt-3 sm:mt-0">
-            <form id="searchForm" class="w-full sm:w-auto">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    name="search" 
-                    class="w-full sm:w-64 px-3 py-2 bg-emerald-100 rounded-xl placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500" 
-                    placeholder="Search notes..."
-                >
+        <input type="text" id="search" placeholder="Search Note list...."
+            class="border-2 border-emerald-400 rounded-2xl py-1 px-2 text-sm w-1/3 md:w-1/4 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+            onkeyup="getSearch()">
+    </div>
+
+    <!-- Modal untuk Add Notes -->
+    <div id="addNoteModal"
+        class="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible transition-opacity duration-300">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl transform transition-all duration-300 scale-95">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-emerald-600">Add New Note</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
+            </div>
+            <form>
+                <div class="mb-4">
+                    <label for="noteTitle" class="block text-sm font-medium text-gray-700">Title</label>
+                    <input type="text" id="noteTitle"
+                        class="mt-1 w-full border-2 border-emerald-400 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                        placeholder="Enter note title">
+                </div>
+                <div class="mb-4">
+                    <label for="noteContent" class="block text-sm font-medium text-gray-700">Content</label>
+                    <textarea id="noteContent"
+                        class="mt-1 w-full border-2 border-emerald-400 rounded-xl py-2 px-3 text-sm h-32 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                        placeholder="Write your note here..."></textarea>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeModal()"
+                        class="bg-gray-200 text-gray-700 py-2 px-4 rounded-xl hover:bg-gray-300 transition-all duration-300">Cancel</button>
+                    <button type="submit"
+                        class="bg-emerald-400 text-white py-2 px-4 rounded-xl hover:bg-emerald-500 transition-all duration-300">Save
+                        Note</button>
+                </div>
             </form>
-            <button id="toggleDarkMode" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-            </button>
         </div>
     </div>
 
-    <!-- Notes Section -->
-    <section class="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
-        <!-- Notes List -->
-        <div class="bg-white w-full md:w-5/12 rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 max-h-[70vh] overflow-hidden">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                Notes List
-            </h3>
-            <div id="notesList" class="space-y-3 overflow-y-auto max-h-[60vh] pr-2"></div>
-        </div>
-
-        <!-- Note Display with Notebook Lines -->
-        <div id="noteDisplay" class="bg-white w-full md:w-7/12 rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 max-h-[70vh] overflow-y-auto hidden relative">
-            <div id="noteContent" class="text-black h-full p-4 relative z-10">
-                <p class="text-lg">Select a note to view its content</p>
+    <!-- Konten Utama -->
+    <div class="flex gap-3">
+        <!-- Bagian Kiri -->
+        <div class="bg-white p-3 fade-in-left w-full md:w-5/12 shadow-md rounded-2xl">
+            <h2 class="text-lg mb-4 font-semibold text-gray-800">Note List</h2>
+            <div class="p-3 rounded-2xl h-72 overflow-auto">
+                @php
+                    $notes = [
+                        ['title' => 'Nasi Padang', 'created_at' => '87 minutes ago'],
+                        ['title' => 'Nasi Goreng', 'created_at' => '2 hours ago'],
+                        ['title' => 'Sate Ayam', 'created_at' => '1 day ago'],
+                        ['title' => 'Rendang Daging', 'created_at' => '3 days ago'],
+                        ['title' => 'Gado-Gado', 'created_at' => '5 days ago'],
+                    ];
+                @endphp
+                @foreach ($notes as $note)
+                    <a href="/notes/detail"
+                        class="block w-full border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 cursor-pointer transition-all duration-300 notelist">
+                        <div class="flex justify-between items-center mt-3">
+                            <h3 class="text-lg">{{ $note['title'] }}</h3>
+                            <p>{{ $loop->iteration }}</p>
+                        </div>
+                        <p class="text-xs opacity-60">Created at {{ $note['created_at'] }}</p>
+                    </a>
+                @endforeach
             </div>
         </div>
-    </section>
 
-    @php
-    $data = [
-        ['id' => '1', 'title' => 'belanja', 'content' => 'beli baju', 'pinned' => false, 'timestamp' => '2025-03-28 10:00'],
-        ['id' => '2', 'title' => 'makan', 'content' => 'makan nasi', 'pinned' => true, 'timestamp' => '2025-03-28 12:00'],
-        ['id' => '3', 'title' => 'minum', 'content' => 'minum air', 'pinned' => false, 'timestamp' => '2025-03-28 14:00']
-    ]
-    @endphp
+        <!-- Bagian Kanan -->
+        <div class="bg-white flex-col fade-in-right justify-center hidden md:flex items-center p-3 shadow-md rounded-2xl w-7/12 h-96">
+            <img src="/image/ilustr1.jpg" alt="ilustrator" class="w-40 h-auto">
+            <p class="text-gray-600">Click Note list for Preview</p>
+        </div>
+    </div>
 
+    <!-- Script untuk Modal dan Search -->
     <script>
-        let notes = @json($data);
-        let selectedNoteId = null;
+        function openModal() {
+            const modal = document.getElementById('addNoteModal');
+            modal.classList.remove('invisible');
 
-        // DOM Elements
-        const searchInput = document.getElementById('searchInput');
-        const notesList = document.getElementById('notesList');
-        const noteDisplay = document.getElementById('noteDisplay');
-        const toggleDarkMode = document.getElementById('toggleDarkMode');
-
-        // Render Notes List
-        function renderNotesList(searchTerm = '') {
-            notesList.innerHTML = '';
-            const filteredNotes = notes
-                .filter(note => note.title.toLowerCase().includes(searchTerm.toLowerCase()) || note.content.toLowerCase().includes(searchTerm.toLowerCase()))
-                .sort((a, b) => b.pinned - a.pinned || new Date(b.timestamp) - new Date(a.timestamp));
-
-            filteredNotes.forEach(note => {
-                const noteElement = document.createElement('div');
-                noteElement.classList.add('p-3', 'rounded-lg', 'cursor-pointer', 'transition-all', 'flex', 'justify-between', 'items-center');
-                noteElement.classList.add(selectedNoteId === note.id ? 'bg-emerald-200' : 'bg-gray-100', 'hover:bg-emerald-100');
-                noteElement.innerHTML = `
-                    <div>
-                        <h4 class="font-medium ${note.pinned ? 'text-emerald-600' : ''}">${note.title}</h4>
-                        <p class="text-xs text-gray-500">${new Date(note.timestamp).toLocaleString()}</p>
-                    </div>
-                `;
-                noteElement.addEventListener('click', () => {
-                    selectedNoteId = note.id;
-                    renderNotesList(searchInput.value);
-                    displayNoteContent(note);
-                });
-                notesList.appendChild(noteElement);
+            // Gunakan requestAnimationFrame agar perubahan opacity lebih smooth
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
             });
         }
 
-        // Display Note Content
-        function displayNoteContent(note) {
-            noteDisplay.classList.remove('hidden');
-            noteDisplay.innerHTML = `
-                <div class="text-black p-4 relative z-10">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="text-lg font-semibold underline-red">${note.title}</h3>
-                        <span class="text-xs opacity-70">${note.pinned ? '📌 Pinned' : ''}</span>
-                    </div>
-                    <p class="text-sm mb-3">${note.content}</p>
-                    <p class="text-xs opacity-70">Last updated: ${new Date(note.timestamp).toLocaleString()}</p>
-                    <div class="flex justify-end space-x-2 mt-4">
-                        <button class="text-black hover:text-emerald-600">✏️ Edit</button>
-                        <button class="text-black hover:text-red-500">🗑️ Delete</button>
-                    </div>
-                </div>
-            `;
-            if (window.innerWidth < 768) {
-                noteDisplay.classList.add('fixed', 'inset-0', 'z-50', 'rounded-none', 'p-6');
-                noteDisplay.innerHTML += `<button id="closeNoteBtn" class="absolute top-4 right-4 text-black">✖</button>`;
-                document.getElementById('closeNoteBtn').addEventListener('click', () => noteDisplay.classList.add('hidden'));
-            }
+        function closeModal() {
+            const modal = document.getElementById('addNoteModal');
+
+            // Tambahkan kembali opacity-0 untuk animasi keluar
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+
+            // Setelah animasi selesai, sembunyikan modal dengan invisible
+            setTimeout(() => {
+                modal.classList.add('invisible');
+            }, 300); // Sesuaikan dengan duration-300 di Tailwind
         }
 
-        // Event Listeners
-        searchInput.addEventListener('input', () => renderNotesList(searchInput.value));
-        toggleDarkMode.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
+        // Fungsi pencarian
+        function getSearch() {
+            let input = document.getElementById("search").value.toLowerCase();
+            let items = document.querySelectorAll(".notelist");
 
-        // Dark Mode Styles + Notebook Lines
-        const customStyles = `
-            .dark .bg-white { background-color: #1f2937; color: #e5e7eb; }
-            .dark .bg-gray-100 { background-color: #374151; }
-            .dark .bg-emerald-200 { background-color: #065f46; }
-            .dark .text-gray-800 { color: #e5e7eb; }
-            .dark .text-gray-500 { color: #9ca3af; }
-            #noteDisplay {
-                background: linear-gradient(to bottom, transparent 19px, rgba(0, 0, 0, 0.1) 20px), linear-gradient(to right, #ffffff, #f0f0f0);
-                background-size: 100% 20px, 100% 100%;
-                background-color: #ffffff;
-            }
-            #noteDisplay .text-black {
-                line-height: 20px; /* Match the line spacing with background */
-            }
-            .underline-red {
-                position: relative;
-                display: inline-block;
-            }
-            .underline-red::after {
-                content: '';
-                position: absolute;
-                left: 0;
-                bottom: -2px;
-                width: 100%;
-                height: 2px;
-                background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 10 0, 20 5 T 40 5 T 60 5 T 80 5 T 100 5" stroke="red" stroke-width="2" fill="none"/></svg>') repeat-x;
-                background-size: 20px 10px;
-            }
-        `;
-        const styleSheet = document.createElement('style');
-        styleSheet.textContent = customStyles;
-        document.head.appendChild(styleSheet);
-
-        // Initial Render
-        renderNotesList();
+            items.forEach(item => {
+                let text = item.textContent.toLowerCase();
+                if (text.includes(input)) {
+                    item.classList.remove("hidden");
+                } else {
+                    item.classList.add("hidden");
+                }
+            });
+        }
     </script>
 </x-layout>

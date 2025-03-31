@@ -23,6 +23,17 @@ Route::get('/notes', function () {
     return view('student.notes');
 });
 
+
+Route::prefix('/notes')->group(function () {
+    Route::get('/', function () {
+        return view('student.notes');
+    });
+    Route::get('/detail', function () {
+        return view('student.notes-detail');
+    });
+});
+
+
 Route::get('/profile', function () {
     $user = [
         ['name' => 'John Doe', 'email' => 'kuntul'],
@@ -39,4 +50,7 @@ Route::get('/task', function () {
 });
 Route::get('/profile', function () {
     return view('profile');
+});
+Route::get('/schedule', function () {
+    return view('student.schedule');
 });
