@@ -54,3 +54,6 @@ Route::get('/profile', function () {
 Route::get('/schedule', function () {
     return view('student.schedule');
 });
+Route::get('/notification', function () {
+    return view('notification');
+});

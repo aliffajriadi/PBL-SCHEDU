@@ -1,4 +1,19 @@
 <x-layout title="Task" role="teacher">
+
+
+
+    <!-- Header Section -->
+    <div
+        class="bg-white flex items-center justify-between p-3 mt-3 mb-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+        <button id="openModalBtn"
+            class="bg-emerald-400 text-white text-sm px-4 py-2 rounded-xl hover:bg-emerald-500 transition-all mb-2 sm:mb-0">
+            Add Notes
+        </button>
+        <input type="text" id="search" placeholder="Search Note list...."
+            class="border-2 border-emerald-400 rounded-2xl py-1 px-2 text-sm w-1/3 md:w-1/4 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+            onkeyup="getSearch()">
+    </div>
+
     <!-- Mobile-Only List (Visible only on screens < md) -->
     <div class="block md:hidden bg-white p-4 rounded-xl shadow-md mb-6">
         <h3 class="text-md font-semibold text-gray-800 mb-3">Task Overview</h3>
@@ -15,17 +30,7 @@
         </ul>
     </div>
 
-    <!-- Header Section -->
-    <div
-        class="bg-white flex items-center justify-between p-3 mt-3 mb-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-        <button id="openModalBtn"
-            class="bg-emerald-400 text-white text-sm px-4 py-2 rounded-xl hover:bg-emerald-500 transition-all mb-2 sm:mb-0">
-            Add Notes
-        </button>
-        <input type="text" id="search" placeholder="Search Note list...."
-            class="border-2 border-emerald-400 rounded-2xl py-1 px-2 text-sm w-1/3 md:w-1/4 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-            onkeyup="getSearch()">
-    </div>
+    
 
     <!-- Task Sections -->
     <section id="task-section" class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-10">
@@ -36,10 +41,10 @@
             <!-- Task Item -->
             @foreach ([1, 2, 3] as $task)
                 <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
+                    <div class="flex  justify-between items-center mb-2">
                         <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
                         <button
-                            class="bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white mt-2 sm:mt-0 hover:bg-emerald-500 transition-all">
+                            class="bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all">
                             Dropdown
                         </button>
                     </div>

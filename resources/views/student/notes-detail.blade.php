@@ -37,20 +37,20 @@
         <div class="bg-emerald-400 p-3 w-full md:w-7/12 shadow-md rounded-2xl h-96">
             <div class="flex justify-between items-center text-white">
                 <div>
-                    <h2 class="text-xl font-semibold text-white">Masakan Padang</h2>
+                    <h2 class="text-lg md:text-xl font-semibold text-white">Masakan Padang</h2>
                     <p class="text-xs text-gray-100">Created at 27 November 2024</p>
                 </div>
-                <div class="flex gap-x-2">
+                <div class="flex flex-col md:flex-row gap-2">
                     <button onclick="openModal()"
-                        class="text-sm flex py-1 items-center gap-1 cursor-pointer bg-amber-500 px-2 rounded-2xl hover:opacity-75 transition-all duration-300">
+                        class="text-sm flex py-1 items-center gap-1 cursor-pointer bg-amber-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
                         <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
-                        <p>Edit</p>
+                        <p class="text-xs md:text-md">Edit</p>
                     </button>
 
                     <button
-                        class="text-sm py-1 flex items-center gap-1 cursor-pointer bg-red-500 px-2 rounded-2xl hover:opacity-75 transition-all duration-300">
+                        class="text-sm py-1 flex items-center gap-1 cursor-pointer bg-red-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
                         <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
-                        <p>Delete</p>
+                        <p class="text-xs md:text-md">Delete</p>
                     </button>
                 </div>
             </div>
