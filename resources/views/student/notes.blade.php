@@ -2,11 +2,11 @@
     <!-- Header dengan Search dan Tombol Add -->
     <div class="bg-white mb-3 flex flex-row-reverse md:flex-row justify-between p-3 shadow-md rounded-2xl items-center">
         <button onclick="openModal()"
-            class="bg-emerald-400 text-white hover:opacity-75 cursor-pointer rounded-2xl py-1 px-2 text-sm transition-all duration-300">
+            class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">
             + Add Notes
         </button>
         <input type="text" id="search" placeholder="Search Note list...."
-            class="border-2 border-emerald-400 rounded-2xl py-1 px-2 text-sm w-1/3 md:w-1/4 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+            class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
             onkeyup="getSearch()">
     </div>
 

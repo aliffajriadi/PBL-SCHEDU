@@ -177,7 +177,7 @@
             <!-- GROUP -->
             <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">GROUP</p>
             <div>
-                <a href="#"
+                <a href="/group"
                     class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                     <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Group</p>
@@ -477,6 +477,8 @@
 
         }
     </script>
+
+
 
 </body>
 

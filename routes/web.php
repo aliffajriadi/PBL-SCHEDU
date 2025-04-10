@@ -57,3 +57,12 @@ Route::get('/schedule', function () {
 Route::get('/notification', function () {
     return view('notification');
 });
+
+Route::get('/group', function () {
+    $role = 'teacher';
+    return view('student.group-list', compact('role'));
+});
+
+Route::get('/group/detail/dasboard', function () {
+    return view('student.group-dashboard');
+} );

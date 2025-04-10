@@ -239,7 +239,7 @@
             class="mt-6 inline-block fade-in-left bg-green-500 text-white px-6 py-2 rounded-[20px] hover:bg-green-600 transition duration-300">Get
             Started</a>
     </main>
-
+    
     <!-- About section -->
     <section id="about"
         class="bg-white fade-in-left py-24 px-8 md:p-32 flex flex-col lg:flex-row items-center gap-16 min-h-screen">
@@ -471,3 +471,4 @@
 </script>
 
 </html>
+

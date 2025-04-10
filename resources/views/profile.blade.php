@@ -1,4 +1,4 @@
-<x-layout title="Profile">
+<x-layout title="Profile" role="student">
 
     <!-- start here! -->
     <main class="flex-1 flex md:mt-0 flex-col text-emerald-800 w-full">
