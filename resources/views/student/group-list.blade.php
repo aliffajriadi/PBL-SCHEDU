@@ -73,7 +73,7 @@
     </div>
 
     <!-- Modal untuk Add New Group -->
-    <div id="addGroupModal" class="fixed inset-0 bg-gray-800/50 flex justify-center items-center z-50 hidden">
+    <div id="addGroupModal" class="fixed inset-0 bg-gray-800/50 flex backdrop-blur-sm justify-center items-center z-50 hidden">
         <div class="p-6 bg-white rounded-2xl shadow-md w-full max-w-md">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New Group</h2>
             <form id="addGroupForm" enctype="multipart/form-data">
@@ -114,7 +114,7 @@
     </div>
 
     <!-- Modal untuk Join Group (Student) -->
-    <div id="joinGroupModal" class="fixed inset-0 bg-gray-800/50 flex justify-center items-center z-50 hidden">
+    <div id="joinGroupModal" class="fixed inset-0 bg-gray-800/50 backdrop-blur-sm flex justify-center items-center z-50 hidden">
         <div class="p-6 bg-white rounded-2xl shadow-md w-full max-w-md">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Join a Group</h2>
             <div class="mb-4">

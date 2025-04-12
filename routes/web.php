@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -63,6 +64,21 @@ Route::get('/group', function () {
     return view('student.group-list', compact('role'));
 });
 
-Route::get('/group/detail/dasboard', function () {
+Route::get('/group/detail/dashboard', function () {
     return view('student.group-dashboard');
 } );
+Route::get('/group/detail/notes', function () {
+    return view('student.group-notes');
+} );
+
+
+
+//belajar api
+
+Route::post('/api/testing', function (Request $request) {
+    $angka1 = $request->input('nama');
+    $angka2 = $request->input('umur');
+
+    $hasil = $angka1 * $angka2;
+    return response()->json(['balasan' => $hasil]);
+});
