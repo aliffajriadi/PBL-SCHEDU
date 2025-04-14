@@ -61,15 +61,32 @@ Route::get('/notification', function () {
 
 Route::get('/group', function () {
     $role = 'teacher';
-    return view('student.group-list', compact('role'));
+    return view('group.group-list', compact('role'));
 });
 
 Route::get('/group/detail/dashboard', function () {
-    return view('student.group-dashboard');
+    return view('group.group-dashboard');
 } );
 Route::get('/group/detail/notes', function () {
-    return view('student.group-notes');
+    return view('group.group-notes');
 } );
+Route::get('/group/detail/task', function () {
+    return view('group.group-task');
+} );
+Route::get('/group/detail/schedule', function () {
+    return view('group.group-schedule');
+} );
+Route::get('/group/detail/settings', function () {
+    return view('group.group-settings');
+} );
+
+
+
+
+
+
+
+
 
 
 

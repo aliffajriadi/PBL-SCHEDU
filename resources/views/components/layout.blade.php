@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ $title }}</title>
+    <title>{{$title}}</title>
     @vite('resources/css/app.css')
     <link rel="icon" class="" href="/image/logoP.png" type="image/png" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -26,6 +26,17 @@
 
             to {
                 opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 0;
                 transform: translateY(0);
             }
         }
@@ -62,6 +73,9 @@
 
         .slide-down {
             animation: slideDown 0.5s ease-in-out;
+        }
+        .slide-out {
+            animation: slideOutUp 0.5s ease-in-out;
         }
 
         /* Scrollbar for sidebar */
@@ -270,7 +284,7 @@
             <img src="{{ asset('image/image4.png') }}" class="w-32 h-auto" alt="schedu" />
         </div>
         <div>
-            <img src="{{ asset('image/Ryan-gosling.jpg') }}"
+            <img src="{{ asset('image/Ryan-Gosling.jpg')}}"
                 class="w-12 border-2 border-green-500 h-12 rounded-full shadow-md transition-all duration-300 hover:border-emerald-600 cursor-pointer"
                 alt="profile" onclick="dropdown('dropdownMenu')" id="dropdownButton" />
         </div>
@@ -411,7 +425,7 @@
     <main class="flex-1 flex mt-16 md:mt-0 flex-col md:ml-64 px-6 pt-8 text-emerald-800">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-xl md:text-2xl font-semibold text-emerald-800">
-                {{ $title }}
+                {{$title}}
             </h1>
             <img src="{{ asset('image/Ryan-Gosling.jpg') }}" id="dropdownButton" onclick="dropdown('dropdownMenu')"
                 class="w-12 hidden md:block h-12 cursor-pointer hover:w-14 hover:h-14 transition-all duration-700 rounded-full border-2 border-green-600"
@@ -438,7 +452,7 @@
             </div>
         </div>
 
-        {{ $slot }}
+        {{$slot}}
 
     </main>
 

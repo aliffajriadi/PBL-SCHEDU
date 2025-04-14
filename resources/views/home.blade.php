@@ -239,7 +239,14 @@
             class="mt-6 inline-block fade-in-left bg-green-500 text-white px-6 py-2 rounded-[20px] hover:bg-green-600 transition duration-300">Get
             Started</a>
     </main>
-    
+
+    {{-- responsif design section --}}
+    <section class="h-1/2 bg-gradient-to-b from-white/50 px-8 to-white flex flex-col justify-center items-center text-center">
+        <img src="{{asset('image/image4.png')}}" alt="logo-responsif-section" class="md:w-56 w-40 h-auto">
+        <p class="text-xl font-semibold text-green-500">Enjoy an optimal browsing experience on all devices</p>
+        <img src="{{asset('image/responsif.png')}}" alt="responsif design section foto" class="sm:w-96 sm:h-auto">
+    </section>
+
     <!-- About section -->
     <section id="about"
         class="bg-white fade-in-left py-24 px-8 md:p-32 flex flex-col lg:flex-row items-center gap-16 min-h-screen">
@@ -406,7 +413,7 @@
     }
 
     // Add scroll event listener to change navbar background
-    window.addEventListener("scroll", function() {
+    window.addEventListener("scroll", function () {
         const navbar = document.getElementById("navbar");
         if (window.scrollY > 50) {
             navbar.classList.remove("navbar-transparent");
@@ -418,7 +425,7 @@
     });
 
     // Check scroll position on page load
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         if (window.scrollY > 50) {
             document.getElementById("navbar").classList.add("navbar-white");
         }
@@ -460,7 +467,7 @@
 </script>
 <script>
     document.querySelectorAll("nav a").forEach((anchor) => {
-        anchor.addEventListener("click", function(e) {
+        anchor.addEventListener("click", function (e) {
             e.preventDefault();
             const targetId = this.getAttribute("href").substring(1);
             document.getElementById(targetId).scrollIntoView({
@@ -471,4 +478,3 @@
 </script>
 
 </html>
-
