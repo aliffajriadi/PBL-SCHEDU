@@ -104,6 +104,7 @@
             <a href=""><img src="assets/Vector 6.svg"
                     class="w-3 h-auto hover:w-4 transition-all duration-300 active:w-4" alt="accountpage"></a>
         </div>
+       
         <x-calender></x-calender>
     </div>
 

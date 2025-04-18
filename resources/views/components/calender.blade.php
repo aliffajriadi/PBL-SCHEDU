@@ -27,7 +27,6 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-
     var events = [
       {
         title: "Project Meeting",

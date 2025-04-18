@@ -338,31 +338,41 @@
     </section>
 
     <!-- Report section -->
-    <section id="report" class="py-16 px-8 min-h-screen bg-gray-100">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl font-bold text-green-500 mb-12">Report</h1>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:pt-20">
+    <!-- Report section -->
+<section id="report" class="py-16 px-8 min-h-screen bg-white">
+    <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-4xl font-bold text-green-500 mb-12">Report</h1>
+        
+        <div class="flex justify-around flex-wrap gap-8">
+            <!-- Data Cards -->
+            <div class="flex flex-col justify-start items-start gap-8 md:pt-20">
+                <!-- Instansi Card -->
                 <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h2 class="text-5xl font-bold text-yellow-400 counter" data-target="27">
-                        0
-                    </h2>
+                    <h2 class="text-5xl font-bold text-yellow-400 counter" data-target="27">0</h2>
                     <p class="text-lg font-semibold text-gray-700 mt-2">Instansi</p>
                 </div>
+
+                <!-- Teacher Card -->
                 <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h2 class="text-5xl font-bold text-green-400 counter" data-target="177">
-                        0
-                    </h2>
+                    <h2 class="text-5xl font-bold text-green-400 counter" data-target="177">0</h2>
                     <p class="text-lg font-semibold text-gray-700 mt-2">Teacher</p>
                 </div>
+
+                <!-- Student Card -->
                 <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                    <h2 class="text-5xl font-bold text-slate-800 counter" data-target="900">
-                        0
-                    </h2>
+                    <h2 class="text-5xl font-bold text-slate-800 counter" data-target="900">0</h2>
                     <p class="text-lg font-semibold text-gray-700 mt-2">Student</p>
                 </div>
             </div>
+
+            <!-- Illustration Image -->
+            <div class="flex justify-center items-center">
+                <img src="{{ asset('image/ilus4.jpg') }}" alt="report illustration" class="w-80 h-auto" />
+            </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Footer -->
     <footer class="bg-green-600 text-white py-8 px-6">

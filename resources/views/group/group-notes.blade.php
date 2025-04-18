@@ -1,5 +1,5 @@
 @php
-    $role = "student";
+    $role = "teacher";
 @endphp
 <x-layout title="Group Notes" role="{{ $role }}">
     <x-nav-group type="search" page="notes"></x-nav-group>
@@ -259,6 +259,7 @@
             window.openAddNoteModal = function() {
                 const modal = document.getElementById('add-note-modal');
                 modal.classList.remove('hidden');
+                modal.classList.add('slide-down');
             };
 
             window.closeAddNoteModal = function() {

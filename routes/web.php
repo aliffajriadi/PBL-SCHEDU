@@ -81,6 +81,11 @@ Route::get('/group/detail/settings', function () {
 } );
 
 
+//admin route dummy
+
+Route::get('/dashboard/admin', function () {
+    return view('admin.dashboard-admin');
+} );
 
 
 
@@ -89,13 +94,3 @@ Route::get('/group/detail/settings', function () {
 
 
 
-
-//belajar api
-
-Route::post('/api/testing', function (Request $request) {
-    $angka1 = $request->input('nama');
-    $angka2 = $request->input('umur');
-
-    $hasil = $angka1 * $angka2;
-    return response()->json(['balasan' => $hasil]);
-});

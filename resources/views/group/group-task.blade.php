@@ -265,7 +265,7 @@
 
     <!-- Modal Tambah Tugas (Hanya untuk Guru) -->
     @if($role === 'teacher')
-        <div id="add-task-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+        <div id="add-task-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Tugas Baru</h3>
                 <form action="/tasks/add" method="POST">
@@ -296,7 +296,7 @@
 
     <!-- Modal Tambah Unit (Hanya untuk Guru) -->
     @if($role === 'teacher')
-        <div id="add-unit-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+        <div id="add-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Unit Baru</h3>
                 <form action="/units/add" method="POST">
