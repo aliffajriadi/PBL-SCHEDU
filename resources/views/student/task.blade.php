@@ -27,8 +27,6 @@
         </ul>
     </div>
 
-    
-
     <!-- Task Sections -->
     <section id="task-section" class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-10">
         <!-- Task Column -->
@@ -38,12 +36,35 @@
             <!-- Task Item -->
             @foreach ([1, 2, 3] as $task)
                 <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-                    <div class="flex  justify-between items-center mb-2">
+                    <div class="flex justify-between items-center mb-2">
                         <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
-                        <button
-                            class="bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all">
-                            Dropdown
-                        </button>
+                        <div class="relative">
+                            <button
+                                class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
+                                onclick="toggleDropdown(this)">
+                                Options
+                            </button>
+                            <ul class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
+                                <li>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                            onclick="editTask({{ $task }})">
+                                        Edit
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                            onclick="deleteTask({{ $task }})">
+                                        Delete
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                            onclick="setToProgress({{ $task }})">
+                                        Set to Progress
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <p class="text-sm text-emerald-500 opacity-70 mb-3">Monday, 23 January 2024</p>
                     <p class="text-xs text-gray-600">
@@ -70,10 +91,39 @@
             <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                     <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
-                    <button
-                        class="bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white mt-2 sm:mt-0 hover:bg-emerald-500 transition-all">
-                        Dropdown
-                    </button>
+                    <div class="relative">
+                        <button
+                            class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
+                            onclick="toggleDropdown(this)">
+                            Options
+                        </button>
+                        <ul class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
+                            <li>
+                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                        onclick="editTask(1)">
+                                    Edit
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                        onclick="deleteTask(1)">
+                                    Delete
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                        onclick="setToDone(1)">
+                                    Set to Done
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                        onclick="setToInitial(1)">
+                                    Set to Initial
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <p class="text-sm text-emerald-500 opacity-70 mb-3">Monday, 23 January 2024</p>
                 <p class="text-xs text-gray-600">
@@ -95,10 +145,33 @@
             <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                     <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
-                    <button
-                        class="bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white mt-2 sm:mt-0 hover:bg-emerald-500 transition-all">
-                        Dropdown
-                    </button>
+                    <div class="relative">
+                        <button
+                            class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
+                            onclick="toggleDropdown(this)">
+                            Options
+                        </button>
+                        <ul class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
+                            <li>
+                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                        onclick="editTask(1)">
+                                    Edit
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-4 py-2 text-sm text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                        onclick="deleteTask(1)">
+                                    Delete
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                        onclick="setToInitial(1)">
+                                    Set to Initial
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <p class="text-sm text-emerald-500 opacity-70 mb-3">Monday, 23 January 2024</p>
                 <p class="text-xs text-gray-600">
@@ -113,12 +186,59 @@
         </div>
     </section>
 
+    <style>
+        /* Dropdown Animation */
+        .dropdown-menu {
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Ensure dropdown is above other elements */
+        .dropdown-menu {
+            z-index: 20;
+        }
+    </style>
 
     <script>
+        // Toggle Dropdown
+        function toggleDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            const isOpen = dropdown.classList.contains('show');
+
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+
+            // Toggle the clicked dropdown
+            if (!isOpen) {
+                dropdown.classList.add('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdowns = document.querySelectorAll('.dropdown-menu');
+            const buttons = document.querySelectorAll('.dropdown-toggle');
+
+            if (!Array.from(buttons).some(button => button.contains(event.target))) {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
+        // Search Functionality
         function getSearch() {
             let input = document.getElementById('search').value.toLowerCase();
             let tasks = document.querySelectorAll('#task-section .bg-white');
-    
+
             tasks.forEach(task => {
                 let text = task.textContent.toLowerCase();
                 if (text.includes(input)) {
@@ -128,6 +248,31 @@
                 }
             });
         }
+
+        // Placeholder Actions for Dropdown Options
+        function editTask(taskId) {
+            console.log(`Editing task ${taskId}`);
+            // Add your edit logic here (e.g., open a modal)
+        }
+
+        function deleteTask(taskId) {
+            console.log(`Deleting task ${taskId}`);
+            // Add your delete logic here (e.g., API call)
+        }
+
+        function setToProgress(taskId) {
+            console.log(`Setting task ${taskId} to Progress`);
+            // Add your set to progress logic here
+        }
+
+        function setToDone(taskId) {
+            console.log(`Setting task ${taskId} to Done`);
+            // Add your set to done logic here
+        }
+
+        function setToInitial(taskId) {
+            console.log(`Setting task ${taskId} to Initial`);
+            // Add your set to initial logic here
+        }
     </script>
-    
 </x-layout>
