@@ -87,6 +87,19 @@ Route::get('/dashboard/admin', function () {
     return view('admin.dashboard-admin');
 } );
 
+//STAFF ROUTE DUMMY
+Route::prefix('/staff')->group( function () {
+    Route::get('/dashboard', function () {
+        return view('staff.dashboard');
+    });
+    Route::get('/account', function () {
+        return view('staff.account');
+    });
+    Route::get('/group', function () {
+        return view('staff.group');
+    });
+});
+
 
 
 
