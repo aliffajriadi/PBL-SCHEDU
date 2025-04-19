@@ -173,14 +173,6 @@
                     <p class="font-semibold">Manage instantiate</p>
                 </div>
             </a>
-            <a href="#"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <div class="flex items-center gap-2">
-                    <img src="{{ asset('assets/notifications.svg') }}" class="w-5 h-auto" />
-                    <p class="font-semibold">Notification</p>
-                </div>
-                <p class="text-xs text-emerald-50 bg-red-500 rounded-full px-2 py-1">3</p>
-            </a>
 
         </div>
         
@@ -246,17 +238,17 @@
                 <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Dashboard</p>
             </a>
-
-            
-
             <a href="#"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <div class="flex items-center gap-2">
-                    <img src="{{ asset('assets/notifications.svg') }}" class="w-5 h-auto" />
-                    <p class="font-semibold">Notification</p>
-                </div>
-                <p class="text-xs text-emerald-50 bg-red-500 rounded-full px-2 py-1">3</p>
+                <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
+                <p class="font-semibold">Manage instantiate</p>
             </a>
+            <a href="#"
+                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
+                <p class="font-semibold">Manage Staff</p>
+            </a>
+
 
 
             <!-- SETTING -->

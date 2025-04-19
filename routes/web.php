@@ -10,50 +10,39 @@ Route::get('/login', function () {
     return view('login');
 });
 
-// student view
+// teachStudent view
 Route::get('/dashboard', function () {
-    return view('student.dashboard');
+    return view('teachStudent.dashboard');
 });
 Route::get('/login', function () {
     return view('login');
 });
 Route::get('/test', function () {
-    return view('student.test');
+    return view('teachStudent.test');
 });
 Route::get('/notes', function () {
-    return view('student.notes');
+    return view('teachStudent.notes');
 });
 
 
 Route::prefix('/notes')->group(function () {
     Route::get('/', function () {
-        return view('student.notes');
+        return view('teachStudent.notes');
     });
     Route::get('/detail', function () {
-        return view('student.notes-detail');
+        return view('teachStudent.notes-detail');
     });
 });
 
 
-Route::get('/profile', function () {
-    $user = [
-        ['name' => 'John Doe', 'email' => 'kuntul'],
-        ['name' => 'John Doe', 'email' => 'kuntul'],
-        ['name' => 'John Doe', 'email' => 'kuntul'],
-        ['name' => 'John Doe', 'email' => 'kuntul'],
-        ['name' => 'John Doe', 'email' => 'kuntul']
-    ];
-    return response()->json($user);
-});
-
 Route::get('/task', function () {
-    return view('student.task');
+    return view('teachStudent.task');
 });
 Route::get('/profile', function () {
     return view('profile');
 });
 Route::get('/schedule', function () {
-    return view('student.schedule');
+    return view('teachStudent.schedule');
 });
 Route::get('/notification', function () {
     return view('notification');
@@ -83,9 +72,17 @@ Route::get('/group/detail/settings', function () {
 
 //admin route dummy
 
-Route::get('/dashboard/admin', function () {
-    return view('admin.dashboard-admin');
-} );
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    });
+    Route::get('/instatiate', function () {
+        return view('admin.instatiate');
+    });
+    Route::get('/staff', function () {
+        return view('admin.staff');
+    });
+});
 
 //STAFF ROUTE DUMMY
 Route::prefix('/staff')->group( function () {
