@@ -441,7 +441,7 @@
                     <a href="#about" class="hover:text-green-500">About Us</a>
                     <a href="#features" class="hover:text-green-500">Feature</a>
                     <a href="#report" class="hover:text-green-500">Report</a>
-                    <a href="login.html"
+                    <a href="/login"
                         class="btn-hover flex items-center text-white hover:text-green-600 bg-green-500 rounded-[20px] px-4 py-1 transition duration-300">
                         <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             class="w-5 h-5 mr-2">

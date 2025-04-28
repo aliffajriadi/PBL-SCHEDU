@@ -1,4 +1,6 @@
-<x-layout title="Dashboard" role="staff">
+<x-layout-staff title="Dashboard" role="staff" :user="$user">
+
+
   <div class="grid md:grid-cols-3 gap-6">
       <!-- Left Column: My Account and Metrics -->
       <div class="md:col-span-2 space-y-6">
@@ -10,8 +12,8 @@
               <div class="bg-emerald-500 rounded-full p-2 flex text-white items-center">
                   <img src="{{asset('image/Ryan-Gosling.jpg')}}" class="w-14 h-14 rounded-full" alt="profile" />
                   <div class="ps-3">
-                      <h4 class="text-base md:text-xl">Pippip</h4>
-                      <p class="text-sm">Staff SMPN 3 BATAM</p>
+                      <h4 class="text-base md:text-xl">{{ $user[0] }}</h4>
+                      <p class="text-sm">{{ $user[1] }}</p>
                   </div>
               </div>
           </div>

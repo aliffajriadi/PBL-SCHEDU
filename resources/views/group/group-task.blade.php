@@ -1,7 +1,7 @@
 @php
     $role = "teacher";
 @endphp
-<x-layout title="Group Task" role="{{ $role }}">
+<x-layout title="Group Task" role="{{ $role }}" :user="$user">
     <x-nav-group type="search" page="tasks"></x-nav-group>
 
     <!-- Konten Utama -->

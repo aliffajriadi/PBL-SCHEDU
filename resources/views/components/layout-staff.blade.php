@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    
     <title>{{$title}}</title>
     @vite('resources/css/app.css')
     <link rel="icon" class="" href="{{asset('/image/logoP.png')}}" type="image/png" />
@@ -19,6 +19,7 @@
         rel="stylesheet" />
 
     <script src="/js/fetch.js"></script>
+    
     
     <x-layoutComponent.layoutCss />
 </head>
@@ -57,7 +58,7 @@
     <!-- Main Content -->
     <main class="flex-1 flex mt-16 md:mt-0 flex-col md:ml-64 px-6 pt-8 text-emerald-800">
         <!-- up content -->
-        <x-layoutComponent.UpContent :role="$role" :title="$title" :user="$user" />
+        <x-layoutComponent.UpContent :role="$role" :title="$title" :user="$user"/>
 
         {{-- dinamis content --}}
         {{$slot}}
@@ -68,7 +69,6 @@
 
     
     <script>
-
         function toggleMenu() {
             const menuMobile = document.getElementById("menuMobile");
             const menuToggle = document.getElementById("menuToggle");

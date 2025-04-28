@@ -37,7 +37,7 @@
                         <th class="py-3 px-4 border-b">Action</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-600 divide-y">
+                <tbody id="t_body" class="text-gray-600 divide-y">
                     @php
                         $institutions = [
                             ['id' => 1, 'name' => 'SMPN 3 Batam', 'staff' => 10, 'teachers' => 20, 'students' => 300, 'created_at' => '2025-01-10'],
@@ -85,19 +85,55 @@
     <div id="addInstitutionModal" class="fixed inset-0 bg-white/50 backdrop-blur-sm slide-down flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Institution</h3>
-            <form action="/institutions/store" method="POST">
-                @csrf
+            <form id="add">
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">Institution Name</label>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
                     <input 
                         type="text" 
-                        id="name" 
-                        name="name" 
+                        id="username" 
+                        name="username" 
                         required 
                         class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
-                        placeholder="Enter institution name..."
+                        placeholder="Enter New Username"
                     />
                 </div>
+
+                <div class="mb-4">
+                    <label for="instance_name" class="block text-sm font-medium text-gray-700">Institution Name</label>
+                    <input 
+                        type="text" 
+                        id="instance_name" 
+                        name="instance_name" 
+                        required 
+                        class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
+                        placeholder="Enter institution name"
+                    />
+                </div>
+
+                <div class="mb-4">
+                    <label for="phone_no" class="block text-sm font-medium text-gray-700">Institution Phone No</label>
+                    <input 
+                        type="text" 
+                        id="phone_no" 
+                        name="phone_no" 
+                        required 
+                        class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
+                        placeholder="Enter institution Phone No"
+                    />
+                </div>
+
+                <div class="mb-4">
+                    <label for="address" class="block text-sm font-medium text-gray-700">Institution Address</label>
+                    <input 
+                        type="text" 
+                        id="address" 
+                        name="address" 
+                        required 
+                        class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
+                        placeholder="Enter Institution Address"
+                    />
+                </div>
+
                 <div class="flex justify-end gap-2">
                     <button 
                         type="button" 
@@ -107,7 +143,8 @@
                         Cancel
                     </button>
                     <button 
-                        type="submit" 
+                        type="button" 
+                        onclick="insert_data()"
                         class="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-300 text-sm"
                     >
                         Save
@@ -121,21 +158,58 @@
     <div id="editInstitutionModal" class="fixed inset-0 bg-white/50 backdrop-blur-sm slide-down flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Edit Institution</h3>
-            <form action="/institutions/update" method="POST">
-                @csrf
-                @method('PUT')
+            <form id="instance_edit">
+
                 <input type="hidden" id="edit_institution_id" name="institution_id" />
+            
                 <div class="mb-4">
-                    <label for="edit_name" class="block text-sm font-medium text-gray-700">Institution Name</label>
+                    <label for="edit_username" class="block text-sm font-medium text-gray-700">Username</label>
                     <input 
                         type="text" 
-                        id="edit_name" 
-                        name="name" 
+                        id="edit_username" 
+                        name="username" 
                         required 
                         class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
-                        placeholder="Enter institution name..."
+                        placeholder="Enter New Username"
                     />
                 </div>
+
+                <div class="mb-4">
+                    <label for="edit_instance_name" class="block text-sm font-medium text-gray-700">Institution Name</label>
+                    <input 
+                        type="text" 
+                        id="edit_instance_name" 
+                        name="instance_name" 
+                        required 
+                        class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
+                        placeholder="Enter institution name"
+                    />
+                </div>
+
+                <div class="mb-4">
+                    <label for="edit_phone_no" class="block text-sm font-medium text-gray-700">Institution Phone No</label>
+                    <input 
+                        type="text" 
+                        id="edit_phone_no" 
+                        name="phone_no" 
+                        required 
+                        class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
+                        placeholder="Enter institution Phone No"
+                    />
+                </div>
+
+                <div class="mb-4">
+                    <label for="edit_address" class="block text-sm font-medium text-gray-700">Institution Address</label>
+                    <input 
+                        type="text" 
+                        id="edit_address" 
+                        name="address" 
+                        required 
+                        class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
+                        placeholder="Enter Institution Address"
+                    />
+                </div>
+
                 <div class="flex justify-end gap-2">
                     <button 
                         type="button" 
@@ -145,7 +219,8 @@
                         Cancel
                     </button>
                     <button 
-                        type="submit" 
+                        type="button" 
+                        onclick="update_data()" 
                         class="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-300 text-sm"
                     >
                         Update
@@ -185,15 +260,88 @@
 
     <!-- JavaScript for Modals -->
     <script>
+        function a()
+        {
+            get_data('/admin/staffs', show_list);
+        }
+
+        a()
+
+        function show_list(datas)
+        {
+            const table_body = document.getElementById('t_body');
+            table_body.innerHTML = '';
+
+            datas.datas.forEach((data, index) => {
+                table_body.innerHTML += `                        
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 border-b">${index + 1}</td>
+                            <td class="py-3 px-4 border-b" id="username${index}">${data.username}</td>
+                            <td class="py-3 px-4 border-b" id="instance${index}">${data.instance_name}</td>
+                            <td class="py-3 px-4 border-b" id="address${index}">${data.address}</td>
+                            <td class="py-3 px-4 border-b" id="phone_no${index}">${data.phone_no}</td>
+                            <td class="py-3 px-4 border-b">{{ $institution['staff'] + $institution['teachers'] + $institution['students'] }}</td>
+                            <td class="py-3 px-4 border-b">{{ $institution['created_at'] }}</td>
+                            <td class="py-3 px-4 border-b flex gap-2">
+                                <button 
+                                    onclick="showEditModal('${data.uuid}', ${index})"
+                                    class="text-emerald-500 hover:text-emerald-600"
+                                >
+                                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0l-1.414-1.414a2 2 0 010-2.828L14.586 4.586a2 2 0 012.828 0z"/>
+                                    </svg>
+                                </button>
+                                <button 
+                                    onclick="showDeleteModal('{{ $institution['id'] }}', '{{ $institution['name'] }}')"
+                                    class="text-red-500 hover:text-red-600"
+                                >
+                                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>`;
+            });
+        }
+
+        function update_data()
+        {
+            const form = document.getElementById('instance_edit');
+            const formData = new FormData(form);
+            formData.append('_method', 'PATCH');
+
+            const id = document.getElementById('edit_institution_id').value;
+
+            api_update('/admin/staffs', formData, id);
+            a();
+            hideAllModals();
+        }
+
+        function insert_data()
+        {
+            const form = document.getElementById('add');
+            const formData = new FormData(form);
+
+            api_store('/admin/staffs', formData);
+
+            a();
+
+            hideAllModals();
+
+        }
+
         function showModal() {
             hideAllModals();
             document.getElementById('addInstitutionModal').classList.remove('hidden');
         }
 
-        function showEditModal(id, name) {
+        function showEditModal(id, index) {
             hideAllModals();
             document.getElementById('edit_institution_id').value = id;
-            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_username').value = document.getElementById(`username${index}`).textContent;
+            document.getElementById('edit_address').value = document.getElementById(`address${index}`).textContent;
+            document.getElementById('edit_instance_name').value = document.getElementById(`instance${index}`).textContent;
+            document.getElementById('edit_phone_no').value = document.getElementById(`phone_no${index}`).textContent;
             document.getElementById('editInstitutionModal').classList.remove('hidden');
         }
 

@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <title>{{$title}}</title>
     @vite('resources/css/app.css')
     <link rel="icon" class="" href="/image/logoP.png" type="image/png" />
@@ -11,8 +13,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <script src="/js/fetch.js"></script>
+    
     <style>
         * {
             font-family: "Poppins", sans-serif;
@@ -152,21 +156,21 @@
         <!-- MENU -->
         <p class="text-sm py-2 text-emerald-100 font-medium">MENU</p>
         <div>
-            <a href="/dashboard"
+            <a href="/admin/dashboard"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Dashboard</p>
             </a>
 
             
-            <a href="#"
+            <a href="/admin/staff"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('assets/edit.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Manage Staff</p>
                 </div>
             </a>
-            <a href="#"
+            <a href="/admin/instatiate"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('assets/edit.svg') }}" class="w-5 h-auto" />
@@ -186,7 +190,7 @@
                 <img src="{{ asset('assets/profile.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Edit Profile</p>
             </a>
-            <a href="#"
+            <a href="/admin/logout"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/Log out.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Logout</p>

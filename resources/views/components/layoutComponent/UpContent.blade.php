@@ -1,4 +1,4 @@
-@props(['role', 'title'])
+@props(['role', 'title', 'user'])
 
 
 <div class="flex justify-between items-center mb-4">
@@ -33,21 +33,25 @@
 </div>
 <div id="dropdownMenu"
     class="hidden slide-down origin-top-right right-0 md:mt-12 h-auto me-6 w-56 rounded-md text-sm text-emerald-900 text-center shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2 z-30 fixed md:absolute">
-    <p class="text-md font-semibold">Ryan Gosling</p>
-    <p style="font-size: smaller">ryangosling@gmail.com</p>
+    <p class="text-md font-semibold">{{ $user[0] }}</p>
+    <p style="font-size: smaller">{{ $user[1] }}</p>
     <p>{{ ucfirst($role) }}</p>
     <hr class="my-2">
     <div class="flex-col flex text-start px-2 space-y-2">
-        <a class="flex gap-x-1 hover:bg-emerald-300 cursor-pointer rounded-lg py-1 px-3">
+        <a href="profile" class="flex gap-x-1 hover:bg-emerald-300 cursor-pointer rounded-lg py-1 px-3">
             <img src="{{ asset('assets/profile-green.svg') }}" alt="avatar" class="w-5 h-auto">
             <p
                 class="text-sm font-semibold text-emerald-800 transition-all duration-500 hover:text-emerald-600">
                 Profile</p>
         </a>
-        <a class="flex gap-x-1 hover:bg-red-300 rounded-lg cursor-pointer py-1 px-3">
-            <img src="{{ asset('assets/Log out (1).svg') }}" alt="avatar" class="w-5 h-auto">
-            <p class="text-sm font-semibold text-red-600 transition-all duration-500 hover:text-red-600 ">
-                Logout</p>
-        </a>
+        <form action="logout" method="POST">
+            @csrf
+            <button type="submit" class="flex gap-x-1 hover:bg-red-300 rounded-lg cursor-pointer py-1 px-3">
+                <img src="{{ asset('assets/Log out (1).svg') }}" alt="avatar" class="w-5 h-auto">
+                <p class="text-sm font-semibold text-red-600 transition-all duration-500 hover:text-red-600 ">
+                    Logout</p>
+            </button>
+        </form>
+
     </div>
 </div>

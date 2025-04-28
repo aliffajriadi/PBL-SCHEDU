@@ -1,4 +1,4 @@
-<x-layout title="Group Dashboard" role="student">
+<x-layout title="Group Dashboard" role="student" :user="$user">
     <x-nav-group type="name" page="dashboard"></x-nav-group>
 
     <section class="flex flex-col md:flex-row gap-2 mt-3">

@@ -1,4 +1,4 @@
-<x-layout title="Dashboard" role="teacher">
+<x-layout title="Dashboard" role="teacher" :user="$user">
     <!-- Main container with responsive padding -->
 
     <!-- Top section that stacks on mobile, side-by-side on larger screens -->

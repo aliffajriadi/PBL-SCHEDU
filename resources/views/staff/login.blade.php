@@ -33,17 +33,17 @@
         <h2 class="font-semibold text-green-600 pt-12 text-3xl pb-6">
           Login
         </h2>
-        <form action="/login" method="POST" class="md:w-full md:px-44">
-          @csrf
+        <form action="/staff/login" method="POST" class="md:w-full md:px-44">
+            @csrf
           <div class="flex flex-col space-y-4">
             <div class="flex flex-col text-start">
-              <label for="email" class="text-green-600 ps-2">Email</label>
+              <label for="username" class="text-green-600 ps-2">Username</label>
               <input
                 type="text"
                 placeholder="Type here ..."
                 class="border-2 border-green-600 p-2 rounded-2xl"
-                id="email"
-                name="email" 
+                id="username"
+                name="username" 
                 type="string"
                 required/>
             </div>

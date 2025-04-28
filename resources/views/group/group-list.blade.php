@@ -1,4 +1,4 @@
-<x-layout title="Group" role={{$role}}>
+<x-layout title="Group" role={{$role}} :user="$user">
     <!-- Header Section -->
     <div class="bg-white p-4 mb-4 flex flex-col sm:flex-row justify-between items-center shadow-md rounded-2xl">
         @if ($role == 'student')

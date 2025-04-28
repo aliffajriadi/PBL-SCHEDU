@@ -1,6 +1,11 @@
-<x-layout title="Notes" role="teacher">
+<x-layout title="Notes" role="teacher" :user="$user">
+
     <div class="bg-white mb-3 flex md:flex-row justify-between p-3 shadow-md rounded-2xl items-center">
-        <button class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">Back to list</button>
+        {{-- <button class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">Back to list</button> --}}
+        <button onclick="openAddModal()"
+            class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">
+            + Add Notes
+        </button>
         <input type="text" id="search" placeholder="Search Note list...."
             class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all" onkeyup="getSearch()">
     </div>
@@ -9,70 +14,58 @@
         {{-- BAGIAN KIRI --}}
         <div class="bg-white p-3 hidden md:block w-5/12 shadow-md rounded-2xl">
             <h2 class="text-lg mb-4">Note List</h2>
-            <div class="p-3 rounded-2xl h-72 overflow-auto">
-                {{-- DUMMY DATA --}}
-                @php
-                    $notes = [
-                        ['title' => 'Nasi Padang', 'created_at' => '87 minutes ago'],
-                        ['title' => 'Nasi Goreng', 'created_at' => '2 hours ago'],
-                        ['title' => 'Sate Ayam', 'created_at' => '1 day ago'],
-                        ['title' => 'Rendang Daging', 'created_at' => '3 days ago'],
-                        ['title' => 'Gado-Gado', 'created_at' => '5 days ago'],
-                    ];
-                @endphp
-                @foreach ($notes as $note)
-                    <a href="#"
-                        class="block w-full border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 cursor-pointer transition-all duration-300 notelist">
-                        <div class="flex justify-between items-center mt-3">
-                            <h3 class="text-lg">{{ $note['title'] }}</h3>
-                            <p>{{ $loop->iteration }}</p>
-                        </div>
-                        <p class="text-xs opacity-60">Created at {{ $note['created_at'] }}</p>
-                    </a>
-                @endforeach
+            <div id="note-list" class="p-3 rounded-2xl h-72 overflow-auto">
+                {{-- isi datanya --}}
             </div>
         </div>
 
-        {{-- BAGIAN KANAN --}}
-        <div class="bg-emerald-400 p-3 w-full md:w-7/12 shadow-md rounded-2xl h-96">
-            <div class="flex justify-between items-center text-white">
-                <div>
-                    <h2 class="text-lg md:text-xl font-semibold text-white">Masakan Padang</h2>
-                    <p class="text-xs text-gray-100">Created at 27 November 2024</p>
-                </div>
-                <div class="flex flex-col md:flex-row gap-2">
-                    <button onclick="openModal()"
-                        class="text-sm flex py-1 items-center gap-1 cursor-pointer bg-amber-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
-                        <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
-                        <p class="text-xs md:text-md">Edit</p>
-                    </button>
+        <button onclick="closeContent()">a</button>
 
-                    <button
-                        class="text-sm py-1 flex items-center gap-1 cursor-pointer bg-red-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
-                        <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
-                        <p class="text-xs md:text-md">Delete</p>
-                    </button>
+        {{-- BAGIAN KANAN --}}
+        <div id="card-parent"
+         class="bg-white flex-col fade-in-right justify-center hidden md:flex items-center p-3 shadow-md rounded-2xl w-7/12 h-96">
+            <img src="/image/ilustr1.jpg" alt="ilustrator" class="w-40 h-auto">
+            <p class="text-gray-600">Click Note list for Preview</p>
+        </div>
+
+    </div>
+
+    <!-- Modal untuk Add Notes -->
+    <div id="addNoteModal"
+        class="fixed inset-0 bg-slate-100/50 flex backdrop-blur-xs items-center justify-center z-50 opacity-0 invisible transition-opacity duration-300">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl transform transition-all duration-300 scale-95">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-emerald-600">Add New Note</h2>
+                <button onclick="closeAddModal()" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
+            </div>
+            <form action="/note/api" method="POST" id="addNote">
+                {{-- @csrf --}}
+                <div class="mb-4">
+                    <label for="add_title" class="block text-sm font-medium text-gray-700">Title</label>
+                    <input type="text" id="add_title" name="title"
+                        class="mt-1 w-full border-2 border-emerald-400 rounded-xl py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                        placeholder="Enter note title">
                 </div>
-            </div>
-            <div class="bg-emerald-50 p-3 mt-3 rounded-2xl h-72 overflow-auto">
-                <p class="text-sm">Lorem ipsum dolor Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
-                    labore vero quasi voluptas incidunt et voluptatum, asperiores soluta reprehenderit quod dolorem est
-                    eius id consectetur ex ut esse repudiandae laboriosam! sit amet consectetur adipisicing elit.
-                    Quisquam, voluptatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quia quae
-                    excepturi odio facilis obcaecati minus tempore? Laudantium quis ut odio ipsum corrupti quaerat fuga.
-                    Eos fugiat eveniet commodi repudiandae.
-                    Laborum at repudiandae ratione et laudantium corrupti, labore tempora corporis temporibus cupiditate
-                    nisi! Rerum ipsam soluta quam esse amet laborum similique. Nam at quae sit incidunt ad ullam nobis?
-                    Recusandae.
-                    Iste repudiandae veritatis ut tempora voluptas minus? Cupiditate, laboriosam dolor repellendus
-                    dolorem id illo quisquam quibusdam aut rerum libero nostrum numquam ad officia, eius quia nam ab cum
-                    architecto temporibus?</p>
-            </div>
+                <div class="mb-4">
+                    <label for="add_content" class="block text-sm font-medium text-gray-700">Content</label>
+                    <textarea id="add_content" name="content"
+                        class="mt-1 w-full border-2 border-emerald-400 rounded-xl py-2 px-3 text-sm h-32 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                        placeholder="Write your note here..."></textarea>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeAddModal()"
+                        class="bg-gray-200 text-gray-700 py-2 px-4 rounded-xl hover:bg-gray-300 transition-all duration-300">Cancel</button>
+                    <button type="button" onclick="insert_data()"
+                        class="bg-emerald-400 text-white py-2 px-4 rounded-xl hover:bg-emerald-500 transition-all duration-300">Save
+                        Note</button>
+                </div>
+            </form>
         </div>
     </div>
 
+
     <!-- Modal Edit -->
-    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+    <div id="editModalParent" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-lg">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold">Edit Note</h3>
@@ -83,32 +76,142 @@
                 </button>
             </div>
             
-            <form>
+            <form id="editModal">
                 <div class="mb-4">
-                    <label for="noteTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input type="text" id="noteTitle" class="w-full border-2 border-emerald-400 rounded-xl p-2 focus:outline-none focus:border-emerald-600" value="Masakan Padang">
+                    <label for="editTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input type="text" name="title" id="editTitle" class="w-full border-2 border-emerald-400 rounded-xl p-2 focus:outline-none focus:border-emerald-600" value="Masakan Padang">
                 </div>
                 
                 <div class="mb-4">
-                    <label for="noteContent" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
-                    <textarea id="noteContent" class="w-full border-2 border-emerald-400 rounded-xl p-2 h-32 focus:outline-none focus:border-emerald-600">Lorem ipsum dolor sit amet consectetur adipisicing elit...</textarea>
+                    <label for="editContent" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                    <textarea name="content" id="editContent" class="w-full border-2 border-emerald-400 rounded-xl p-2 h-32 focus:outline-none focus:border-emerald-600">Lorem ipsum dolor sit amet consectetur adipisicing elit...</textarea>
                 </div>
                 
+                <input type="hidden" id="note_id">
+
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded-xl hover:opacity-75">Cancel</button>
-                    <button type="submit" class="bg-emerald-400 text-white px-4 py-2 rounded-xl hover:opacity-75">Save Changes</button>
+                    <button type="button" onclick="update_data()" 
+                    class="bg-emerald-400 text-white px-4 py-2 rounded-xl hover:opacity-75">Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
+
+        get_data('/note/api', show_list);
+
+        function insert_data()
+        {
+            const form = document.getElementById('addNote');
+            const formData = new FormData(form);
+
+            formData.append('_method', 'POST');
+
+            api_store('/note/api', formData);
+            closeAddModal();
+
+            const add_title = document.getElementById('add_title');
+            const add_content = document.getElementById('add_content');
+
+            add_title.value = '';
+            add_content.value = '';
+            get_data('/note/api', show_list);
+            
+        }
+
+        function update_data()
+        {
+            const form = document.getElementById('editModal');
+            const id = document.getElementById('note_id');
+            
+            const formData = new FormData(form);
+            formData.append('_method', 'PATCH');
+
+            api_update('/note/api', formData, id.value);
+            get_data('/note/api', show_list);
+        
+            closeModal();
+        }
+
+        function delete_data(id)
+        {
+            api_destroy('/note/api', id);
+            get_data('/note/api', show_list);
+        }
+
+        function show_list(datas) {
+            const parent = document.getElementById('note-list');
+            parent.innerHTML = '';
+            // 
+            datas.datas.forEach((data) => {
+                parent.innerHTML += ` <div onclick="openContent(${data.id})"
+                        class="block w-full border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 cursor-pointer transition-all duration-300 notelist">
+                        <div class="flex justify-between items-center mt-3">
+                            <h3 class="text-lg">${data.title}</h3>
+                            <p>${data.content}</p>
+                        </div>
+                        <p class="text-xs opacity-60"></p>
+                    </div>`;
+            });
+        }
+
+        function content(data)
+        {
+            note = data.data;
+            const card_parent = document.getElementById('card-parent');
+
+            card_parent.className = "bg-emerald-400 p-3 w-full md:w-7/12 shadow-md rounded-2xl h-96" 
+            card_parent.innerHTML = 
+            `<div class="flex justify-between items-center text-white">
+                <div>
+                    <h2 class="text-lg md:text-xl font-semibold text-white">${note.title}</h2>
+                    <p class="text-xs text-gray-100">Created at 27 November 2024</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-2">
+                    <button onclick="openEditModal(${note.id})"
+                        class="text-sm flex py-1 items-center gap-1 cursor-pointer bg-amber-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
+                        <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
+                        <p class="text-xs md:text-md">Edit</p>
+                    </button>
+
+                    <button onclick="delete_data(${note.id})"
+                        class="text-sm py-1 flex items-center gap-1 cursor-pointer bg-red-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
+                        <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
+                        <p class="text-xs md:text-md">Delete</p>
+                    </button>
+                </div>
+            </div>
+            <div class="bg-emerald-50 p-3 mt-3 rounded-2xl h-72 overflow-auto">
+                <p class="text-sm">${note.content}</p>
+            </div>`;
+        }
+
+        async function openContent(id)
+        {
+            get_data('/note/api', content, id);
+    
+        }
+
+        function closeContent()
+        {
+            const card_parent = document.getElementById('card-parent');
+
+            card_parent.className = "transition-all duration-500 ease-out flex-col justify-center hidden md:flex items-center p-3 shadow-md rounded-2xl w-7/12 h-96 bg-white" 
+            card_parent.innerHTML = `
+              <img src="/image/ilustr1.jpg" alt="ilustrator" class="w-40 h-auto">
+            <p class="text-gray-600">Click Note list for Preview</p>`;
+        }
+
         function getSearch() {
             let input = document.getElementById("search").value.toLowerCase();
             let items = document.querySelectorAll(".notelist");
 
             items.forEach(item => {
+
                 let text = item.textContent.toLowerCase();
+                console.log(text);
                 if (text.includes(input)) {
                     item.classList.remove("hidden");
                 } else {
@@ -118,13 +221,57 @@
         }
 
         // Fungsi untuk membuka modal
-        function openModal() {
-            document.getElementById("editModal").classList.remove("hidden");
+        async function openEditModal(id) {
+            await get_data('/note/api', set_edit_modal, id);
+            document.getElementById("editModalParent").classList.remove("hidden");
+        }
+
+        function set_edit_modal(data)
+        {
+            const note = data.data;
+
+            const id = document.getElementById('note_id');
+            const title = document.getElementById('editTitle');
+            const content = document.getElementById('editContent');
+
+            id.value = note.id;
+            title.value = note.title;
+            content.value = note.content;
         }
 
         // Fungsi untuk menutup modal
         function closeModal() {
-            document.getElementById("editModal").classList.add("hidden");
+            document.getElementById("editModalParent").classList.add("hidden");
         }
+
+        function openAddModal() {
+            const modal = document.getElementById('addNoteModal');
+            modal.classList.remove('invisible');
+
+            // Gunakan requestAnimationFrame agar perubahan opacity lebih smooth
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            });
+        }
+
+        function closeAddModal() {
+            const modal = document.getElementById('addNoteModal');
+
+            // Tambahkan kembali opacity-0 untuk animasi keluar
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+
+            // Setelah animasi selesai, sembunyikan modal dengan invisible
+            setTimeout(() => {
+                modal.classList.add('invisible');
+            }, 300); // Sesuaikan dengan duration-300 di Tailwind
+        }
+
+        // function search()
+        // {
+        //     const keyword = document.getElementById();
+        // }
+
     </script>
 </x-layout>

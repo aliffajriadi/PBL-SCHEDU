@@ -1,4 +1,4 @@
-<x-layout title="Schedule" role="teacher">
+<x-layout title="Schedule" role="teacher" :user="$user">
     <!-- Header Section -->
     <div class="bg-white mb-3 flex flex-row-reverse md:flex-row justify-between items-center p-3 shadow-md rounded-2xl">
         <button 
