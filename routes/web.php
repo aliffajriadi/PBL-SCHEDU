@@ -147,11 +147,12 @@ Route::prefix('/admin')->group(function () {
     });
 
     Route::get('/instatiate', function () {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
+        $user_data = [
+            $user->username, 'admin'
+        ];
         return view('admin.instatiate', [
-            'name' => $user->name,
-            'email' => $user->email,
-            'user' => $user
+            'user' => $user_data
         ]);
     });
     
