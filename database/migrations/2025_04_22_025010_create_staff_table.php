@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('staff', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
             $table->string('username')->unique();
+            $table->char('folder_name', 6)->unique();
             $table->string('instance_name');
             $table->string('password');
             $table->string('phone_no');

@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+
 
 use Illuminate\Support\Str;
 
@@ -32,4 +35,13 @@ class Staff extends Authenticatable
 
     protected $fillable = ['username', 'instance_name', 'password', 'phone_no', 'address'];
 
+    public function user()
+    {
+        return $this->hasMany(User::class, 'instance_uuid', 'uuid');
+    }
+
+    public function group()
+    {
+        return $this->hasMany(Group::class, 'instance_uuid', 'uuid');
+    }
 }

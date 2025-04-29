@@ -6,10 +6,29 @@ use Illuminate\Http\Request;
 use App\Models\Staff;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class StaffController extends Controller
 {
+
+    private static function generate_code()
+    {
+        $template = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $str_length = strlen($template) - 1;
+        $new_code;
+
+        do{
+            $new_code = '';       
+            for($i = 0; $i < 6; $i++){
+                $new_code .= $template[random_int(0, $str_length)];
+            }
+        }
+        while(Staff::where('folder_name', $new_code)->exists());
+
+        return $new_code;
+    }
 
     public function login(Request $request)
     {
@@ -94,6 +113,12 @@ class StaffController extends Controller
             ]);
 
             $field['password'] = Hash::make('password');
+            $folder_name = self::generate_code();
+            $field['folder_name'] = $folder_name;
+
+            Storage::makeDirectory($folder_name);
+            Storage::makeDirectory($folder_name . '/groups');
+            Storage::makeDirectory($folder_name . '/pic');
 
             Staff::create($field);
 

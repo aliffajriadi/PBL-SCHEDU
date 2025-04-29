@@ -87,7 +87,7 @@
                         <input 
                             type="file" 
                             id="groupPicture" 
-                            name="groupPicture" 
+                            name="pic" 
                             accept="image/*" 
                             class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-500 file:text-white hover:file:bg-emerald-600 transition-all duration-300"
                             onchange="previewGroupImage(event)"
@@ -99,7 +99,7 @@
                     <input 
                         type="text" 
                         id="groupName" 
-                        name="groupName" 
+                        name="name" 
                         placeholder="Enter group name..." 
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
                         required
@@ -249,4 +249,13 @@
     } else {
         console.log("Join Group Button not found");
     }
+
+    function insert_data()
+    {
+        const form = document.getElementById('addGroupForm');
+        const formData = new FormData(form);
+
+        api_store('/group');
+    }
+
 </script>

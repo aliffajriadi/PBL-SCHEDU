@@ -18,10 +18,10 @@ class GroupController extends Controller
         do{
             $new_code = '';       
             for($i = 0; $i < 6; $i++){
-                $new_code .= $template[rand(0, $str_length)];
+                $new_code .= $template[random_int(0, $str_length)];
             }
         }
-        while(Group::where('join_code')->exists());
+        while(Group::where('join_code', $new_code)->exists());
 
         return $new_code;
     }
@@ -32,12 +32,16 @@ class GroupController extends Controller
            
             $field = $request->validate([
                 'name' => 'required|max:255',
-                'pic' 
+                'pic' => 'image|mimes:jpg,jpeg,png|max:2048'
             ]);
 
-            $field['join_code'] = self::generate_code();
-            $field['instance_id'] = Auth::user()->instance_id;
-            $field['pic'] =
+            $user = Auth::user();
+
+            $field['group_code'] = self::generate_code();
+            $field['instance_id'] = $user->instance_id;
+            
+            Storage::makeDirectory($user()->group()->group_code);
+
             Group::create($field);
 
             return response()->json([

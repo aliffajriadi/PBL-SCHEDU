@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -65,5 +68,15 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+
+    public function instance() : BelongsTo
+    {
+        return $this->belongsTo(Staff::class, 'instance_uuid', 'uuid');
+    }
+
+    public function note()
+    {
+        return $this->hasMany(PersonalNote::class, 'user_uuid', 'uuid');
     }
 }

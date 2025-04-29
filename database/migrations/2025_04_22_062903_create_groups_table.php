@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->char('join_code', 6)->unique();
+            $table->char('group_code', 6)->unique();
             $table->uuid('instance_uuid');
             $table->foreign('instance_uuid')->references('uuid')->on('staff');
             $table->text('pic');
