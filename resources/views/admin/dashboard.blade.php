@@ -2,11 +2,11 @@
     <div class="bg-white p-4 md:p-6 mb-6 rounded-xl">
         <div class="flex justify-between mb-3 items-center">
             <p class="text-lg md:text-2xl font-bold">My Account</p>
-            <a href="#"><img src="assets/Vector 6.svg" class="w-3 hover:w-4 transition-all duration-300"
+            <a href="#"><img src="{{ asset('assets/Vector 6.svg') }}" class="w-3 hover:w-4 transition-all duration-300"
                     alt="accountpage"></a>
         </div>
         <div class="bg-emerald-500 rounded-full p-2 flex text-white items-center">
-            <img src="image/profile.jpg" class="w-14 h-auto rounded-full" alt="profile">
+            <img src="{{ asset('image/Ryan-Gosling.jpg') }}" class="w-14 h-auto rounded-full" alt="profile">
             <div class="ps-2">
                 <h4 class="text-base md:text-xl">Pipip</h4>
                 <p class="text-sm">admin</p>
