@@ -20,7 +20,7 @@
     </div>
 
     <!-- Group List Section -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-9">
+    <div id="group-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-9">
         @php
             $groups = [
                 ['name' => 'Kelas Bahasa Indonesia', 'teacher' => 'Hermanto S.pd, M.pd', 'notes' => 12, 'schedules' => 5, 'tasks' => 3, 'progress' => 0, 'pict_grub' => 'image/image2.jpg'],
@@ -76,7 +76,20 @@
     <div id="addGroupModal" class="fixed inset-0 bg-gray-800/50 flex backdrop-blur-sm justify-center items-center z-50 hidden">
         <div class="p-6 bg-white rounded-2xl shadow-md w-full max-w-md">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New Group</h2>
-            <form id="addGroupForm" enctype="multipart/form-data">
+            <form method="POST" action="/group/api" id="addGroupForm" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Group Name</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="Enter group name..." 
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                        required
+                    >
+                </div>
+
                 <div class="mb-4">
                     <label for="groupPicture" class="block text-sm font-medium text-gray-700 mb-2">Group Profile Picture</label>
                     <div class="flex items-center gap-4">
@@ -94,20 +107,10 @@
                         >
                     </div>
                 </div>
-                <div class="mb-4">
-                    <label for="groupName" class="block text-sm font-medium text-gray-700 mb-2">Group Name</label>
-                    <input 
-                        type="text" 
-                        id="groupName" 
-                        name="name" 
-                        placeholder="Enter group name..." 
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-                        required
-                    >
-                </div>
+
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeModal()" class="bg-gray-300 text-gray-700 hover:bg-gray-400 px-4 py-2 rounded-lg text-sm transition-all duration-300">Cancel</button>
-                    <button type="submit" class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">Save</button>
+                    <button type="submit"  class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">Save</button>
                 </div>
             </form>
         </div>
@@ -117,16 +120,18 @@
     <div id="joinGroupModal" class="fixed inset-0 bg-gray-800/50 backdrop-blur-sm flex justify-center items-center z-50 hidden">
         <div class="p-6 bg-white rounded-2xl shadow-md w-full max-w-md">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Join a Group</h2>
-            <div class="mb-4">
+            <form id="joinGroupForm" method="POST" action="/group/join_group">
+                @csrf
+                <div class="mb-4">
                     <input 
                         type="text" 
-                        id="groupSearch" 
+                        id="groupSearch"
+                        name="group_code" 
                         placeholder="Filter Search groups..." 
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
                         onkeyup="filterGroups()"
                     >
                 </div>
-            <form id="joinGroupForm">
                 <!-- Input Pencarian Grup -->
                 
                 <!-- Dropdown Grup -->
@@ -136,7 +141,7 @@
                         id="groupSelect" 
                         name="groupSelect" 
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-                        required
+                        {{-- required --}}
                     >
                         <option value="" disabled selected>Select a group...</option>
                         @foreach ($groups as $group)
@@ -155,6 +160,66 @@
 </x-layout>
 
 <script>
+
+    a();
+
+    function show_data(groups)
+    {   
+        const parent = document.getElementById('group-list');
+        
+        parent.innerHTML = '';
+        groups.datas.forEach((group) => {
+            console.log(`{{asset('storage/app/public/${group.instance.folder_name}/groups/${group.group_code}/${group.pic}')}}`);
+            
+            parent.innerHTML += `
+            <a href="/group/${group.group_code}">
+
+                        <div class="bg-white fade-in-left cursor-pointer shadow-md rounded-2xl overflow-hidden group transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                <div class="h-40 bg-gray-100 overflow-hidden">
+                    <img src="{{ asset('storage/${group.instance.folder_name}/groups/${group.group_code}/${group.pic}') }}" alt="${group.name} image" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                </div>
+                <div class="p-4 bg-emerald-400 infogrub transition-colors duration-300 group-hover:bg-emerald-500">
+                    <h3 class="text-lg font-semibold text-gray-800 transition-colors duration-300 group-hover:text-white">${group.name}</h3>
+                    <p class="text-sm text-gray-500 transition-colors duration-300 group-hover:text-gray-200">nama pembuat</p>
+                    <div class="mt-2 grid grid-cols-3 gap-2 text-xs text-gray-700 transition-colors duration-300 group-hover:text-gray-100">
+                        <div class="flex items-center gap-1">
+                            <img src="{{ asset('assets/bx-notepad 2.svg') }}" alt="Notes icon" class="w-4 h-4">
+                            <span>COUNT() Notes</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <img src="{{ asset('assets/calender-white.svg') }}" alt="Schedules icon" class="w-4 h-4">
+                            <span>COUNT() Sched</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <img src="{{ asset('assets/bx-task (1) 2.svg') }}" alt="Tasks icon" class="w-4 h-4">
+                            <span>COUNT() Tasks</span>
+                        </div>
+                    </div>
+                    @if ($role != 'teacher')
+                    <div class="mt-2">
+                        <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                            <div class="bg-yellow-300 h-2 rounded-full transition-all duration-300 group-hover:bg-yellow-400" style="width: {{ $group['progress'] }}%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1 transition-colors duration-300 group-hover:text-gray-200">{{ $group['progress'] }}% Complete</p>
+                    </div>
+                    @else
+                    <div class="flex items-center gap-2 mt-2">
+                        <img src="{{ asset('assets/bx-group (1) 3.svg') }}" alt="Student" class="w-4 h-4">
+                        <p class="text-sm group-hover:text-white transition-all duration-300">COUNT Student</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            </a>
+            `;
+        });
+    }
+
+    function a()
+    {
+        get_data('/group/api', show_data);
+    }
+
     const userRole = "{{ $role }}"; // Menyematkan nilai $role ke variabel JavaScript
     console.log("User Role:", userRole); // Debug nilai role
 
@@ -172,7 +237,7 @@
     }
     function closeModal() {
         document.getElementById('addGroupModal').classList.add('hidden');
-        resetForm();
+        // resetForm();
     }
     function previewGroupImage(event) {
         const file = event.target.files[0];
@@ -189,13 +254,13 @@
         }
     }
     function resetForm() {
-        document.getElementById('addGroupForm').reset();
-        document.getElementById('previewImage').classList.add('hidden');
-        document.getElementById('noImageText').classList.remove('hidden');
+        // document.getElementById('addGroupForm').reset();
+        // document.getElementById('previewImage').classList.add('hidden');
+        // document.getElementById('noImageText').classList.remove('hidden');
     }
     document.getElementById('addGroupForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const groupName = document.getElementById('groupName').value;
+        // e.preventDefault();
+        const groupName = document.getElementById('name').value;
         const groupPicture = document.getElementById('groupPicture').files[0];
         console.log('Group Name:', groupName);
         console.log('Group Picture:', groupPicture);
@@ -219,16 +284,16 @@
         resetJoinForm();
     }
     function resetJoinForm() {
-        document.getElementById('joinGroupForm').reset();
-        document.getElementById('groupSearch').value = ''; // Reset input pencarian
+        // document.getElementById('joinGroupForm').reset();
+        // document.getElementById('groupSearch').value = ''; // Reset input pencarian
         filterGroups(); // Reset filter saat form direset
     }
-    document.getElementById('joinGroupForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const selectedGroup = document.getElementById('groupSelect').value;
-        console.log('Joining Group ID:', selectedGroup);
-        closeJoinModal();
-    });
+    // document.getElementById('joinGroupForm').addEventListener('submit', function(e) {
+    //     // e.preventDefault();
+    //     const selectedGroup = document.getElementById('groupSelect').value;
+    //     console.log('Joining Group ID:', selectedGroup);
+    //     closeJoinModal();
+    // });
 
     // Fungsi untuk memfilter grup di modal
     function filterGroups() {
@@ -255,7 +320,10 @@
         const form = document.getElementById('addGroupForm');
         const formData = new FormData(form);
 
-        api_store('/group');
+        for (let [key, value] of formData.entries()) {
+           console.log(`${key}: ${value}`);
+        }
+        api_store('/group/api', formData, true);
     }
 
 </script>

@@ -52,7 +52,7 @@
             <!-- GROUP -->
             <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">GROUP</p>
             <div>
-                <a href="/groups"
+                <a href="/group"
                     class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
                     <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Group</p>
@@ -82,7 +82,7 @@
                         <p class="font-semibold">Group Schedule</p>
                     </a>
                     @if ($role == 'teacher')
-                        <a href="#"
+                        <a href="/group/settings"
                             class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
                             <img src="{{ asset('assets/setting.svg') }}" class="w-5 h-auto" />
                             <p class="font-semibold">Group Settings</p>

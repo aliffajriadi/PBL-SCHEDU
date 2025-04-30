@@ -6,11 +6,11 @@
             <div class="bg-white shadow-md p-3 rounded-2xl">
                 <h2 class="text-lg font-semibold">Group</h2>
                 <div class="mt-3 bg-emerald-400 rounded-2xl w-full shadow-2xs p-3 flex">
-                    <img src="{{ asset('image/image2.jpg') }}" alt="pictgroup" class="w-32 h-auto rounded-2xl me-3 border border-amber-300">
+                    <img src="{{ asset('storage/' . $group->instance->folder_name . '/groups/' . $group->group_code . '/' . $group->pic) }}" alt="pictgroup" class="w-32 h-auto rounded-2xl me-3 border border-amber-300">
                     <div class="text-white">
-                        <p class="text-lg font-semibold">Kelas Bahasa Indonesia 8C</p>
-                        <p class="text-md">SMP Negeri 36 Batam</p>
-                        <p class="text-sm">Siti Aminah S.Pd</p>
+                        <p class="text-lg font-semibold">{{ $group->name }}</p>
+                        <p class="text-md">{{ $group->instance->instance_name }}</p>
+                        <p class="text-sm">Nama Guru yang buat</p>
                     </div>
                 </div>
             </div>
@@ -19,17 +19,17 @@
                 <div class="flex flex-col md:flex-row justify-around gap-3">
                     <div class="bg-emerald-400 text-white rounded-2xl shadow-md p-3 flex-1 text-center">
                         <img src="{{ asset('assets/bx-notepad 2.svg') }}" alt="Notes" class="w-8 h-8 mx-auto mb-2">
-                        <p class="text-sm font-medium">Notes</p>
+                        <p class="text-sm font-medium">COUNT() Notes</p>
                         <p class="text-2xl font-bold">5</p>
                     </div>
                     <div class="bg-emerald-400 text-white rounded-2xl shadow-md p-3 flex-1 text-center">
                         <img src="{{ asset('assets/bx-task (1) 2.svg') }}" alt="Task" class="w-8 h-8 mx-auto mb-2">
-                        <p class="text-sm font-medium">Task</p>
+                        <p class="text-sm font-medium">COUNT() Task</p>
                         <p class="text-2xl font-bold">30</p>
                     </div>
                     <div class="bg-emerald-400 text-white rounded-2xl shadow-md p-3 flex-1 text-center">
                         <img src="{{ asset('assets/calender-white.svg') }}" alt="Schedule" class="w-8 h-8 mx-auto mb-2">
-                        <p class="text-sm font-medium">Schedule</p>
+                        <p class="text-sm font-medium">COUNT() Schedule</p>
                         <p class="text-2xl font-bold">85</p>
                     </div>
                 </div>

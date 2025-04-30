@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Group extends Model
 {
-    protected $fillable = ['name', 'join_code', 'instance_uuid'];
+    protected $fillable = ['name', 'group_code', 'instance_uuid', 'pic'];
 
     public function instance()
     {

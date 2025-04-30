@@ -1,4 +1,4 @@
-<x-layout-admin title="Manage Institutions" role="admin">
+<x-layout-admin title="Manage Institutions" role="admin" :user="$user">
     <!-- Main Content -->
     <div class="bg-white p-6 rounded-2xl shadow-md w-full">
         <!-- Header with Search and Add Button -->
@@ -236,8 +236,8 @@
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirm Delete</h3>
             <p class="text-sm text-gray-600 mb-4">Are you sure you want to delete <span id="delete_institution_name" class="font-semibold"></span>?</p>
             <form action="/institutions/delete" method="POST">
-                @csrf
-                @method('DELETE')
+                {{-- @csrf
+                @method('DELETE') --}}
                 <input type="hidden" id="delete_institution_id" name="institution_id" />
                 <div class="flex justify-end gap-2">
                     <button 
@@ -248,7 +248,8 @@
                         Cancel
                     </button>
                     <button 
-                        type="submit" 
+                        type="button" 
+                        onclick="delete_data()"
                         class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300 text-sm"
                     >
                         Delete
@@ -260,12 +261,14 @@
 
     <!-- JavaScript for Modals -->
     <script>
+        let del_temp = -1;
+
         function a()
         {
             get_data('/admin/staffs', show_list);
         }
 
-        a()
+        a();
 
         function show_list(datas)
         {
@@ -292,7 +295,7 @@
                                     </svg>
                                 </button>
                                 <button 
-                                    onclick="showDeleteModal('{{ $institution['id'] }}', '{{ $institution['name'] }}')"
+                                    onclick="showDeleteModal('${data.uuid}', '${data.instance_name}')"
                                     class="text-red-500 hover:text-red-600"
                                 >
                                     <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -330,8 +333,21 @@
 
         }
 
+        function set_del_temp(id)
+        {
+            del_temp = id;
+        }
+
+        function delete_data()
+        {
+            api_destroy('/admin/staffs', del_temp);
+            a();
+            hideAllModals();
+        }
+
         function showModal() {
             hideAllModals();
+            del_temp = -1;
             document.getElementById('addInstitutionModal').classList.remove('hidden');
         }
 
@@ -347,6 +363,7 @@
 
         function showDeleteModal(id, name) {
             hideAllModals();
+            set_del_temp(id);
             document.getElementById('delete_institution_id').value = id;
             document.getElementById('delete_institution_name').textContent = name;
             document.getElementById('deleteInstitutionModal').classList.remove('hidden');

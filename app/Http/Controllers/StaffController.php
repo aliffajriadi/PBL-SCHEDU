@@ -45,6 +45,8 @@ class StaffController extends Controller
                 ]);
             }
 
+            return redirect('/staff/dashbobard');
+
             return response()->json([
                 'status' => true,
                 'message' => 'Login Successfully'
@@ -116,9 +118,9 @@ class StaffController extends Controller
             $folder_name = self::generate_code();
             $field['folder_name'] = $folder_name;
 
-            Storage::makeDirectory($folder_name);
-            Storage::makeDirectory($folder_name . '/groups');
-            Storage::makeDirectory($folder_name . '/pic');
+            Storage::disk('public')->makeDirectory($folder_name);
+            Storage::disk('public')->makeDirectory($folder_name . '/groups');
+            Storage::disk('public')->makeDirectory($folder_name . '/pic');
 
             Staff::create($field);
 
@@ -194,8 +196,9 @@ class StaffController extends Controller
     public function destroy(Staff $staff)
     {
         try {
+            Storage::disk('public')->deleteDirectory($staff->folder_name);
             $staff->delete();
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'Staff Deleted Successfully'

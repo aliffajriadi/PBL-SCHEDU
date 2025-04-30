@@ -11,7 +11,14 @@ class PersonalNoteController extends Controller
 {
     public function home()
     {
-        return view('teachStudent.notes');
+        $user = Auth::user();
+        $user_data = [$user->name, $user->email];
+
+        return view('teachStudent.notes', [
+            'user' => $user_data
+        ]);
+    
+    
     }
 
     public function index(Request $request)
