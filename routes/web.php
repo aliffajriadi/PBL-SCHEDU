@@ -8,6 +8,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PersonalNoteController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\MemberOfController;
 
 
 use Illuminate\Support\Facades\Auth;
@@ -51,9 +52,8 @@ Route::get('/test', function () {
 Route::get('/profile', [UserController::class, 'profile']);
 
 Route::prefix('/note')->group(function () {
-    Route::get('/', [PersonalNoteController::class, 'home']);
 
-    Route::get('/detail', function () {
+    Route::get('/', function () {
         $user = Auth::user();
         $user_data = [$user->name, $user->email];
         return view('teachStudent.notes-detail', [
@@ -68,45 +68,110 @@ Route::prefix('/note')->group(function () {
 Route::apiResource('/user', UserController::class);
 
 
-// Route::get('/notes', function () {
-//     return view('teachStudent.notes');
-// });
-
-// Route::prefix('/notes')->group(function () {
-//     Route::get('/', function () {
-//         return view('teachStudent.notes');
-//     });
-
-// });
-
-
-// Route::get('/task', function () {
-//     return view('teachStudent.task');
-// });
-// Route::get('/schedule', function () {
-//     return view('teachStudent.schedule');
-// });
-// Route::get('/notification', function () {
-//     return view('notification');
-// });
-
-Route::get('/groups', function () {
-    $role = session('role');
+Route::get('/task', function () {
     $user = Auth::user();
-    $user_data = [
-        $user->name, $user->email
-    ];
+    $user_data = [$user->name, $user->email];
 
-    return view('group.group-list', [
-        'role' => $role, 
+    return view('teachStudent.task', [
+        'user' => $user_data
+
+    ]);
+});
+
+Route::get('/schedule', function () {
+    $user = Auth::user();
+    $user_data = [$user->name, $user->email];
+
+    return view('teachStudent.schedule', [
         'user' => $user_data
     ]);
 });
 
+Route::get('/notification', function () {
+    $user = Auth::user();
+    $user_data = [$user->name, $user->email];
+
+    return view('notification', [
+        'user' => $user_data
+    ]);
+});
+
+
 Route::prefix('/group')->group(function () {
+    
+    Route::get('/', function () {
+        $role = session('role');
+        $user = Auth::user();
+        $user_data = [
+            $user->name, $user->email
+        ];
+    
+        return view('group.group-list', [
+            'role' => $role, 
+            'user' => $user_data
+        ]);
+    });
+
+    Route::get('/{group:group_code}', [GroupController::class, 'dashboard']);
+
+    Route::get('/note', function () {
+        $role = session('role');
+        $user = Auth::user();
+        $user_data = [
+            $user->name, $user->email
+        ];
+    
+        return view('group.group-notes', [
+            'role' => $role, 
+            'user' => $user_data
+        ]);
+    });
+    
+    Route::get('/schedule', function () {
+        $role = session('role');
+        $user = Auth::user();
+        $user_data = [
+            $user->name, $user->email
+        ];
+    
+        return view('group.group-schedule', [
+            'role' => $role, 
+            'user' => $user_data
+        ]);
+    });
+    
+    Route::get('/task', function () {
+        $role = session('role');
+        $user = Auth::user();
+        $user_data = [
+            $user->name, $user->email
+        ];
+    
+        return view('group.group-task', [
+            'role' => $role, 
+            'user' => $user_data
+        ]);
+    });
+    
+    Route::get('/settings', function () {
+        $role = session('role');
+        $user = Auth::user();
+        $user_data = [
+            $user->name, $user->email
+        ];
+    
+        return view('group.group-settings', [
+            'role' => $role, 
+            'user' => $user_data
+        ]);
+    });
+    
+
     Route::apiResource('/api', GroupController::class);
 
-    Route::get('/', [GroupController::class, 'show']);
+    Route::post('join_group', [MemberOfController::class, 'join_group']);
+
+
 
 });
 
@@ -147,11 +212,12 @@ Route::prefix('/admin')->group(function () {
     });
 
     Route::get('/instatiate', function () {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
+        $user_data = [
+            $user->username, 'admin'
+        ];
         return view('admin.instatiate', [
-            'name' => $user->name,
-            'email' => $user->email,
-            'user' => $user
+            'user' => $user_data
         ]);
     });
     

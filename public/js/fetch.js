@@ -26,18 +26,22 @@ async function get_data(url, callback, id = -1)
     return response;
 }
 
-async function api_store(url, form)
+async function api_store(url, form, file = false)
 {
     // console.log(url);
+    
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    let headers_data = {
+        'Accept' : 'application/json',
+        'X-CSRF-TOKEN' : csrfToken
+    };
+
+    if(file) headers_data['Content-Type'] = 'multipart/form-data';
 
     const response = fetch(`${url}`, {
         method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-            // 'Content-Type': 'application/json'
-        },
+        headers: headers_data,
         body: form
     }).then(result => result.json())
     .then(result => {

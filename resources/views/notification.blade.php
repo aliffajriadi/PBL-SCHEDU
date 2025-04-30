@@ -1,7 +1,7 @@
 @php
     $role = "teacher";
 @endphp
-<x-layout title="Notifications" role="{{ $role }}">
+<x-layout title="Notifications" role="{{ $role }}" :user="$user">
     <!-- Header with Search and Back Button -->
     <div class="bg-white mb-4 flex flex-row items-center justify-between p-4 shadow-md rounded-2xl">
         <input 

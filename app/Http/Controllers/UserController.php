@@ -41,6 +41,7 @@ class UserController extends Controller
             // return redirect('/dashboard');
             $request->session()->regenerate();
 
+            return redirect('/dashboard');
 
             return response()->json([
                 'status' => true,
