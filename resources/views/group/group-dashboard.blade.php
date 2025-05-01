@@ -40,13 +40,18 @@
                 <h2 class="text-lg font-semibold mb-3">Anggota Kelas</h2>
                 <div class="flex flex-col gap-3">
                     <!-- Anggota 1 -->
-                    <div class="flex items-center gap-3 bg-emerald-50 rounded-2xl p-1">
-                        <img src="{{ asset('image/Ryan-Gosling.jpg') }}" alt="Anggota 1" class="w-12 h-12 rounded-full border border-emerald-400">
-                        <div>
-                            <p class="text-sm font-medium">Budi Santoso</p>
-                            <p class="text-xs text-gray-500">Siswa</p>
+                    @foreach ($members as $member)
+                        <div class="flex items-center gap-3 bg-emerald-50 rounded-2xl p-1">
+                            <img src="{{ asset('image/Ryan-Gosling.jpg') }}" alt="Anggota 1" class="w-12 h-12 rounded-full border border-emerald-400">
+                            <div>
+                                <p class="text-sm font-medium">{{ $member->user->name }}</p>
+                                <p class="text-xs text-gray-500">Siswa</p>
+                            </div>
                         </div>
-                    </div>
+                        
+                    @endforeach
+                    
+                  
                     <!-- Anggota 2 -->
                     <div class="flex items-center gap-3 bg-emerald-50 rounded-2xl p-1">
                         <img src="{{ asset('image/Ryan-Gosling.jpg') }}" alt="Anggota 2" class="w-12 h-12 rounded-full border border-emerald-400">
