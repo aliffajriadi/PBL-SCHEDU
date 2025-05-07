@@ -152,21 +152,21 @@
         <!-- MENU -->
         <p class="text-sm py-2 text-emerald-100 font-medium">MENU</p>
         <div>
-            <a href="/dashboard"
+            <a href="/admin"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Dashboard</p>
             </a>
 
             
-            <a href="#"
+            <a href="/admin/staff"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('assets/edit.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Manage Staff</p>
                 </div>
             </a>
-            <a href="#"
+            <a href="/admin/instatiate"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('assets/edit.svg') }}" class="w-5 h-auto" />
@@ -181,12 +181,12 @@
         <!-- SETTING -->
         <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">SETTING</p>
         <div>
-            <a href="#"
+            <a href="/profile"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/profile.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Edit Profile</p>
             </a>
-            <a href="#"
+            <a href="/login"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/Log out.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Logout</p>
