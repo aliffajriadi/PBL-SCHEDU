@@ -509,15 +509,15 @@
                     class="w-full max-w-md object-contain rounded-lg animate-in" style="animation-delay: 0.2s;" />
             </div>
             <p class="text-lg md:text-xl text-black animate-in" style="animation-delay: 0.4s;">
-                Selamat datang di SchedU, platform yang dirancang khusus untuk
-                membantu mahasiswa dalam mengelola jadwal perkuliahan, tugas, dan
-                kolaborasi akademik secara efektif.
+                Welcome to SchedU, a platform designed specifically to help students 
+                effectively manage their class schedules, assignments, and academic 
+                collaboration.
             </p>
             <p class="text-lg md:text-xl text-black mt-4 animate-in" style="animation-delay: 0.6s;">
-                Kami memahami betapa pentingnya manajemen waktu dalam kehidupan
-                perkuliahan, itulah sebabnya kami menyediakan fitur pengingat otomatis
-                untuk jadwal kuliah, deadline tugas, serta sistem kolaborasi yang
-                memudahkan komunikasi dalam kerja kelompok.
+                We understand how important time management is in college life,
+                that's why we provide automatic reminder features for
+                lecture schedules, assignment deadlines, and a collaboration 
+                system that facilitates communication in group work.
             </p>
         </div>
         <div class="flex-1 flex justify-center hidden md:block">
@@ -640,7 +640,7 @@
             <!-- Logo dan Tagline -->
             <div class="text-center md:text-left animate-in">
                 <img src="image/logowhite.png" alt="SchedU Logo" class="w-36 h-auto mx-auto md:mx-0 mb-2" />
-                <p class="text-sm opacity-80">Your Daily Plans, All In One Place</p>
+                <p class="text-sm opacity-75">Your Daily Plans, All In One Place</p>
             </div>
 
             <!-- Quick Links & Contact -->
