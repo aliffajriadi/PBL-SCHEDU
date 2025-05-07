@@ -56,7 +56,7 @@ Route::get('/group', function () {
 Route::get('/group/dashboard', function () {
     return view('group.group-dashboard');
 } );
-Route::get('/group/notes', function () {
+Route::get('/group/note', function () {
     return view('group.group-notes');
 } );
 Route::get('/group/task', function () {
