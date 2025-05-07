@@ -53,19 +53,19 @@ Route::get('/group', function () {
     return view('group.group-list', compact('role'));
 });
 
-Route::get('/group/detail/dashboard', function () {
+Route::get('/group/dashboard', function () {
     return view('group.group-dashboard');
 } );
-Route::get('/group/detail/notes', function () {
+Route::get('/group/notes', function () {
     return view('group.group-notes');
 } );
-Route::get('/group/detail/task', function () {
+Route::get('/group/task', function () {
     return view('group.group-task');
 } );
-Route::get('/group/detail/schedule', function () {
+Route::get('/group/schedule', function () {
     return view('group.group-schedule');
 } );
-Route::get('/group/detail/settings', function () {
+Route::get('/group/settings', function () {
     return view('group.group-settings');
 } );
 
@@ -73,7 +73,7 @@ Route::get('/group/detail/settings', function () {
 //admin route dummy
 
 Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
+    Route::get('/', function () {
         return view('admin.dashboard');
     });
     Route::get('/instatiate', function () {
@@ -86,7 +86,7 @@ Route::prefix('admin')->group(function () {
 
 //STAFF ROUTE DUMMY
 Route::prefix('/staff')->group( function () {
-    Route::get('/dashboard', function () {
+    Route::get('/', function () {
         return view('staff.dashboard');
     });
     Route::get('/account', function () {
