@@ -66,7 +66,7 @@
         class="bg-green-600 w-9/12 h-screen bg-[url('/public/image/image1.png')] bg-cover flex-col text-center justify-center items-center gap-y-10 hidden md:flex"
       >
         <h2 class="text-slate-50 font-semibold text-3xl">Good Day sir</h2>
-        <p class="text-slate-50 px-24">
+        <p class="text-slate-50 px-25">
           Hello, the most on-time! Ready to schedule today?
         </p>
         <a href="/"
