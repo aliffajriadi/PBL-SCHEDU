@@ -40,11 +40,11 @@
                 <tbody class="text-gray-600 divide-y">
                     @php
                         $institutions = [
-                            ['id' => 1, 'name' => 'SMPN 3 Batam', 'staff' => 10, 'teachers' => 20, 'students' => 300, 'created_at' => '2025-01-10'],
+                            ['id' => 1, 'name' => 'SMA 3 Batam', 'staff' => 10, 'teachers' => 20, 'students' => 300, 'created_at' => '2025-01-10'],
                             ['id' => 2, 'name' => 'SMAN 1 Batam', 'staff' => 15, 'teachers' => 25, 'students' => 400, 'created_at' => '2025-02-15'],
-                            ['id' => 3, 'name' => 'SDN Tiban', 'staff' => 8, 'teachers' => 15, 'students' => 200, 'created_at' => '2025-03-01'],
+                            ['id' => 3, 'name' => 'SMA 4 Tiban', 'staff' => 8, 'teachers' => 15, 'students' => 200, 'created_at' => '2025-03-01'],
                             ['id' => 4, 'name' => 'SMA Cipta Garden', 'staff' => 12, 'teachers' => 26, 'students' => 350, 'created_at' => '2025-04-05'],
-                            ['id' => 5, 'name' => 'SMP Batu Ajo', 'staff' => 9, 'teachers' => 18, 'students' => 250, 'created_at' => '2025-04-10'],
+                            ['id' => 5, 'name' => 'SMA 30 Batu Aji', 'staff' => 9, 'teachers' => 18, 'students' => 250, 'created_at' => '2025-04-10'],
                         ];
                     @endphp
                     @foreach ($institutions as $index => $institution)
