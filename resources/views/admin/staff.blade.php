@@ -49,7 +49,7 @@
                             ['id' => 2, 'name' => 'Jane Smith', 'email' => 'jane.smith@example.com', 'institution_id' => 2],
                             ['id' => 3, 'name' => 'Michael Tan', 'email' => 'michael.tan@example.com', 'institution_id' => 3],
                             ['id' => 4, 'name' => 'Sarah Lee', 'email' => 'sarah.lee@example.com', 'institution_id' => 4],
-                            ['id' => 5, 'name' => 'David Wong', 'email' => 'david.wong@example.com', 'institution_id' => 5],
+                            ['id' => 5, 'name' => 'David San', 'email' => 'david.san@example.com', 'institution_id' => 5],
                         ];
                     @endphp
                     @foreach ($staff as $index => $admin)
