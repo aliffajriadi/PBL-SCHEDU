@@ -31,18 +31,18 @@
                         <th class="py-3 px-4 border-b">No</th>
                         <th class="py-3 px-4 border-b">Name</th>
                         <th class="py-3 px-4 border-b">Email</th>
-                        <th class="py-3 px-4 border-b">Asal Instansi</th>
-                        <th class="py-3 px-4 border-b">Aksi</th>
+                        <th class="py-3 px-4 border-b">Origin Instance</th>
+                        <th class="py-3 px-4 border-b">Action</th>
                     </tr>
                 </thead>
                 <tbody class="text-gray-600 divide-y">
                     @php
                         $institutions = [
-                            1 => 'SMPN 3 Batam',
+                            1 => 'SMA 3 Batam',
                             2 => 'SMAN 1 Batam',
-                            3 => 'SDN Tiban',
+                            3 => 'SMA 4 Tiban',
                             4 => 'SMA Cipta Garden',
-                            5 => 'SMP Batu Ajo',
+                            5 => 'SMA 30 Batu Aji',
                         ];
                         $staff = [
                             ['id' => 1, 'name' => 'John Doe', 'email' => 'john.doe@example.com', 'institution_id' => 1],
@@ -123,7 +123,7 @@
                     />
                 </div>
                 <div class="mb-4">
-                    <label for="institution_id" class="block text-sm font-medium text-gray-700">Asal Instansi</label>
+                    <label for="institution_id" class="block text-sm font-medium text-gray-700">Origin Instance</label>
                     <select 
                         id="institution_id" 
                         name="institution_id" 
@@ -195,7 +195,7 @@
                     />
                 </div>
                 <div class="mb-4">
-                    <label for="edit_institution_id" class="block text-sm font-medium text-gray-700">Asal Instansi</label>
+                    <label for="edit_institution_id" class="block text-sm font-medium text-gray-700">Origin Instance</label>
                     <select 
                         id="edit_institution_id" 
                         name="institution_id" 
