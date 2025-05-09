@@ -8,6 +8,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PersonalNoteController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\GroupNoteController;
 use App\Http\Controllers\MemberOfController;
 
 
@@ -99,6 +100,8 @@ Route::get('/notification', function () {
 
 Route::prefix('/group')->group(function () {
     
+    Route::apiResource('/api', GroupController::class);
+
     Route::get('/', function () {
         $role = session('role');
         $user = Auth::user();
@@ -112,62 +115,80 @@ Route::prefix('/group')->group(function () {
         ]);
     });
 
-    Route::get('/{group:group_code}', [GroupController::class, 'dashboard']);
+    Route::prefix('/{group:group_code}')->group(function() {
+        Route::get('/', [GroupController::class, 'dashboard']);
 
-    Route::get('/note', function () {
-        $role = session('role');
-        $user = Auth::user();
-        $user_data = [
-            $user->name, $user->email
-        ];
-    
-        return view('group.group-notes', [
-            'role' => $role, 
-            'user' => $user_data
-        ]);
+        Route::prefix('/note')->group(function () {
+            Route::get('/', function () {
+                $role = session('role');
+                $user = Auth::user();
+                $user_data = [
+                    $user->name, $user->email
+                ];
+            
+                return view('group.group-notes', [
+                    'role' => $role, 
+                    'user' => $user_data
+                ]);
+            });
+
+            Route::apiResource('/api', GroupNoteController::class);
+        });
+
+        Route::prefix('/schedule')->group(function () {
+            Route::get('/', function () {
+                $role = session('role');
+                $user = Auth::user();
+                $user_data = [
+                    $user->name, $user->email
+                ];
+            
+                return view('group.group-schedule', [
+                    'role' => $role, 
+                    'user' => $user_data
+                ]);
+            });
+
+            Route::apiResource('/api', GroupNoteController::class);
+        });
+
+        Route::prefix('/task')->group(function () {
+            Route::get('/', function () {
+                $role = session('role');
+                $user = Auth::user();
+                $user_data = [
+                    $user->name, $user->email
+                ];
+            
+                return view('group.group-task', [
+                    'role' => $role, 
+                    'user' => $user_data
+                ]);
+            });
+
+            Route::apiResource('/api', GroupNoteController::class);
+        });
+
+        Route::get('/settings', function () {
+            $role = session('role');
+            $user = Auth::user();
+            $user_data = [
+                $user->name, $user->email
+            ];
+        
+            return view('group.group-settings', [
+                'role' => $role, 
+                'user' => $user_data
+            ]);
+        });    
     });
-    
-    Route::get('/schedule', function () {
-        $role = session('role');
-        $user = Auth::user();
-        $user_data = [
-            $user->name, $user->email
-        ];
-    
-        return view('group.group-schedule', [
-            'role' => $role, 
-            'user' => $user_data
-        ]);
-    });
-    
-    Route::get('/task', function () {
-        $role = session('role');
-        $user = Auth::user();
-        $user_data = [
-            $user->name, $user->email
-        ];
-    
-        return view('group.group-task', [
-            'role' => $role, 
-            'user' => $user_data
-        ]);
-    });
-    
-    Route::get('/settings', function () {
-        $role = session('role');
-        $user = Auth::user();
-        $user_data = [
-            $user->name, $user->email
-        ];
-    
-        return view('group.group-settings', [
-            'role' => $role, 
-            'user' => $user_data
-        ]);
-    });
+
     
 
-    Route::apiResource('/api', GroupController::class);
+    
+
+    
+
 
     Route::post('join_group', [MemberOfController::class, 'join_group']);
 

@@ -45,7 +45,7 @@ class StaffController extends Controller
                 ]);
             }
 
-            return redirect('/staff/dashbobard');
+            return redirect('/staff/dashboard');
 
             return response()->json([
                 'status' => true,

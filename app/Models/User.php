@@ -79,4 +79,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(PersonalNote::class, 'user_uuid', 'uuid');
     }
+
+    public function member_of()
+    {
+        return $this->hasMany(MemberOf::class, 'user_uuid', 'uuid');
+    }
+
+    public function make_note()
+    {
+        return $this->hasMany(GroupNote::class, 'user_uuid', 'uuid');
+    }
+
+    
 }

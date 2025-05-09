@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 
-
 class GroupController extends Controller
 {
 
@@ -17,7 +16,7 @@ class GroupController extends Controller
     {
         $template = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         $str_length = strlen($template) - 1;
-        $new_code;
+        $new_code = '';
 
         do{
             $new_code = '';       
@@ -31,17 +30,22 @@ class GroupController extends Controller
     }
 
     public function dashboard(Request $request, Group $group)
-    {
+    {   
         $role = session('role');
         $user = Auth::user();
         $user_data = [
             $user->name, $user->email
         ];
     
+        $members = MemberOf::with(['user:uuid,name'])->where('group_id', $group->id)->get();
+        // dd($members);
+        // dd($members);
+
         return view('group.group-dashboard', [
             'role' => $role, 
             'user' => $user_data,
-            'group' => $group
+            'group' => $group,
+            'members' => $members
         ]);
     }
 

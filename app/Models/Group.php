@@ -14,4 +14,9 @@ class Group extends Model
     {
         return $this->belongsTo(Staff::class, 'instance_uuid', 'uuid');
     }
+
+    public function note()
+    {
+        return $this->hasMany(GroupNote::class, 'group_id', 'id');
+    }
 }
