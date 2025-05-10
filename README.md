@@ -35,7 +35,6 @@
 
 ---
 
-## ⚙ Quick Start Guide
 
 ### Prerequisites
 Make sure you have the following installed on your system:
@@ -44,27 +43,8 @@ Make sure you have the following installed on your system:
 - Node.js 18.x+
 - MySQL 8.0+
 
-### Installation
 
-Install the dependencies:
-
-composer install
-npm install
-
-Set up the environment:
-cp .env.example .env
-php artisan key:generate
-
-Configure the database (update .env file with your database credentials):
-php artisan migrate --seed
-
-Build the frontend assets:
-npm run build
-
-Start the development server:
-php artisan serve
-
-👨💻 Development Team
+##👨💻 Development Team
 
 **Project Manager:**  
 Metta Santiputri, S.T., M.Sc, Ph.D  
