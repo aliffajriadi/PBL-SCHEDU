@@ -45,8 +45,7 @@ Make sure you have the following installed on your system:
 - MySQL 8.0+
 
 ### Installation
-1. Clone the repository:
-   ```bash
+
 Install the dependencies:
 
 composer install
