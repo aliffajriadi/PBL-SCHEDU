@@ -7,7 +7,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.3.x-06B6D4?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
 [![Vite](https://img.shields.io/badge/Vite-4.x-B73BFE?style=for-the-badge&logo=vite)](https://vitejs.dev)
 
-## 🌟 Featured in PBL IF2D01
+## 🌟 Featured in SchedU
 
 ---
 
@@ -70,8 +70,11 @@ php artisan serve
 Metta Santiputri, S.T., M.Sc, Ph.D  
 
 Team Leader	Alif Fajriadi	3312401103
+
 Member	Bastian Herinko Limbong	3312401092
+
 Member	Dwiky Putra Dachi	3312401086
+
 Member	Rafif Ihsan Syahwaly	3312401095	
 
 
