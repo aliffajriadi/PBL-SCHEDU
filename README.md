@@ -1,6 +1,5 @@
-# 🚀 SchedU - Academic Schedule Mastery Platform
+# 🚀 SchedU - Web Application Platform for Schedule Reminder
 
-![SchedU Banner](https://via.placeholder.com/1920x400.png?text=SchedU+Modern+Schedule+Management) <!-- Replace with actual banner -->
 
 > Your Smart Academic Companion ⏰📚
 
@@ -9,8 +8,6 @@
 [![Vite](https://img.shields.io/badge/Vite-4.x-B73BFE?style=for-the-badge&logo=vite)](https://vitejs.dev)
 
 ## 🌟 Featured in PBL IF2D01
-**Project Supervisor:**  
-Metta Santiputri, S.T., M.Sc, Ph.D  
 
 ---
 
@@ -69,6 +66,9 @@ Start the development server:
 php artisan serve
 
 👨💻 Development Team
+
+**Project Manager:**  
+Metta Santiputri, S.T., M.Sc, Ph.D  
 
 Team Leader	Alif Fajriadi	3312401103
 Member	Bastian Herinko Limbong	3312401092
