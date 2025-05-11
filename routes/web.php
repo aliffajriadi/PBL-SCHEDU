@@ -10,6 +10,7 @@ use App\Http\Controllers\PersonalNoteController;
 
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MemberOfController;
+use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\GroupNoteController;
 use App\Http\Controllers\GroupScheduleController;
@@ -92,13 +93,18 @@ Route::get('/schedule', function () {
     ]);
 });
 
-Route::get('/notification', function () {
-    $user = Auth::user();
-    $user_data = [$user->name, $user->email];
+Route::prefix('/notification')->group(function () {
 
-    return view('notification', [
-        'user' => $user_data
-    ]);
+    Route::get('/', function () {
+        $user = Auth::user();
+        $user_data = [$user->name, $user->email];
+
+        return view('notification', [
+            'user' => $user_data
+        ]);
+    });
+
+    Route::apiResource('/api', NotificationController::class);
 });
 
 

@@ -14,5 +14,9 @@ class NotificationStatus extends Model
         'user_uuid', 'group_id', 'is_read'
     ];
 
+    public function notification()
+    {
+        return $this->belongsTo(Notification::class, 'notif_id', 'id');
+    }
 
 }

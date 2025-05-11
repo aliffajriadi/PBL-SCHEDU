@@ -57,9 +57,27 @@ class NotificationController extends Controller
                 'message' => $e->getMessage()
             ];
         }
-
-        
     }
+
+    public function index(Request $request)
+    {
+        try {
+            $notifications = NotificationStatus::with('notification')->where('user_uuid', Auth::user()->uuid)->get();
+
+            return response()->json([
+                'status' => true,
+                'datas' => $notifications
+            ]);
+
+        }catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+
+        }
+    }
+
 
     public function show(notification $notification)
     {
