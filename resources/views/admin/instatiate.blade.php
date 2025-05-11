@@ -87,14 +87,14 @@
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Institution</h3>
             <form id="add">
                 <div class="mb-4">
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input 
                         type="text" 
-                        id="username" 
-                        name="username" 
+                        id="email" 
+                        name="email" 
                         required 
                         class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
-                        placeholder="Enter New Username"
+                        placeholder="Enter New Email"
                     />
                 </div>
 
@@ -163,14 +163,14 @@
                 <input type="hidden" id="edit_institution_id" name="institution_id" />
             
                 <div class="mb-4">
-                    <label for="edit_username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input 
                         type="text" 
-                        id="edit_username" 
-                        name="username" 
+                        id="email" 
+                        name="email" 
                         required 
                         class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300" 
-                        placeholder="Enter New Username"
+                        placeholder="Enter New Email"
                     />
                 </div>
 
@@ -279,7 +279,7 @@
                 table_body.innerHTML += `                        
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-4 border-b">${index + 1}</td>
-                            <td class="py-3 px-4 border-b" id="username${index}">${data.username}</td>
+                            <td class="py-3 px-4 border-b" id="email${index}">${data.email}</td>
                             <td class="py-3 px-4 border-b" id="instance${index}">${data.instance_name}</td>
                             <td class="py-3 px-4 border-b" id="address${index}">${data.address}</td>
                             <td class="py-3 px-4 border-b" id="phone_no${index}">${data.phone_no}</td>
@@ -354,7 +354,7 @@
         function showEditModal(id, index) {
             hideAllModals();
             document.getElementById('edit_institution_id').value = id;
-            document.getElementById('edit_username').value = document.getElementById(`username${index}`).textContent;
+            document.getElementById('email').value = document.getElementById(`email${index}`).textContent;
             document.getElementById('edit_address').value = document.getElementById(`address${index}`).textContent;
             document.getElementById('edit_instance_name').value = document.getElementById(`instance${index}`).textContent;
             document.getElementById('edit_phone_no').value = document.getElementById(`phone_no${index}`).textContent;

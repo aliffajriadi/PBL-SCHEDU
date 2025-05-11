@@ -33,7 +33,7 @@ class Staff extends Authenticatable
     }
 
 
-    protected $fillable = ['username', 'instance_name', 'password', 'phone_no', 'address', 'folder_name'];
+    protected $fillable = ['email', 'instance_name', 'password', 'phone_no', 'address', 'folder_name'];
 
     public function user()
     {

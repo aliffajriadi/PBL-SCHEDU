@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Group;
 use App\Models\GroupNote;
+
 use Illuminate\Support\Facades\Auth;
 
 class GroupNoteController extends Controller
@@ -35,10 +36,7 @@ class GroupNoteController extends Controller
 
     public function show(Request $request, Group $group, GroupNote $api)
     {
-        // dd($group, $api);
-
         try {
-            // $api = GroupNote::firstOrFail($request->query('id'));
 
             return response()->json([
                 'data' => $api
@@ -54,15 +52,11 @@ class GroupNoteController extends Controller
     public function store(Request $request, Group $group)
     {
         try {
-
-            // dd($group, $request->all());
-
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required',
                 'file'
             ]);
-
 
             $field['created_by'] = Auth::user()->uuid;
 
@@ -82,10 +76,14 @@ class GroupNoteController extends Controller
             $field['group_id'] = $group->id;
             GroupNote::create($field);
 
+            $notification = NotificationController::store(
+                'Catatan Group Baru', 'Catatan baru sudah dibuat disuatu grup', null, $group->id
+            );
+
             return response()->json([
                 'status' => 200,
-                'message' => 'New Note Added Successfully'
-
+                'message' => 'New Note Added Successfully',
+                'notif' => $notification
             ]);
 
         }catch(\Exception $e){
@@ -98,22 +96,22 @@ class GroupNoteController extends Controller
         }
     }
 
-    public function update(Request $request, Group $group, GroupNote $note)
+    public function update(Request $request, Group $group, GroupNote $api)
     {
         try {
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required',
-                'file'
+                'file' => 'nullable|file'
             ]);
 
-            if($note->pic !== null){
-                Storage::disk('public')->delete(Auth::user()->instance->folder_name . '/groups/' . $group->group_code .'/'. $note->pic);
+            if($api->pic !== null){
+                Storage::disk('public')->delete(Auth::user()->instance->folder_name . '/groups/' . $group->group_code .'/'. $api->pic);
             } 
             
             $file_name = null;
 
-            if($request->hasFile)
+            if($request->hasFile('file'))
             {
                 $file = $request->file('file');
                 
@@ -125,29 +123,42 @@ class GroupNoteController extends Controller
 
             $field['file'] = $file_name;
 
-            $group->update($field);
+            $api->update($field);
+            // $note->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Note Updated Successfully',
+                'request' => $field['title']
+
+            ]);
 
         }catch(\Exception $e){
             return response()->json([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'request' => $field['title']
+
 
             ]);
         }
     }
 
-    public function destroy(Group $group, GroupNote $note)
+    public function destroy(Group $group, GroupNote $api)
     {
         try {
-            if($note->pic !== null){
-                Storage::disk('public')->delete(Auth::user()->instance->folder_name . '/groups/' . $group->group_code .'/'. $note->pic);
+            if($api->pic !== null){
+                Storage::disk('public')->delete(Auth::user()->instance->folder_name . '/groups/' . $group->group_code .'/'. $api->pic);
             } 
 
-            $note->delete();
+            $temp = $api;
+
+            $api->delete();
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Note Deleted Successfully' 
+                'message' => 'Note Deleted Successfully',
+                'api' => $temp
             ]);
 
         }catch(\Exception $e){

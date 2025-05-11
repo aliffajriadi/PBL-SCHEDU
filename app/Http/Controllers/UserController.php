@@ -92,7 +92,7 @@ class UserController extends Controller
     public function profile()
     {
         return view('profile', [
-            'user' => Auth::user()
+            'user' => Auth::user()->instance
         ]);
     }
 

@@ -70,7 +70,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function instance() : BelongsTo
+    public function instance()
     {
         return $this->belongsTo(Staff::class, 'instance_uuid', 'uuid');
     }

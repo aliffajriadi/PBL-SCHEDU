@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('group_notes', function (Blueprint $table) {
+        Schema::create('group_schedules', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('content');
+            $table->datetime('start_datetime');
+            $table->datetime('end_datetime');
             $table->foreignId('group_id')->constrained(
-                table: 'groups',
-                column: 'id' 
+                table:'groups',
+                column:'id'
             )->onDelete('cascade')->onUpdate('cascade');
-            $table->uuid('created_by');
-            $table->foreign('created_by')->references('uuid')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('group_notes');
+        Schema::dropIfExists('group_schedules');
     }
 };

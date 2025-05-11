@@ -120,6 +120,11 @@
 
     <!-- Script for Search and Filter -->
     <script>
+        function show_content()
+        {
+            
+        }
+
         function getSearch() {
             const input = document.getElementById("search").value.toLowerCase();
             const items = document.querySelectorAll(".notification-item");

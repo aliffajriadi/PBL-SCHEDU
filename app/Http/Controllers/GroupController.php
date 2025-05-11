@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\MemberOf;
+use App\Models\GroupTaskUnit;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -29,7 +31,7 @@ class GroupController extends Controller
         return $new_code;
     }
 
-    public function dashboard(Request $request, Group $group)
+    public function dashboard(Group $group)
     {   
         $role = session('role');
         $user = Auth::user();
@@ -38,26 +40,25 @@ class GroupController extends Controller
         ];
     
         $members = MemberOf::with(['user:uuid,name'])->where('group_id', $group->id)->get();
-        // dd($members);
-        // dd($members);
 
         return view('group.group-dashboard', [
             'role' => $role, 
             'user' => $user_data,
             'group' => $group,
-            'members' => $members
+            'members' => $members,
         ]);
     }
 
     public function index(Request $request)
     {
-        $groups = Group::query()->with(['instance:uuid,folder_name']);
+        // $groups = Group::query()->with(['instance:uuid,folder_name'])->where('instance_uuid', Auth::user()->instance_uuid);
+        $groups = MemberOf::with('group')->where('user_uuid', Auth::user()->uuid)->where('verified', true);
 
         try {
-            if($request->query('keyword')){
-                $keyword = '%' . $request->query('keyword') . '%';
-                $groups = $groups->where('title', 'like', $keyword);
-            }
+            // if($request->query('keyword')){
+            //     $keyword = '%' . $request->query('keyword') . '%';
+            //     $groups = $groups->where('title', 'like', $keyword);
+            // }
 
             return response()->json([
                 'status' => true,
@@ -165,7 +166,7 @@ class GroupController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Note Deleted Successfully'
+                'message' => 'Group Deleted Successfully'
             ]);
             
         }catch(\Exception $e) {

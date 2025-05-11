@@ -1,6 +1,7 @@
 @php
-    $role = "teacher";
+    $current_url = url()->current();
 @endphp
+
 <x-layout role="{{ $role }}" title="Group Settings" :user="$user">
     <x-nav-group type="name" page="settings"></x-nav-group>
 
@@ -23,35 +24,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            $members = [
-                                [
-                                    'id' => 1,
-                                    'name' => 'Andi Pratama',
-                                    'email' => 'andi.pratama@example.com',
-                                    'joined_at' => '2025-04-01',
-                                ],
-                                [
-                                    'id' => 2,
-                                    'name' => 'Budi Santoso',
-                                    'email' => 'budi.santoso@example.com',
-                                    'joined_at' => '2025-04-02',
-                                ],
-                                [
-                                    'id' => 3,
-                                    'name' => 'Cindy Amelia',
-                                    'email' => 'cindy.amelia@example.com',
-                                    'joined_at' => '2025-04-03',
-                                ],
-                            ];
-                        @endphp
                         @foreach($members as $member)
                             <tr class="border-t">
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member['name'] }}</td>
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member['email'] }}</td>
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member['joined_at'] }}</td>
+                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member->user->name }}</td>
+                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member->user->email }}</td>
+                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member->updated_at }}</td>
                                 <td class="py-2 px-4 text-sm">
-                                    <button onclick="openKickModal({{ $member['id'] }}, '{{ $member['name'] }}')"
+                                    <button onclick="openKickModal({{ $member->id }}, '{{ $member->user->name }}')"
                                         class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
                                         Kick
                                     </button>
@@ -65,10 +44,10 @@
             <div class="md:hidden flex flex-col gap-3">
                 @foreach($members as $member)
                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                        <p class="text-sm font-medium text-gray-800">{{ $member['name'] }}</p>
-                        <p class="text-sm text-gray-600">{{ $member['email'] }}</p>
-                        <p class="text-sm text-gray-500">Bergabung: {{ $member['joined_at'] }}</p>
-                        <button onclick="openKickModal({{ $member['id'] }}, '{{ $member['name'] }}')"
+                        <p class="text-sm font-medium text-gray-800">{{ $member->user->name }}</p>
+                        <p class="text-sm text-gray-600">{{ $member->user->email }}</p>
+                        <p class="text-sm text-gray-500">Bergabung: {{ $member->updated_at }}</p>
+                        <button onclick="openKickModal({{ $member->id }}, '{{ $member->user->name }}')"
                             class="mt-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
                             Kick
                         </button>
@@ -94,36 +73,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            $pendingRequests = [
-                                [
-                                    'id' => 4,
-                                    'name' => 'Dewi Lestari',
-                                    'email' => 'dewi.lestari@example.com',
-                                    'requested_at' => '2025-04-10',
-                                ],
-                                [
-                                    'id' => 5,
-                                    'name' => 'Eko Wahyu',
-                                    'email' => 'eko.wahyu@example.com',
-                                    'requested_at' => '2025-04-11',
-                                ],
-                            ];
-                        @endphp
-                        @foreach($pendingRequests as $request)
+
+                        @foreach($pending_requests as $request)
                             <tr class="border-t">
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $request['name'] }}</td>
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $request['email'] }}</td>
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $request['requested_at'] }}</td>
+                                <td class="py-2 px-4 text-sm text-gray-700">{{ $request->user->name }}</td>
+                                <td class="py-2 px-4 text-sm text-gray-700">{{ $request->user->email }}</td>
+                                <td class="py-2 px-4 text-sm text-gray-700">{{ $request->created_at }}</td>
                                 <td class="py-2 px-4 text-sm flex gap-2">
-                                    <form action="/group/approve/{{ $request['id'] }}" method="POST">
+                                    <form action="{{ $current_url }}/approve/{{ $request->id }}" method="POST">
                                         @csrf
                                         <button type="submit"
                                             class="bg-emerald-400 text-white px-3 py-1 rounded-lg hover:bg-emerald-500 transition">
                                             Approve
                                         </button>
                                     </form>
-                                    <button onclick="openRejectModal({{ $request['id'] }}, '{{ $request['name'] }}')"
+                                    <button onclick="openRejectModal({{ $request->id }}, '{{ $request->user->name }}')"
                                         class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
                                         Reject
                                     </button>
@@ -135,20 +99,20 @@
             </div>
             <!-- Card untuk Mobile -->
             <div class="md:hidden flex flex-col gap-3">
-                @foreach($pendingRequests as $request)
+                @foreach($pending_requests as $request)
                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                        <p class="text-sm font-medium text-gray-800">{{ $request['name'] }}</p>
-                        <p class="text-sm text-gray-600">{{ $request['email'] }}</p>
-                        <p class="text-sm text-gray-500">Permintaan: {{ $request['requested_at'] }}</p>
+                        <p class="text-sm font-medium text-gray-800">{{ $request->user->name }}</p>
+                        <p class="text-sm text-gray-600">{{ $request->user->email }}</p>
+                        <p class="text-sm text-gray-500">Permintaan: {{ $request->created_at }}</p>
                         <div class="mt-2 flex gap-2">
-                            <form action="/group/approve/{{ $request['id'] }}" method="POST">
+                            <form action="{{ $current_url }}/approve/{{ $request->id }}" method="POST">
                                 @csrf
                                 <button type="submit"
                                     class="bg-emerald-400 text-white px-3 py-1 rounded-lg hover:bg-emerald-500 transition">
                                     Approve
                                 </button>
                             </form>
-                            <button onclick="openRejectModal({{ $request['id'] }}, '{{ $request['name'] }}')"
+                            <button onclick="openRejectModal({{ $request->id }}, '{{ $request->user->name }}')"
                                 class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
                                 Reject
                             </button>
@@ -157,6 +121,8 @@
                 @endforeach
             </div>
         </div>
+
+        @if($role === 'teacher')
 
         <!-- Custom Section dengan Tombol Hapus -->
         <div class="bg-white shadow-md rounded-2xl p-4">
@@ -188,14 +154,16 @@
                 </button>
             </div>
         </div>
+        @endif
     </section>
 
+    @if($role === 'teacher')
     <!-- Modal Konfirmasi Kick -->
     <div id="kick-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Kick Anggota</h3>
             <p class="text-gray-600 mb-6">Apakah Anda yakin ingin mengeluarkan "<span id="kick-student-name"></span>" dari grup? Tindakan ini tidak dapat dibatalkan.</p>
-            <form id="kick-student-form" action="" method="POST">
+            <form id="kick-student-form" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-4">
@@ -256,8 +224,12 @@
         </div>
     </div>
 
+    @endif
+
     <!-- JavaScript untuk Modal -->
     <script>
+        const path = window.location.pathname;
+
         document.addEventListener('DOMContentLoaded', function () {
             // Fungsi Modal Kick
             window.openKickModal = function(id, name) {
@@ -265,7 +237,8 @@
                 const nameSpan = document.getElementById('kick-student-name');
                 const form = document.getElementById('kick-student-form');
                 nameSpan.textContent = name;
-                form.action = `/group/kick/${id}`;
+                form.action = `{{ $current_url }}/out/${id}`;
+                
                 modal.classList.remove('hidden');
             };
 
@@ -280,7 +253,7 @@
                 const nameSpan = document.getElementById('reject-student-name');
                 const form = document.getElementById('reject-student-form');
                 nameSpan.textContent = name;
-                form.action = `/group/reject/${id}`;
+                form.action = `{{ $current_url }}/out/${id}`;
                 modal.classList.remove('hidden');
             };
 
@@ -304,32 +277,32 @@
                     case 'notes':
                         titleText = 'Hapus Seluruh Catatan';
                         messageText = 'Apakah Anda yakin ingin menghapus seluruh catatan? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '/group/delete/notes';
+                        actionUrl = '{{ $current_url }}/delete_all/notes';
                         break;
                     case 'tasks':
                         titleText = 'Hapus Seluruh Tugas';
                         messageText = 'Apakah Anda yakin ingin menghapus seluruh tugas? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '/group/delete/tasks';
+                        actionUrl = '{{ $current_url }}/delete_all/tasks';
                         break;
                     case 'schedules':
                         titleText = 'Hapus Seluruh Jadwal';
                         messageText = 'Apakah Anda yakin ingin menghapus seluruh jadwal? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '/group/delete/schedules';
+                        actionUrl = '{{ $current_url }}/delete_all/schedules';
                         break;
                     case 'members':
                         titleText = 'Hapus Seluruh Murid';
                         messageText = 'Apakah Anda yakin ingin menghapus seluruh murid dari grup? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '/group/delete/members';
+                        actionUrl = '{{ $current_url }}/delete_all/members';
                         break;
                     case 'pending':
                         titleText = 'Hapus Seluruh Permintaan Masuk';
                         messageText = 'Apakah Anda yakin ingin menghapus seluruh permintaan masuk? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '/group/delete/pending';
+                        actionUrl = '{{ $current_url }}/delete_all/pending';
                         break;
                     case 'group':
                         titleText = 'Hapus Grup';
                         messageText = 'Apakah Anda yakin ingin menghapus grup ini? Semua data terkait akan hilang dan tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '/group/delete';
+                        actionUrl = '{{ $current_url }}/delete';
                         break;
                 }
 

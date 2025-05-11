@@ -1,6 +1,3 @@
-@php
-    $role = "teacher";
-@endphp
 <x-layout title="Group Task" role="{{ $role }}" :user="$user">
     <x-nav-group type="search" page="tasks"></x-nav-group>
 
@@ -23,118 +20,51 @@
                     </div>
                 @endif
             </div>
-            <div class="flex flex-col gap-3 max-h-96 overflow-auto">
-                @php
-                    $units = [
-                        'Unit 1' => [
-                            1 => ['title' => 'Tugas Matematika', 'deadline' => '2025-04-15'],
-                            2 => ['title' => 'Tugas Bahasa', 'deadline' => '2025-04-17'],
-                            3 => ['title' => 'Tugas IPA', 'deadline' => '2025-04-20'],
-                            4 => ['title' => 'Tugas Sejarah', 'deadline' => '2025-04-22'],
-                        ],
-                        'Unit 2' => [
-                            5 => ['title' => 'Tugas Seni', 'deadline' => '2025-04-25'],
-                            6 => ['title' => 'Tugas Olahraga', 'deadline' => '2025-04-27'],
-                        ],
-                    ];
-                @endphp
-                @foreach($units as $unit => $tasks)
-                    <div class="bg-white border border-gray-200 rounded-md p-3">
-                        <p class="text-gray-800 font-medium mb-2">{{ $unit }}</p>
-                        <div class="flex flex-col gap-2">
-                            @foreach($tasks as $id => $task)
-                                <a href="?task={{ $id }}" class="tasks block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50">
-                                    <p class="font-medium text-gray-800">{{ $task['title'] }}</p>
-                                    <p class="text-sm text-gray-500">Tenggat: {{ $task['deadline'] }}</p>
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+
+            <div id="task-list" class="flex flex-col gap-3 max-h-96 overflow-auto"></div>
+
         </div>
 
         <!-- Kolom Kanan: Detail Tugas -->
-        <div class="bg-white shadow-md rounded-2xl w-full lg:w-7/12 p-4 mt-4 lg:mt-0">
-            @if(request()->query('task'))
-                @php
-                    $tasks = [
-                        1 => [
-                            'title' => 'Tugas Matematika',
-                            'deadline' => '2025-04-15',
-                            'description' => 'Selesaikan 10 soal aljabar linear. Pastikan menunjukkan langkah-langkah penyelesaian secara rinci.'
-                        ],
-                        2 => [
-                            'title' => 'Tugas Bahasa',
-                            'deadline' => '2025-04-17',
-                            'description' => 'Buat esai 500 kata tentang pentingnya pelestarian lingkungan. Sertakan referensi jika diperlukan.'
-                        ],
-                        3 => [
-                            'title' => 'Tugas IPA',
-                            'deadline' => '2025-04-20',
-                            'description' => 'Lakukan percobaan sederhana tentang fotosintesis dan tulis laporan hasilnya.'
-                        ],
-                        4 => [
-                            'title' => 'Tugas Sejarah',
-                            'deadline' => '2025-04-22',
-                            'description' => 'Buat ringkasan tentang perjuangan kemerdekaan Indonesia.'
-                        ],
-                        5 => [
-                            'title' => 'Tugas Seni',
-                            'deadline' => '2025-04-25',
-                            'description' => 'Buat sketsa bertema alam dengan cat air.'
-                        ],
-                        6 => [
-                            'title' => 'Tugas Olahraga',
-                            'deadline' => '2025-04-27',
-                            'description' => 'Rekam video latihan kebugaran selama 10 menit.'
-                        ]
-                    ];
-                    $taskId = request()->query('task');
-                    $task = isset($tasks[$taskId]) ? $tasks[$taskId] : null;
-                @endphp
-
-                @if($task)
-                    @if($role === 'teacher')
-                        <!-- Form Edit Tugas untuk Guru -->
-                        <form action="/tasks/update/{{ $taskId }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <input type="text" name="title" value="{{ $task['title'] }}" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                            <input type="date" name="deadline" value="{{ $task['deadline'] }}" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                            <textarea name="description" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required>{{ $task['description'] }}</textarea>
-                            <div class="flex gap-4">
-                                <button type="submit" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Task</button>
-                                <button type="button" onclick="openDeleteModal({{ $taskId }}, '{{ $task['title'] }}')"
-                                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Delete Task</button>
-                            </div>
-                        </form>
-                    @else
-                        <!-- Tampilan untuk Murid -->
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">{{ $task['title'] }}</h3>
-                        <p class="text-sm text-gray-500 mb-4">Tenggat: {{ $task['deadline'] }}</p>
-                        <p class="text-gray-700 mb-6">{{ $task['description'] }}</p>
-                        <div class="border-t border-gray-200 pt-4">
-                            <h4 class="font-semibold text-gray-700 mb-2">Kumpulkan Tugas</h4>
-                            <form action="/submit-task" method="POST" enctype="multipart/form-data" id="submission-form">
-                                @csrf
-                                <input type="hidden" name="task_id" value="{{ $taskId }}">
-                                <input type="file" name="submissions[]" id="file-input" class="mb-4 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx" multiple>
-                                <div id="file-preview" class="flex flex-col gap-2 mb-4"></div>
-                                <button type="submit" class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition">Kumpul Tugas</button>
-                            </form>
+        <div id="task-content" class="bg-white shadow-md rounded-2xl w-full lg:w-7/12 p-4 mt-4 lg:mt-0">
+            <div id="content-active" class="hidden">
+                @if($role === 'teacher')
+                    <!-- Form Edit Tugas untuk Guru -->
+                    <form id="update-task" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <input id="content-title" type="text" name="title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                        <input id="content-deadline" type="date" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                        <textarea id="content-description" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
+                        <div class="flex gap-4">
+                            <button type="button" onclick="update_data()" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Task</button>
+                            <button type="button" onclick="openDeleteModal()"
+                                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Delete Task</button>
                         </div>
-                    @endif
+                    </form>
                 @else
-                    <div class="flex items-center justify-center h-full text-gray-500">
-                        <p>Tugas tidak ditemukan.</p>
+                    <!-- Tampilan untuk Murid -->
+                    <h3 id="content-title" class="text-xl font-bold text-gray-800 mb-2">**title**</h3>
+                    <p id="content-deadline" class="text-sm text-gray-500 mb-4">Tenggat: **tanggal**</p>
+                    <p id="content-description" class="text-gray-700 mb-6">**deskriprsi**</p>
+                    <div class="border-t border-gray-200 pt-4">
+                        <h4 class="font-semibold text-gray-700 mb-2">Kumpulkan Tugas</h4>
+                        <form action="/submit-task" method="POST" enctype="multipart/form-data" id="submission-form">
+                            @csrf
+                            {{-- <input type="hidden" name="task_id" value="{{ $taskId }}"> --}}
+                            <input type="file" name="submissions[]" id="file-input" class="mb-4 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx" multiple>
+                            <div id="file-preview" class="flex flex-col gap-2 mb-4"></div>
+                            <button type="submit" class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition">Kumpul Tugas</button>
+                        </form>
                     </div>
                 @endif
-            @else
-                <div class="flex items-center justify-center h-full text-gray-500">
-                    <p>Pilih tugas di sebelah kiri untuk melihat detail.</p>
-                </div>
-            @endif
+            
+            </div>
+
+            <div id="default-content" class="flex items-center justify-center h-full text-gray-500">
+                <p>Pilih tugas di sebelah kiri untuk melihat detail.</p>
+            </div>
+        
         </div>
     </section>
 
@@ -261,30 +191,31 @@
                 <p>Pilih tugas untuk melihat riwayat pengumpulan.</p>
             </div>
         @endif
-    </section>
+</section>
 
     <!-- Modal Tambah Tugas (Hanya untuk Guru) -->
     @if($role === 'teacher')
         <div id="add-task-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Tugas Baru</h3>
-                <form action="/tasks/add" method="POST">
+                <form id="add-form" action="task/api" method="POST">
                     @csrf
                     <input type="text" name="title" placeholder="Judul Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <select name="unit" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <select name="unit_id" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                         <option value="" disabled selected>Pilih Unit</option>
-                        @foreach($units as $unit => $tasks)
-                            <option value="{{ $unit }}">{{ $unit }}</option>
+                        @foreach($unit_datas as $unit)
+                            <option value="{{ $unit->id }}">{{ $unit->name }}</option>
                         @endforeach
                     </select>
                     <input type="date" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <textarea name="description" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                    <textarea name="content" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddTaskModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
-                        <button type="submit"
+                        <button type="button"
+                            onclick="insert_data()"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
                             Simpan
                         </button>
@@ -299,9 +230,9 @@
         <div id="add-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Unit Baru</h3>
-                <form action="/units/add" method="POST">
+                <form action="task/unit" method="POST">
                     @csrf
-                    <input type="text" name="unit_name" placeholder="Nama Unit (contoh: Unit 3)" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <input type="text" name="name" placeholder="Nama Unit (contoh: Unit 3)" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddUnitModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
@@ -331,7 +262,7 @@
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
-                        <button type="submit"
+                        <button type="button" onclick="delete_data()"
                             class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
                             Hapus
                         </button>
@@ -343,8 +274,14 @@
 
     <!-- JavaScript untuk Pratinjau File, Modal Tambah, Modal Unit, dan Modal Delete -->
     <script>
+
+        const path = window.location.pathname;
+        let task_selected = -1;
+
         document.addEventListener('DOMContentLoaded', function () {
             // Pratinjau File
+            reset_list()
+
             const fileInput = document.getElementById('file-input');
             if (fileInput) {
                 fileInput.addEventListener('change', function(event) {
@@ -398,12 +335,12 @@
             };
 
             // Fungsi Modal Delete
-            window.openDeleteModal = function(taskId, taskTitle) {
+            window.openDeleteModal = function() {
                 const modal = document.getElementById('delete-modal');
-                const titleSpan = document.getElementById('delete-task-title');
-                const form = document.getElementById('delete-task-form');
-                titleSpan.textContent = taskTitle;
-                form.action = `/tasks/delete/${taskId}`;
+                // const titleSpan = document.getElementById('delete-task-title');
+                // const form = document.getElementById('delete-task-form');
+                // titleSpan.textContent = taskTitle;
+                // form.action = `/tasks/delete/${taskId}`;
                 modal.classList.remove('hidden');
             };
 
@@ -412,5 +349,142 @@
                 modal.classList.add('hidden');
             };
         });
+
+
+        function reset_list()
+        {
+            get_data(`${path}/api`, show_task_list);
+        }
+
+
+        // function show_task_list(units)
+        // {
+        //     console.log(units)
+
+        //     const parent = document.getElementById('task-list');
+        //     parent.innerHTML = '';
+
+        //     units.datas.forEach(unit => {
+        //         let subparent = `
+        //         <div class="bg-white border border-gray-200 rounded-md p-3">
+        //             <p class="text-gray-800 font-medium mb-2">${unit.name}</p>
+        //             <div class="flex flex-col gap-2">`;
+
+        //         console.log(unit.task)
+
+        //         unit.task.forEach(data => {
+        //             subparent.innerHTML += `
+        //             <a href="${data.id}" class="tasks block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50">
+        //                 <p class="font-medium text-gray-800">${data.title}</p>
+        //                 <p class="text-sm text-gray-500">Tenggat: ${data.deadline} </p>
+        //             </a>`;
+        //         });
+
+        //         subparent.innerHTML += `
+        //             </div>
+        //         </div>`
+
+        //         parent.innerHTML += subparent;
+        //     });
+        // }
+
+        function show_task_list(units) {
+            const parent = document.getElementById('task-list');
+            parent.innerHTML = '';
+
+            units.datas.forEach(unit => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'bg-white border border-gray-200 rounded-md p-3';
+
+                const title = document.createElement('p');
+                title.className = 'text-gray-800 font-medium mb-2';
+                title.textContent = unit.name;
+
+                const container = document.createElement('div');
+                container.className = 'flex flex-col gap-2';
+
+                unit.task.forEach(data => {
+                    const a = document.createElement('a');
+                    // a.href = data.id;
+                    a.className = 'tasks block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50';
+
+                    const p1 = document.createElement('p');
+                    p1.className = 'font-medium text-gray-800';
+                    p1.textContent = data.title;
+
+                    const p2 = document.createElement('p');
+                    p2.className = 'text-sm text-gray-500';
+                    p2.textContent = `Tenggat: ${data.deadline}`;
+
+                    a.appendChild(p1);
+                    a.appendChild(p2);
+                    container.appendChild(a);
+
+
+                    a.onclick = () => {
+                        show_data(data.id)
+                    };
+                });
+
+                wrapper.appendChild(title);
+                wrapper.appendChild(container);
+                parent.appendChild(wrapper);
+
+            });
+        }
+
+        function content(task)
+        {
+            const data = task.data;
+
+            document.getElementById('default-content').classList.add('hidden');
+            document.getElementById('content-active').classList.remove('hidden');
+
+            if('{{ $role }}' == 'teacher'){
+                document.getElementById('content-title').value = data.title;
+                document.getElementById('content-deadline').value = data.deadline;
+                document.getElementById('content-description').value = data.content;
+            }else{
+                document.getElementById('content-title').textContent = data.title;
+                document.getElementById('content-deadline').textContent = data.deadline;
+                document.getElementById('content-description').textContent = data.content;
+            }
+        }
+
+        function insert_data()
+        {
+            const form = document.getElementById('add-form');
+            const formData = new FormData(form);
+
+            api_store(`${path}/api`, formData);
+
+            closeAddTaskModal();
+            reset_list();
+            
+        }
+
+        function update_data()
+        {
+            const form = document.getElementById('update-task');
+            const formData =  new FormData(form);
+
+            api_update(`${path}/api`, formData, task_selected);
+            reset_list();
+        }
+
+        function delete_data()
+        {
+            api_destroy(`${path}/api`, task_selected);
+
+            closeDeleteModal();
+            reset_list();
+        }
+
+        function show_data(id)
+        {
+            task_selected = id;
+            get_data(`${path}/api`, content, id);
+        }
+
     </script>
 </x-layout>

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GroupNote extends Model
 {
-    protected $fillable = ['title', 'content', 'group_id', 'created_by'];
+    protected $fillable = ['title', 'content', 'group_id', 'created_by', 'pic'];
 
     public function user()
     {

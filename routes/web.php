@@ -7,10 +7,14 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PersonalNoteController;
+
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\GroupNoteController;
 use App\Http\Controllers\MemberOfController;
 
+use App\Http\Controllers\GroupNoteController;
+use App\Http\Controllers\GroupScheduleController;
+use App\Http\Controllers\GroupTaskController;
+use App\Http\Controllers\GroupTaskUnitController;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -111,7 +115,8 @@ Route::prefix('/group')->group(function () {
     
         return view('group.group-list', [
             'role' => $role, 
-            'user' => $user_data
+            'user' => $user_data,
+            'folder_name' => Auth::user()->instance->folder_name
         ]);
     });
 
@@ -131,7 +136,6 @@ Route::prefix('/group')->group(function () {
                     'user' => $user_data
                 ]);
             });
-
             Route::apiResource('/api', GroupNoteController::class);
         });
 
@@ -149,50 +153,31 @@ Route::prefix('/group')->group(function () {
                 ]);
             });
 
-            Route::apiResource('/api', GroupNoteController::class);
+            Route::apiResource('/api', GroupScheduleController::class);
         });
 
         Route::prefix('/task')->group(function () {
-            Route::get('/', function () {
-                $role = session('role');
-                $user = Auth::user();
-                $user_data = [
-                    $user->name, $user->email
-                ];
-            
-                return view('group.group-task', [
-                    'role' => $role, 
-                    'user' => $user_data
-                ]);
-            });
+            Route::get('/', [GroupTaskController::class, 'dashboard']);
+            Route::post('/unit', [GroupTaskUnitController::class, 'store']);
 
-            Route::apiResource('/api', GroupNoteController::class);
+            Route::apiResource('/api', GroupTaskController::class);
         });
 
-        Route::get('/settings', function () {
-            $role = session('role');
-            $user = Auth::user();
-            $user_data = [
-                $user->name, $user->email
-            ];
+        Route::prefix('/settings')->group(function () {
+            Route::get('/', [MemberOfController::class, 'index']);
+           
+            Route::post('/approve/{member_of}', [MemberOfController::class, 'verifying']);
         
-            return view('group.group-settings', [
-                'role' => $role, 
-                'user' => $user_data
-            ]);
-        });    
+            Route::delete('/out/{member_of}', [MemberOfController::class, 'leave_group']);
+
+            Route::delete('/delete', [GroupController::class, 'destroy']);
+
+            Route::delete('delete_all/{table}', [MemberOfController::class, 'delete_all']);
+        });
+
     });
 
-    
-
-    
-
-    
-
-
     Route::post('join_group', [MemberOfController::class, 'join_group']);
-
-
 
 });
 
@@ -246,9 +231,6 @@ Route::prefix('/admin')->group(function () {
         return view('admin.staff');
     });
 });
-
-
-
 
 
 // //STAFF ROUTE DUMMY

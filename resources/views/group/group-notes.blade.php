@@ -1,5 +1,5 @@
 @php
-    $role = "teacher";
+    $role = $role;
 @endphp
 <x-layout title="Group Notes" role="{{ $role }}" :user="$user">
     <x-nav-group type="search" page="notes"></x-nav-group>
@@ -160,8 +160,8 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Catatan Baru</h3>
                 <form id="add-note-form" action="api" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="text" name="title" placeholder="Note Title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <textarea name="content" placeholder="Note Content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                    <input id="add-title" type="text" name="title" placeholder="Note Title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <textarea id="add-content" name="content" placeholder="Note Content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                     <input type="file" name="file" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddNoteModal()"
@@ -194,7 +194,7 @@
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
-                        <button type="submit"
+                        <button type="button" onclick="delete_data()"
                             class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
                             Hapus
                         </button>
@@ -208,29 +208,26 @@
     <script>
 
         let note_picked = -1;
+        const path = window.location.pathname;
 
         function show_data(id)
         {
-            get_data(`note/api`, function (data) {
+            note_picked = id;
+
+            get_data(path + `/api`, function (data) {
                 const note = data.data;
                 
                 document.getElementById('note-null').classList.add('hidden');
                 document.getElementById('note-content').classList.remove('hidden');
                 
-                // console.log(data.datas);
-
                 if('{{$role}}' === 'teacher'){
                     title.value = note.title;
                     content.value = note.content;
                 }else{
                     title.textContent = note.title;
-                    content.value = note.content;
+                    content.textContent = note.content;
                 }
-
-                
-
             }, id);
-
         }
 
         function show_list(notes)
@@ -255,7 +252,7 @@
 
         function a()
         {
-            get_data('note/api', show_list);   
+            get_data(path + '/api', show_list);   
         }
 
         a();
@@ -265,20 +262,32 @@
             const form = document.getElementById('add-note-form');
             const formData = new FormData(form);
 
-            api_store('note/api', formData, file = true);
+            api_store(path + '/api', formData, file = true);
 
             closeAddNoteModal();
-            a()
+            a();
         }
 
+        function delete_data()
+        {
+            api_destroy(`${path}/api`, note_picked);
+            closeDeleteModal();
+            a();
 
+            document.getElementById('note-null').classList.remove('hidden');
+            document.getElementById('note-content').classList.add('hidden');
+        }
 
-        // function content(note)
-        // {
-        //     if()
-        //     const parent_content = document.getElementById('');
-        // }
+        function update_data()
+        {
+            const form = document.getElementById('note-content');
+            const formData = new FormData(form);
+            formData.append('_method', 'PATCH');
 
+            api_update(path + '/api', formData, note_picked);
+            a();
+            show_data(note_picked);
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             // Pratinjau File
@@ -318,6 +327,10 @@
             window.closeAddNoteModal = function() {
                 const modal = document.getElementById('add-note-modal');
                 modal.classList.add('hidden');
+
+
+                document.getElementById('add-title').value = '';
+                document.getElementById('add-content').value = '';
             };
 
             // Fungsi Modal Delete
@@ -327,11 +340,12 @@
                 const form = document.getElementById('delete-note-form');
                 // titleSpan.textContent = noteTitle;
                 
-                form.action = `/notes/delete/${noteId}`;
+                // form.action = `/notes/delete/${noteId}`;
                 modal.classList.remove('hidden');
             };
 
             window.closeDeleteModal = function() {
+                note_picked = -1;
                 const modal = document.getElementById('delete-modal');
                 modal.classList.add('hidden');
             };

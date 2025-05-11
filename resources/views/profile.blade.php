@@ -1,4 +1,4 @@
-<x-layout title="Profile" role="student">
+<x-layout title="Profile" role="student" :user="$user">
 
     <!-- start here! -->
     <main class="flex-1 flex md:mt-0 flex-col text-emerald-800 w-full">
@@ -25,7 +25,7 @@
                     </div>
                     <div>
                         <p class="font-semibold opacity-70">School</p>
-                        <p>{{ $user->instance_uuid }}</p>
+                        <p>{{ $user->instance_name }}</p>
                     </div>
                     <div>
                         <p class="font-semibold opacity-70">Gender</p>

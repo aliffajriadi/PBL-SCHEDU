@@ -21,55 +21,7 @@
 
     <!-- Group List Section -->
     <div id="group-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-9">
-        @php
-            $groups = [
-                ['name' => 'Kelas Bahasa Indonesia', 'teacher' => 'Hermanto S.pd, M.pd', 'notes' => 12, 'schedules' => 5, 'tasks' => 3, 'progress' => 0, 'pict_grub' => 'image/image2.jpg'],
-                ['name' => 'Kelas Matematika', 'teacher' => 'Siti Aminah S.pd', 'notes' => 8, 'schedules' => 4, 'tasks' => 6, 'progress' => 80, 'pict_grub' => 'image/image22.png'],
-                ['name' => 'Kelas IPA', 'teacher' => 'Budi Santoso S.pd', 'notes' => 15, 'schedules' => 3, 'tasks' => 2, 'progress' => 30, 'pict_grub' => 'image/image2.jpg'],
-                ['name' => 'Kelas Bahasa Inggris', 'teacher' => 'Rina Wulandari S.pd', 'notes' => 10, 'schedules' => 6, 'tasks' => 4, 'progress' => 50, 'pict_grub' => 'image/image2.jpg'],
-                ['name' => 'Kelas Sejarah', 'teacher' => 'Ahmad Yani S.pd', 'notes' => 7, 'schedules' => 2, 'tasks' => 5, 'progress' => 70, 'pict_grub' => 'image/image2.jpg'],
-                ['name' => 'Kelas Seni Budaya', 'teacher' => 'Dewi Lestari S.pd', 'notes' => 5, 'schedules' => 3, 'tasks' => 1, 'progress' => 20, 'pict_grub' => 'image/image2.jpg'],
-            ];
-        @endphp
-        @foreach ($groups as $group)
-            <div class="bg-white fade-in-left cursor-pointer shadow-md rounded-2xl overflow-hidden group transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                <div class="h-40 bg-gray-100 overflow-hidden">
-                    <img src="{{ asset($group['pict_grub']) }}" alt="{{ $group['name'] }} image" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                </div>
-                <div class="p-4 bg-emerald-400 infogrub transition-colors duration-300 group-hover:bg-emerald-500">
-                    <h3 class="text-lg font-semibold text-gray-800 transition-colors duration-300 group-hover:text-white">{{ $group['name'] }}</h3>
-                    <p class="text-sm text-gray-500 transition-colors duration-300 group-hover:text-gray-200">{{ $group['teacher'] }}</p>
-                    <div class="mt-2 grid grid-cols-3 gap-2 text-xs text-gray-700 transition-colors duration-300 group-hover:text-gray-100">
-                        <div class="flex items-center gap-1">
-                            <img src="{{ asset('assets/bx-notepad 2.svg') }}" alt="Notes icon" class="w-4 h-4">
-                            <span>{{ $group['notes'] }} Notes</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <img src="{{ asset('assets/calender-white.svg') }}" alt="Schedules icon" class="w-4 h-4">
-                            <span>{{ $group['schedules'] }} Sched</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <img src="{{ asset('assets/bx-task (1) 2.svg') }}" alt="Tasks icon" class="w-4 h-4">
-                            <span>{{ $group['tasks'] }} Tasks</span>
-                        </div>
-                    </div>
-                    @if ($role != 'teacher')
-                    <div class="mt-2">
-                        <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                            <div class="bg-yellow-300 h-2 rounded-full transition-all duration-300 group-hover:bg-yellow-400" style="width: {{ $group['progress'] }}%"></div>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1 transition-colors duration-300 group-hover:text-gray-200">{{ $group['progress'] }}% Complete</p>
-                    </div>
-                    @else
-                    <div class="flex items-center gap-2 mt-2">
-                        <img src="{{ asset('assets/bx-group (1) 3.svg') }}" alt="Student" class="w-4 h-4">
-                        <p class="text-sm group-hover:text-white transition-all duration-300">27 Student</p>
-                    </div>
-                    @endif
-                    
-                </div>
-            </div>
-        @endforeach
+     
     </div>
 
     <!-- Modal untuk Add New Group -->
@@ -143,10 +95,10 @@
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
                         {{-- required --}}
                     >
-                        <option value="" disabled selected>Select a group...</option>
+                        {{-- <option value="" disabled selected>Select a group...</option>
                         @foreach ($groups as $group)
                             <option value="{{ $loop->index + 1 }}">{{ $group['name'] }} - {{ $group['teacher'] }}</option>
-                        @endforeach
+                        @endforeach --}}
                     </select>
                 </div>
                 <div class="flex justify-end gap-2">
@@ -166,17 +118,21 @@
     function show_data(groups)
     {   
         const parent = document.getElementById('group-list');
-        
+        const folder_name = '{{ $folder_name }}';
+        let group;
+
         parent.innerHTML = '';
         groups.datas.forEach((group) => {
-            console.log(`{{asset('storage/app/public/${group.instance.folder_name}/groups/${group.group_code}/${group.pic}')}}`);
+            
+            group = group.group;
+            console.log(`{{asset('storage/app/public/${folder_name}/groups/${group.group_code}/${group.pic}')}}`);
             
             parent.innerHTML += `
             <a href="/group/${group.group_code}">
 
                         <div class="bg-white fade-in-left cursor-pointer shadow-md rounded-2xl overflow-hidden group transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                 <div class="h-40 bg-gray-100 overflow-hidden">
-                    <img src="{{ asset('storage/${group.instance.folder_name}/groups/${group.group_code}/${group.pic}') }}" alt="${group.name} image" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                    <img src="{{ asset('storage/${folder_name}/groups/${group.group_code}/${group.pic}') }}" alt="${group.name} image" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                 </div>
                 <div class="p-4 bg-emerald-400 infogrub transition-colors duration-300 group-hover:bg-emerald-500">
                     <h3 class="text-lg font-semibold text-gray-800 transition-colors duration-300 group-hover:text-white">${group.name}</h3>
@@ -198,9 +154,9 @@
                     @if ($role != 'teacher')
                     <div class="mt-2">
                         <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                            <div class="bg-yellow-300 h-2 rounded-full transition-all duration-300 group-hover:bg-yellow-400" style="width: {{ $group['progress'] }}%"></div>
+                            <div class="bg-yellow-300 h-2 rounded-full transition-all duration-300 group-hover:bg-yellow-400" style="width: 100%"></div>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1 transition-colors duration-300 group-hover:text-gray-200">{{ $group['progress'] }}% Complete</p>
+                        <p class="text-xs text-gray-500 mt-1 transition-colors duration-300 group-hover:text-gray-200">100% Complete</p>
                     </div>
                     @else
                     <div class="flex items-center gap-2 mt-2">

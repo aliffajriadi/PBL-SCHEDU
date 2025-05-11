@@ -34,7 +34,7 @@ class StaffController extends Controller
     {
         try {
             $credentials = $request->validate([
-                'username' => 'required',
+                'email' => 'required',
                 'password' => 'required'
             ]);
 
@@ -108,7 +108,7 @@ class StaffController extends Controller
     {
         try {
             $field = $request->validate([
-                'username' => 'required|max:255',
+                'email' => 'required|max:255',
                 'instance_name' => 'required|max:255',
                 'address' => 'required|max:255',
                 'phone_no' => 'required|max:255'

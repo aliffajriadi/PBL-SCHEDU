@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('user_uuid');
             $table->UnsignedBigInteger('group_id');
             $table->boolean('verified');
-            $table->foreign('user_uuid')->references('uuid')->on('users');
-            $table->foreign('group_id')->references('id')->on('groups');
+            $table->foreign('user_uuid')->references('uuid')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

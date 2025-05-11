@@ -1,6 +1,4 @@
-@php
-    $role = "student";
-@endphp
+
 <x-layout title="Group Schedule" role="{{ $role }}" :user="$user">
     <x-nav-group type="search" page="schedule"></x-nav-group>
 
@@ -17,7 +15,7 @@
                     </button>
                 @endif
             </div>
-            <div class="flex flex-col gap-3 max-h-96 overflow-auto">
+            <div id="schedule-list" class="flex flex-col gap-3 max-h-96 overflow-auto">
                 @php
                     $schedules = [
                         1 => [
@@ -86,18 +84,19 @@
         <div id="add-schedule-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Jadwal Baru</h3>
-                <form action="/schedules/add" method="POST">
+                <form id="add-form" action="/schedules/add" method="POST">
                     @csrf
                     <input type="text" name="title" placeholder="Judul Jadwal" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <textarea name="body" placeholder="Deskripsi Jadwal" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
-                    <input type="datetime-local" name="start" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <input type="datetime-local" name="end" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <textarea name="content" placeholder="Deskripsi Jadwal" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                    <input type="datetime-local" name="start_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <input type="datetime-local" name="end_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddScheduleModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
-                        <button type="submit"
+                        <button type="button"
+                            onclick="insert_data()"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
                             Simpan
                         </button>
@@ -116,15 +115,16 @@
                     @csrf
                     @method('PUT')
                     <input type="text" name="title" id="edit-title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <textarea name="body" id="edit-body" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
-                    <input type="datetime-local" name="start" id="edit-start" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <input type="datetime-local" name="end" id="edit-end" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <textarea name="content" id="edit-body" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                    <input type="datetime-local" name="start_datetime" id="edit-start" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <input type="datetime-local" name="end_datetime" id="edit-end" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeEditScheduleModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
-                        <button type="submit"
+                        <button type="button"
+                            onclick="update_data()"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
                             Simpan
                         </button>
@@ -148,7 +148,8 @@
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
-                        <button type="submit"
+                        <button type="button"
+                            onclick="delete_data()"
                             class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
                             Hapus
                         </button>
@@ -160,6 +161,79 @@
 
     <!-- JavaScript untuk Modal -->
     <script>
+        const path = window.location.pathname;
+        let schedule_selected = -1;
+
+        console.log(path)
+        function insert_data()
+        {
+            const form = document.getElementById('add-form');
+            const formData = new FormData(form);
+            api_store(`${path}/api`, formData);
+        
+            closeAddScheduleModal();
+            all_schedule();
+        }
+
+        function schedule_list(schedules)
+        {
+            const parent = document.getElementById('schedule-list');
+            parent.innerHTML = '';
+
+            schedules.datas.forEach(schedule => {
+                parent.innerHTML += `
+                <div class="block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50 transition-all duration-300">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-medium text-gray-800">${schedule['title']}</h3>
+                            @if($role === 'teacher')
+                                <div class="flex gap-2">
+                                    <button onclick="openEditScheduleModal(${schedule['id']}, '${schedule['title']}', '${schedule['content']}', '${schedule['start_datetime']}', '${schedule['end_datetime']}')"
+                                        class="text-blue-500 hover:text-blue-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                    </button>
+                                    <button onclick="openDeleteModal(${schedule['id']}, '${schedule['title']}')"
+                                        class="text-red-500 hover:text-red-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            @endif
+                        </div>
+                        <p class="text-sm text-gray-700">${schedule['content']}</p>
+                        <p class="text-sm text-gray-500">Mulai: ${schedule['start_datetime']}</p>
+                        <p class="text-sm text-gray-500">Selesai: ${schedule['end_datetime']}</p>
+                    </div>`
+            });
+        }
+
+        function all_schedule()
+        {
+            get_data(`${path}/api`, schedule_list);
+        }
+
+        all_schedule()
+
+        function update_data()
+        {
+            const form = document.getElementById('edit-schedule-form');
+            const formData = new FormData(form);
+
+            api_update(`${path}/api`, formData, schedule_selected);
+        
+            closeEditScheduleModal();
+            all_schedule();
+        }
+
+        function delete_data()
+        {
+            api_destroy(`${path}/api`, schedule_selected);
+            closeDeleteModal();
+            all_schedule();
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             // Fungsi Modal Tambah Jadwal
             window.openAddScheduleModal = function() {
@@ -174,23 +248,28 @@
 
             // Fungsi Modal Edit Jadwal
             window.openEditScheduleModal = function(id, title, body, start, end) {
+                schedule_selected = id;
                 const modal = document.getElementById('edit-schedule-modal');
                 const form = document.getElementById('edit-schedule-form');
                 document.getElementById('edit-title').value = title;
                 document.getElementById('edit-body').value = body;
                 document.getElementById('edit-start').value = start.replace(' ', 'T');
                 document.getElementById('edit-end').value = end.replace(' ', 'T');
-                form.action = `/schedules/update/${id}`;
+                // form.action = `/schedules/update/${id}`;
                 modal.classList.remove('hidden');
             };
 
             window.closeEditScheduleModal = function() {
+                schedule_selected = -1;
+
                 const modal = document.getElementById('edit-schedule-modal');
                 modal.classList.add('hidden');
             };
 
             // Fungsi Modal Delete
             window.openDeleteModal = function(id, title) {
+                schedule_selected = id;
+
                 const modal = document.getElementById('delete-modal');
                 const titleSpan = document.getElementById('delete-schedule-title');
                 const form = document.getElementById('delete-schedule-form');
@@ -200,6 +279,7 @@
             };
 
             window.closeDeleteModal = function() {
+                schedule_selected = -1;
                 const modal = document.getElementById('delete-modal');
                 modal.classList.add('hidden');
             };

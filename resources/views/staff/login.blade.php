@@ -37,13 +37,13 @@
             @csrf
           <div class="flex flex-col space-y-4">
             <div class="flex flex-col text-start">
-              <label for="username" class="text-green-600 ps-2">Username</label>
+              <label for="username" class="text-green-600 ps-2">Email</label>
               <input
                 type="text"
                 placeholder="Type here ..."
                 class="border-2 border-green-600 p-2 rounded-2xl"
-                id="username"
-                name="username" 
+                id="email"
+                name="email" 
                 type="string"
                 required/>
             </div>
