@@ -1,3 +1,14 @@
+// debounce function untuk live search
+function debounce(fn, delay)
+{
+    let timeout;
+
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn.apply(args), delay )
+    }
+}
+
 // function nutuk api
 
 function testing()

@@ -19,4 +19,19 @@ class Group extends Model
     {
         return $this->hasMany(GroupNote::class, 'group_id', 'id');
     }
+
+    public function schedule()
+    {
+        return $this->hasMany(GroupSchedule::class, 'group_id', 'id');
+    }
+
+    public function task()
+    {
+        return $this->hasMany(GroupTask::class, 'group_id', 'id');
+    }
+
+    public function member()
+    {
+        return $this->hasMany(MemberOf::class, 'group_id', 'id');
+    }
 }

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\PersonalNote;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+
 
 class PersonalNoteController extends Controller
 {
@@ -24,13 +26,21 @@ class PersonalNoteController extends Controller
     public function index(Request $request)
     {
         $notes = PersonalNote::query();
-        // where('uuid', Auth::user()->uuid);
+
 
         try {
-            if($request->query('keyword')){
-                $keyword = '%' . $request->query('keyword') . '%';
+            $keyword = $request->query('keyword');
 
-                $notes = $notes->where('title', 'like', $keyword);
+            if($request->query('keyword')){
+
+                $notes = $notes->where('title', 'like', "%$keyword%")->orderByRaw(
+                    "CASE
+                            WHEN title LIKE ? THEN 1
+                            WHEN title LIKE ? THEN 3
+                            ELSE 3
+                        END;",
+                        ["$keyword%", "%$keyword%"]
+                );
             }
             
             return response()->json([
@@ -48,9 +58,22 @@ class PersonalNoteController extends Controller
 
     public function show(PersonalNote $api)
     {
-        return response()->json([
-            'data' => $api
-        ]);
+        try {
+            Gate::allows('own', [$api]);
+
+            return response()->json([
+                'status' => true,
+                'data' => $api
+            ]);
+        }catch(\Exception $e){
+            
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
+
     }
 
     public function store(Request $request)
@@ -63,8 +86,6 @@ class PersonalNoteController extends Controller
             ]);
 
             $field['user_uuid'] = Auth::user()->uuid;
-
-            
 
             PersonalNote::create($field);
 
@@ -84,7 +105,9 @@ class PersonalNoteController extends Controller
     public function update(Request $request, PersonalNote $api)
     {
         try {
-           
+
+            Gate::allows('own', [$api]);
+
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required'
@@ -109,6 +132,8 @@ class PersonalNoteController extends Controller
     public function destroy(PersonalNote $api)
     {
         try {
+            Gate::allows('own', [$api]);
+
             $api->delete();
 
             return response()->json([

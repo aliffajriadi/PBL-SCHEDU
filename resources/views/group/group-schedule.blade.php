@@ -16,60 +16,7 @@
                 @endif
             </div>
             <div id="schedule-list" class="flex flex-col gap-3 max-h-96 overflow-auto">
-                @php
-                    $schedules = [
-                        1 => [
-                            'title' => 'Kelas Matematika',
-                            'body' => 'Pembahasan aljabar linear dan vektor.',
-                            'start' => '2025-04-15 08:00',
-                            'end' => '2025-04-15 09:30',
-                        ],
-                        2 => [
-                            'title' => 'Kelas Bahasa Inggris',
-                            'body' => 'Latihan menulis esai dan tata bahasa.',
-                            'start' => '2025-04-15 10:00',
-                            'end' => '2025-04-15 11:30',
-                        ],
-                        3 => [
-                            'title' => 'Kelas IPA',
-                            'body' => 'Praktikum fotosintesis di laboratorium.',
-                            'start' => '2025-04-16 09:00',
-                            'end' => '2025-04-16 11:00',
-                        ],
-                        4 => [
-                            'title' => 'Diskusi Kelompok',
-                            'body' => 'Diskusi proyek akhir semester.',
-                            'start' => '2025-04-17 13:00',
-                            'end' => '2025-04-17 14:30',
-                        ],
-                    ];
-                @endphp
-                @foreach ($schedules as $id => $schedule)
-                    <div class="block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50 transition-all duration-300">
-                        <div class="flex justify-between items-center">
-                            <h3 class="font-medium text-gray-800">{{ $schedule['title'] }}</h3>
-                            @if($role === 'teacher')
-                                <div class="flex gap-2">
-                                    <button onclick="openEditScheduleModal({{ $id }}, '{{ $schedule['title'] }}', '{{ $schedule['body'] }}', '{{ $schedule['start'] }}', '{{ $schedule['end'] }}')"
-                                        class="text-blue-500 hover:text-blue-600">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
-                                    </button>
-                                    <button onclick="openDeleteModal({{ $id }}, '{{ $schedule['title'] }}')"
-                                        class="text-red-500 hover:text-red-600">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            @endif
-                        </div>
-                        <p class="text-sm text-gray-700">{{ $schedule['body'] }}</p>
-                        <p class="text-sm text-gray-500">Mulai: {{ $schedule['start'] }}</p>
-                        <p class="text-sm text-gray-500">Selesai: {{ $schedule['end'] }}</p>
-                    </div>
-                @endforeach
+             
             </div>
         </div>
 

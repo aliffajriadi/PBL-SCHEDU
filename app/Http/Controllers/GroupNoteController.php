@@ -14,7 +14,7 @@ class GroupNoteController extends Controller
     public function index(Request $request, Group $group)
     {
         try {
-            $notes = GroupNote::query()->where('group_id', $group->id);
+            $notes = GroupNote::query()->where('group_id', $group->id)->orderByDesc('created_at');
             
             $keyword = $request->query('keyword');
 

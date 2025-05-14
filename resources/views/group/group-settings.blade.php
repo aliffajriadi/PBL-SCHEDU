@@ -3,7 +3,7 @@
 @endphp
 
 <x-layout role="{{ $role }}" title="Group Settings" :user="$user">
-    <x-nav-group type="name" page="settings"></x-nav-group>
+    <x-nav-group type="name" page="settings" group_name="{{ $group_name }}"></x-nav-group>
 
     <!-- Konten Utama -->
     <section class="mt-3 space-y-6">

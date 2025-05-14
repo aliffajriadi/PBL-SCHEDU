@@ -13,9 +13,10 @@
         
         <input 
             type="text" 
+            id="search"
             placeholder="Search groups..." 
             class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-            onkeyup="searchGroups()"
+            oninput="search()"
         >
     </div>
 
@@ -113,20 +114,37 @@
 
 <script>
 
+    const debounce_search = debounce(a, 500);
+
     a();
+
+    function search()
+    {
+        debounce_search();
+        
+    }
 
     function show_data(groups)
     {   
         const parent = document.getElementById('group-list');
         const folder_name = '{{ $folder_name }}';
         let group;
+        let note_count;
+        let task_count;
+        let schedule_count;
+        let member_count;
 
         parent.innerHTML = '';
         groups.datas.forEach((group) => {
             
-            group = group.group;
+            // group = group.group;
             console.log(`{{asset('storage/app/public/${folder_name}/groups/${group.group_code}/${group.pic}')}}`);
             
+            note_count = group.note_count;
+            task_count = group.task_count;
+            schedule_count = group.schedule_count;
+            member_count = group.member_count;
+
             parent.innerHTML += `
             <a href="/group/${group.group_code}">
 
@@ -140,15 +158,15 @@
                     <div class="mt-2 grid grid-cols-3 gap-2 text-xs text-gray-700 transition-colors duration-300 group-hover:text-gray-100">
                         <div class="flex items-center gap-1">
                             <img src="{{ asset('assets/bx-notepad 2.svg') }}" alt="Notes icon" class="w-4 h-4">
-                            <span>COUNT() Notes</span>
+                            <span>${note_count} ${ note_count < 2 ? 'Note' : 'Notes' } </span>
                         </div>
                         <div class="flex items-center gap-1">
                             <img src="{{ asset('assets/calender-white.svg') }}" alt="Schedules icon" class="w-4 h-4">
-                            <span>COUNT() Sched</span>
+                            <span>${schedule_count} ${ schedule_count< 2 ? 'Schedule' : 'Schedules' }</span>
                         </div>
                         <div class="flex items-center gap-1">
                             <img src="{{ asset('assets/bx-task (1) 2.svg') }}" alt="Tasks icon" class="w-4 h-4">
-                            <span>COUNT() Tasks</span>
+                            <span>${task_count} ${task_count < 2 ? 'Task' : 'Tasks'}</span>
                         </div>
                     </div>
                     @if ($role != 'teacher')
@@ -161,7 +179,7 @@
                     @else
                     <div class="flex items-center gap-2 mt-2">
                         <img src="{{ asset('assets/bx-group (1) 3.svg') }}" alt="Student" class="w-4 h-4">
-                        <p class="text-sm group-hover:text-white transition-all duration-300">COUNT Student</p>
+                        <p class="text-sm group-hover:text-white transition-all duration-300">${member_count} ${member_count < 2 ? 'Participant' : 'Participants'}</p>
                     </div>
                     @endif
                 </div>
@@ -173,7 +191,9 @@
 
     function a()
     {
-        get_data('/group/api', show_data);
+        const keyword = document.getElementById('search').value;
+
+        get_data(`/group/api?keyword=${keyword}`, show_data);
     }
 
     const userRole = "{{ $role }}"; // Menyematkan nilai $role ke variabel JavaScript

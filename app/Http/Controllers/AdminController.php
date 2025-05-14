@@ -27,7 +27,7 @@ class AdminController extends Controller
                 //     'message' => 'Wrong Username or Password'
                 // ]);
             
-                return redirect('/admin/login');
+                return redirect('/adm_login');
 
             }
 
@@ -53,7 +53,7 @@ class AdminController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect('/admin/login');
+            return redirect('/adm_login');
 
             return response()->json([
                 'status' => true,

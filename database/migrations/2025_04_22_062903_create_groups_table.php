@@ -18,10 +18,8 @@ return new class extends Migration
             $table->uuid('instance_uuid');
             $table->foreign('instance_uuid')->references('uuid')->on('staff')->onDelete('cascade')->onUpdate('cascade');
             $table->text('pic')->nullable();
-            // $table->foreignId('instance_id')->constrained(
-            //     table: 'staff',
-            //     column: 'id'
-            // );
+            $table->uuid('created_by');
+            $table->foreign('created_by')->references('uuid')->on('users');
             $table->timestamps();
         });
     }

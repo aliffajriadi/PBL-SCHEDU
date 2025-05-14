@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Group;
+use App\Models\GroupNote;
+use App\Models\GroupSchedule;
+use App\Models\GroupTask;
 use App\Models\MemberOf;
 use App\Models\GroupTaskUnit;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 
 class GroupController extends Controller
@@ -33,32 +37,71 @@ class GroupController extends Controller
 
     public function dashboard(Group $group)
     {   
+        Gate::allows('is_member', $group);
+
+        $id = $group->id;
+
         $role = session('role');
         $user = Auth::user();
         $user_data = [
             $user->name, $user->email
         ];
     
-        $members = MemberOf::with(['user:uuid,name'])->where('group_id', $group->id)->get();
+        $note_total = GroupNote::where('group_id', $id)->count();
+        $schedule_total = GroupSchedule::where('group_id', $id)->count();
+        $task_total = GroupTask::where('group_id', $id)->count();
+
+        $notes = GroupNote::orderBy('updated_at', 'DESC')->limit(3)->get();
+    
+
+        $members = MemberOf::with(['user:uuid,name'])->where('group_id', $id)->get();
 
         return view('group.group-dashboard', [
             'role' => $role, 
             'user' => $user_data,
             'group' => $group,
             'members' => $members,
+            'note_total' => $note_total, 
+            'task_total' => $task_total,
+            'schedule_total' => $schedule_total,
+            'notes' => $notes
+        ]);
+    }
+
+    public function group_list()
+    {
+        $role = session('role');
+        $user = Auth::user();
+        $user_data = [
+            $user->name, $user->email
+        ];
+    
+        return view('group.group-list', [
+            'role' => $role, 
+            'user' => $user_data,
+            'folder_name' => Auth::user()->instance->folder_name
         ]);
     }
 
     public function index(Request $request)
     {
         // $groups = Group::query()->with(['instance:uuid,folder_name'])->where('instance_uuid', Auth::user()->instance_uuid);
-        $groups = MemberOf::with('group')->where('user_uuid', Auth::user()->uuid)->where('verified', true);
+        $groups_ids = MemberOf::with('group')->where('user_uuid', Auth::user()->uuid)->where('verified', true)->pluck('group_id');
+
+        $groups = Group::withCount(['note', 'task', 'schedule', 'member'])->whereIn('id', $groups_ids);
 
         try {
-            // if($request->query('keyword')){
-            //     $keyword = '%' . $request->query('keyword') . '%';
-            //     $groups = $groups->where('title', 'like', $keyword);
-            // }
+            if($request->query('keyword')){
+                $keyword = $request->query('keyword');
+                $groups = $groups->where('name', 'like', "%$keyword%")->orderByRaw(
+                    "CASE 
+                            WHEN name LIKE ? THEN 1
+                            WHEN name LIKE ? THEN 2
+                            ELSE 3
+                        END",
+                        ["$keyword%", "%$keyword%"]);
+
+            }
 
             return response()->json([
                 'status' => true,
@@ -75,6 +118,8 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         try {
+
+            Gate::allows('create');
             // dd($request);
             
             $field = $request->validate([
@@ -136,7 +181,9 @@ class GroupController extends Controller
     public function update(Request $request, Group $group)
     {
         try {
-           
+            Gate::allows('is_member', [$group]);
+            Gate::allows('modify_permission', [$group]);
+
             $field = $request->validate([
                 'name' => 'required|max:255',
             ]);
@@ -160,6 +207,10 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         try {
+
+            Gate::allows('is_member', [$group]);
+            Gate::allows('modify_permission', [$group]);
+
             Storage::disk('public')->deleteDirectory($group->instance->folder_name . '/groups/' . $group->group_code);
 
             $group->delete();

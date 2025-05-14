@@ -10,14 +10,27 @@ use Illuminate\Support\Facades\Auth;
 
 class GroupTaskController extends Controller
 {
-    public function index()
+    public function index(Request $request, Group $group)
     {
         try{
-            $unit = GroupTaskUnit::query()->with('task')->get();
+            $keyword = $request->query('keyword');
             
+            $unit = GroupTaskUnit::query()->with('task')->orderByDesc('created_at');
+            
+            if($keyword) {
+                $unit->whereHas('task', function ($model) use ($keyword) {
+                    $model->where('title', 'LIKE', "%$keyword%")->orderByRaw("
+                        CASE 
+                            WHEN title LIKE ? THEN 1
+                            WHEN title LIKE ? THEN 2
+                            ELSE 3
+                        END", ["$keyword", "%$keyword%"]);
+                });
+            }
+
             return response()->json([
                 'status' => true,
-                'datas' => $unit
+                'datas' => $unit->get()
             ]);
 
         }catch(\Exception $e){
@@ -39,7 +52,7 @@ class GroupTaskController extends Controller
         return view('group.group-task', [
             'role' => $role, 
             'user' => $user_data,
-            'unit_datas' => GroupTaskUnit::where('group_id', $group->id)->get()
+            'unit_datas' => GroupTaskUnit::where('group_id', $group->id)->orderBy('created_at')->get()
         ]);
     }
 

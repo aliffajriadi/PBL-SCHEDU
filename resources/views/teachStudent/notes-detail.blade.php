@@ -7,7 +7,7 @@
             + Add Notes
         </button>
         <input type="text" id="search" placeholder="Search Note list...."
-            class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all" onkeyup="getSearch()">
+            class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all" oninput="search()">
     </div>
 
     <div class="flex gap-3">
@@ -99,8 +99,22 @@
     </div>
 
     <script>
+        const debounce_search = debounce(refresh_list, 500);
 
-        get_data('/note/api', show_list);
+        function search()
+        {
+            debounce_search();
+
+        }
+
+        function refresh_list()
+        {
+            const keyword = document.getElementById('search').value ? document.getElementById('search').value : '';
+            get_data(`/note/api?keyword=${encodeURIComponent(keyword)}`, show_list);
+
+        }
+
+        refresh_list();
 
         function insert_data()
         {
@@ -117,7 +131,7 @@
 
             add_title.value = '';
             add_content.value = '';
-            get_data('/note/api', show_list);
+            refresh_list();
             
         }
 
@@ -130,7 +144,7 @@
             formData.append('_method', 'PATCH');
 
             api_update('/note/api', formData, id.value);
-            get_data('/note/api', show_list);
+            refresh_list();
         
             closeModal();
         }
@@ -138,7 +152,7 @@
         function delete_data(id)
         {
             api_destroy('/note/api', id);
-            get_data('/note/api', show_list);
+            refresh_list();
         }
 
         function show_list(datas) {
@@ -190,8 +204,8 @@
 
         async function openContent(id)
         {
-            get_data('/note/api', content, id);
-    
+
+            get_data(`/note/api`, content, id);    
         }
 
         function closeContent()
@@ -204,7 +218,8 @@
             <p class="text-gray-600">Click Note list for Preview</p>`;
         }
 
-        function getSearch() {
+        function getSearch() 
+        {
             let input = document.getElementById("search").value.toLowerCase();
             let items = document.querySelectorAll(".notelist");
 
@@ -268,10 +283,7 @@
             }, 300); // Sesuaikan dengan duration-300 di Tailwind
         }
 
-        // function search()
-        // {
-        //     const keyword = document.getElementById();
-        // }
+
 
     </script>
 </x-layout>

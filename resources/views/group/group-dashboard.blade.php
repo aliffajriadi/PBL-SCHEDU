@@ -1,5 +1,6 @@
-<x-layout title="Group Dashboard" role="student" :user="$user">
-    <x-nav-group type="name" page="dashboard"></x-nav-group>
+<x-layout title="Group Dashboard" role="{{ $role }}" :user="$user">
+    <x-nav-group type="name" page="dashboard" group_name="{{ $group->name }}"></x-nav-group>
+
 
     <section class="flex flex-col md:flex-row gap-2 mt-3">
         <div class="w-full md:w-7/12 flex flex-col gap-y-2">
@@ -19,18 +20,18 @@
                 <div class="flex flex-col md:flex-row justify-around gap-3">
                     <div class="bg-emerald-400 text-white rounded-2xl shadow-md p-3 flex-1 text-center">
                         <img src="{{ asset('assets/bx-notepad 2.svg') }}" alt="Notes" class="w-8 h-8 mx-auto mb-2">
-                        <p class="text-sm font-medium">COUNT() Notes</p>
-                        <p class="text-2xl font-bold">5</p>
+                        <p class="text-sm font-medium">{{ $note_total > 1 ? 'Notes' : 'Note' }}</p>
+                        <p class="text-2xl font-bold">{{ $note_total }}</p>
                     </div>
                     <div class="bg-emerald-400 text-white rounded-2xl shadow-md p-3 flex-1 text-center">
                         <img src="{{ asset('assets/bx-task (1) 2.svg') }}" alt="Task" class="w-8 h-8 mx-auto mb-2">
-                        <p class="text-sm font-medium">COUNT() Task</p>
-                        <p class="text-2xl font-bold">30</p>
+                        <p class="text-sm font-medium">{{ $task_total> 1 ? 'Tasks' : 'Task' }}</p>
+                        <p class="text-2xl font-bold">{{ $task_total }}</p>
                     </div>
                     <div class="bg-emerald-400 text-white rounded-2xl shadow-md p-3 flex-1 text-center">
                         <img src="{{ asset('assets/calender-white.svg') }}" alt="Schedule" class="w-8 h-8 mx-auto mb-2">
-                        <p class="text-sm font-medium">COUNT() Schedule</p>
-                        <p class="text-2xl font-bold">85</p>
+                        <p class="text-sm font-medium">{{ $schedule_total > 1 ? 'Schedules' : 'Schedule' }}</p>
+                        <p class="text-2xl font-bold">{{ $schedule_total }}</p>
                     </div>
                 </div>
             </div>
@@ -128,38 +129,20 @@
                 <h2 class="text-lg font-semibold mb-3">Catatan Kelas</h2>
                 <div class="flex flex-col gap-3">
                     <!-- Catatan 1 -->
+                    @foreach ($notes as $note)
                     <div class="p-3 bg-gray-50 text-gray-800 rounded-xl hover:bg-emerald-50 transition-all duration-300">
                         <div class="flex items-center gap-3">
-                            <img src="{{ asset('assets/bx-note.svg') }}" alt="Catatan" class="w-8 h-8">
+                            <img src="{{ asset('assets/bx-notepad 2.svg') }}" alt="Catatan" class="w-8 h-8">
                             <div>
-                                <p class="text-sm font-medium">Struktur Puisi</p>
-                                <p class="text-xs text-gray-500">Dibuat: 15 April 2025</p>
+                                <p class="text-sm font-medium">{{ $note->title }}</p>
+                                <p class="text-xs text-gray-500">Created {{ $note->created_at->diffForHumans() }}</p>
                             </div>
                         </div>
-                        <p class="text-xs text-gray-600 mt-2 line-clamp-2">Penjelasan tentang bait, rima, dan irama dalam puisi tradisional.</p>
+                        {{-- <p class="text-xs text-gray-600 mt-2 line-clamp-2">{{ $note->content }}</p> --}}
                     </div>
-                    <!-- Catatan 2 -->
-                    <div class="p-3 bg-gray-50 text-gray-800 rounded-xl hover:bg-emerald-50 transition-all duration-300">
-                        <div class="flex items-center gap-3">
-                            <img src="{{ asset('assets/bx-note.svg') }}" alt="Catatan" class="w-8 h-8">
-                            <div>
-                                <p class="text-sm font-medium">Unsur Cerpen</p>
-                                <p class="text-xs text-gray-500">Dibuat: 10 April 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-2 line-clamp-2">Catatan tentang tema, tokoh, dan latar dalam cerita pendek.</p>
-                    </div>
-                    <!-- Catatan 3 -->
-                    <div class="p-3 bg-gray-50 text-gray-800 rounded-xl hover:bg-emerald-50 transition-all duration-300">
-                        <div class="flex items-center gap-3">
-                            <img src="{{ asset('assets/bx-note.svg') }}" alt="Catatan" class="w-8 h-8">
-                            <div>
-                                <p class="text-sm font-medium">Kosa Kata Baru</p>
-                                <p class="text-xs text-gray-500">Dibuat: 8 April 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-xs text-gray-600 mt-2 line-clamp-2">Daftar kosa kata dari teks yang dibahas di kelas.</p>
-                    </div>
+                    @endforeach
+
+                 
                 </div>
             </div>
         </div>

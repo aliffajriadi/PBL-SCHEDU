@@ -28,10 +28,10 @@ class GroupTaskUnitController extends Controller
 
             return redirect()->back();
 
-            return response()->json([
-                'status' => true, 
-                'message' => 'Berhasil menambah unit'
-            ]);
+            // return response()->json([
+            //     'status' => true, 
+            //     'message' => 'Berhasil menambah unit'
+            // ]);
         }catch(\Exception $e){
             return response()->json([
                 'status' => false, 
