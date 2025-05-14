@@ -14,6 +14,9 @@ class Group extends Model
     {
         return $this->belongsTo(Staff::class, 'instance_uuid', 'uuid');
     }
+    public function user(){
+        return $this->belongsTo(User::class, 'pic', 'uuid');
+    }
 
     public function note()
     {

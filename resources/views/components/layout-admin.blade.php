@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <title>{{$title}}</title>
     @vite('resources/css/app.css')
     <link rel="icon" class="" href="/image/logoP.png" type="image/png" />
@@ -13,10 +13,11 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
     <script src="/js/fetch.js"></script>
-    
+
     <style>
         * {
             font-family: "Poppins", sans-serif;
@@ -33,6 +34,7 @@
                 transform: translateY(0);
             }
         }
+
         @keyframes slideOutUp {
             from {
                 opacity: 1;
@@ -44,6 +46,7 @@
                 transform: translateY(0);
             }
         }
+
         @keyframes fadeInRight {
             from {
                 opacity: 0;
@@ -55,6 +58,7 @@
                 transform: translateX(0);
             }
         }
+
         @keyframes fadeInLeft {
             from {
                 opacity: 0;
@@ -71,6 +75,7 @@
         .fade-in-right {
             animation: fadeInRight 1s ease-out forwards;
         }
+
         .fade-in-left {
             animation: fadeInLeft 1s ease-out forwards;
         }
@@ -78,6 +83,7 @@
         .slide-down {
             animation: slideDown 0.5s ease-in-out;
         }
+
         .slide-out {
             animation: slideOutUp 0.5s ease-in-out;
         }
@@ -156,40 +162,34 @@
         <!-- MENU -->
         <p class="text-sm py-2 text-emerald-100 font-medium">MENU</p>
         <div>
-            <a href="/admin/dashboard"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/admin/dashboard" class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item 
+                {{ Request::is('admin/dashboard') ? 'bg-green-400' : 'hover:bg-green-400' }}">
                 <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Dashboard</p>
             </a>
 
-            
-            <a href="/admin/staff"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <div class="flex items-center gap-2">
-                    <img src="{{ asset('assets/edit.svg') }}" class="w-5 h-auto" />
-                    <p class="font-semibold">Manage Staff</p>
-                </div>
-            </a>
-            <a href="/admin/instatiate"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/admin/instatiate" class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item 
+                {{ Request::is('admin/instatiate') ? 'bg-green-400' : 'hover:bg-green-400' }}">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('assets/edit.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Manage instantiate</p>
                 </div>
             </a>
 
+
         </div>
-        
+
 
 
         <!-- SETTING -->
         <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">SETTING</p>
         <div>
-            <a href="#"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="{{ route('profile-admin') }}"
+                class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item hover:bg-green-400 {{ request()->routeIs('profile-admin') ? 'bg-green-400' : '' }}">
                 <img src="{{ asset('assets/profile.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Edit Profile</p>
             </a>
+
             <a href="/admin/logout"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/Log out.svg') }}" class="w-5 h-auto" />
@@ -215,10 +215,12 @@
             <img src="{{ asset('image/image4.png') }}" class="w-32 h-auto" alt="schedu" />
         </div>
         <div>
-            <img src="{{ asset('image/Ryan-Gosling.jpg')}}"
-                class="w-12 border-2 border-green-500 h-12 rounded-full shadow-md transition-all duration-300 hover:border-emerald-600 cursor-pointer"
-                alt="profile" onclick="dropdown('dropdownMenu')" id="dropdownButton" />
+            <div class="bg-emerald-500 text-white rounded-full w-12  md:hidden flex items-center justify-center h-12 cursor-pointer hover:w-14 hover:h-14 transition-all duration-700 border-2 border-green-600 text-xl font-semibold"
+                onclick="dropdown('dropdownMenu')" id="dropdownButton">
+                {{ strtoupper(substr($user->username, 0, 1)) }}
+            </div>
         </div>
+
     </nav>
 
     <!-- Mobile menu - Fixed position from top of screen -->
@@ -237,20 +239,15 @@
         <!-- MENU -->
         <p class="text-sm py-2 text-emerald-100 font-medium">MENU</p>
         <div>
-            <a href="#"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/admin/dashboard"
+                class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item hover:bg-green-400 active:bg-green-400 {{ request()->is('admin/dashboard') ? 'bg-green-400' : '' }}">
                 <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Dashboard</p>
             </a>
-            <a href="#"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/admin/instatiate"
+                class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item hover:bg-green-400 active:bg-green-400 {{ request()->is('admin/instatiate') ? 'bg-green-400' : '' }}">
                 <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Manage instantiate</p>
-            </a>
-            <a href="#"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
-                <p class="font-semibold">Manage Staff</p>
             </a>
 
 
@@ -258,14 +255,14 @@
             <!-- SETTING -->
             <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">SETTING</p>
             <div>
-                <a href="#"
-                    class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <a href="{{ route('profile-admin') }}"
+                    class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item hover:bg-green-400 active:bg-green-400 {{ request()->routeIs('profile-admin') ? 'bg-green-400' : '' }}">
                     <img src="{{ asset('assets/profile.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Edit Profile</p>
                 </a>
 
-                <a href="#"
-                    class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <a href="/admin/logout"
+                    class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item hover:bg-green-400 active:bg-green-400">
                     <img src="{{ asset('assets/Log out.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Logout</p>
                 </a>
@@ -282,14 +279,16 @@
             <h1 class="text-xl md:text-2xl font-semibold text-emerald-800">
                 {{$title}}
             </h1>
-            <img src="{{ asset('image/Ryan-Gosling.jpg') }}" id="dropdownButton" onclick="dropdown('dropdownMenu')"
-                class="w-12 hidden md:block h-12 cursor-pointer hover:w-14 hover:h-14 transition-all duration-700 rounded-full border-2 border-green-600"
-                alt="profile"/>
+
+            <div class="bg-emerald-500 text-white rounded-full w-12 hidden md:flex items-center justify-center h-12 cursor-pointer hover:w-14 hover:h-14 transition-all duration-700 border-2 border-green-600 text-xl font-semibold"
+                onclick="dropdown('dropdownMenu')" id="dropdownButton">
+                {{ strtoupper(substr($user->username, 0, 1)) }}
+            </div>
+
         </div>
         <div id="dropdownMenu"
             class="hidden slide-down origin-top-right right-0 md:mt-12 h-auto me-6 w-56 rounded-md text-sm text-emerald-900 text-center shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2 z-30 fixed md:absolute">
-            <p class="text-md font-semibold">Ryan Gosling</p>
-            <p style="font-size: smaller">ryangosling@gmail.com</p>
+            <p class="text-md font-semibold">{{ $user->username }}</p>
             <p>{{ ucfirst($role) }}</p>
             <hr class="my-2">
             <div class="flex-col flex text-start px-2 space-y-2">
@@ -310,11 +309,11 @@
         {{$slot}}
 
     </main>
-    
+
+    <x-modal.toast />
 
 
 
-    
     <script>
         function toggleMenu() {
             const menuMobile = document.getElementById("menuMobile");

@@ -205,63 +205,55 @@ Route::prefix('/group')->group(function () {
 
 
 
+//===================================================================================================
+//ADMIN ROUTE
 
-// //admin route dummy
+// ROUTE FOR ADMIN NON MIDDLEWARE / FOR PUBLIC GUEST
+Route::controller(AdminController::class)->group(function () {
+    Route::post('/admin/login', 'login');
+    Route::get('/admin/logout', 'logout');
+    Route::get('/admin/login', 'view_login');
+});
 
-Route::prefix('/admin')->group(function () {
-    Route::get('/login', function(){
-        return view('admin.login');
-    });
+// ROUTE ADMIN WITH MIDDLEWARE
+Route::prefix('/admin')->middleware('admin')->controller(AdminController::class)->group(function () {
+    Route::get('/dashboard', 'index');
+    Route::post('/password', 'edit_password');
+    Route::post('/username', 'edit_username');
+    Route::get('/profile', 'profile')->name('profile-admin');
+    Route::get('/instatiate', 'instatiate')->name('instantiate_manage');
+});
 
-    Route::apiResource('/staffs', StaffController::class);
-
-    Route::get('/logout', [AdminController::class, 'logout']);
-
-    Route::post('/login', [AdminController::class, 'login']);
-
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    });
-
-    Route::get('/instatiate', function () {
-        $user = Auth::guard('admin')->user();
-        $user_data = [
-            $user->username, 'admin'
-        ];
-        return view('admin.instatiate', [
-            'user' => $user_data
-        ]);
-    });
-    
-    Route::get('/staff', function () {
-        return view('admin.staff');
-    });
+Route::prefix('/admin')->middleware('admin')->controller(StaffController::class)->group(function(){
+    Route::post('/instantiate-store', 'store')->name('store-instantiate');
 });
 
 
-// //STAFF ROUTE DUMMY
-Route::prefix('/staff')->group(function () {
-    // Route::apiResource('/api', StaffController::class);
+//END ADMIN ROUTE
+//===============================================================================================
+
+
+
+//===============================================================================================
+//STAFF ROUTE
+
+
+//STAFF NON MIDDLEWARE / FOR PUBLIC GUEST
+Route::get('/staff/login', [StaffController::class, 'view_login']);
+Route::post('/staff/login', [StaffController::class, 'login']);
+
+
+//ROUTE FOR WITH MIDDLEWARE STAFF
+Route::prefix('/staff')->middleware('staff')->group(function () {
 
     Route::apiResource('/user', UserController::class);
 
-    Route::get('/login', function () {
-        return view('staff.login');
+    Route::controller(StaffController::class)->group(function(){
+        Route::get('/dashboard', 'dashboard');
+        Route::post('/logout', 'logout');
     });
-
-    Route::post('/login', [StaffController::class, 'login']);
-
-    Route::post('/logout', [StaffController::class, 'logout']);
 
     Route::post('/create-user', [UserController::class, 'store']);
-
-    Route::get('/dashboard', function () {
-        $user = Auth::guard('staff')->user();
-        $data_user = [$user->username, $user->instance_name];
-        return view('staff.dashboard', [
-            'user' => $data_user
-        ]);
-    });
 
     Route::get('/account', function () {
         $user = Auth::guard('staff')->user();
@@ -278,7 +270,9 @@ Route::prefix('/staff')->group(function () {
             'user' => $user
         ]);
     });
-
-
-
 });
+
+
+//END ROUTE FOR STAFF / INSTANSI
+//===============================================================================================
+

@@ -28,7 +28,7 @@
             href="/" 
             class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-300"
         >
-            Back to Home
+            Back
         </a>
     </section>
 
