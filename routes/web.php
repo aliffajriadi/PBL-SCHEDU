@@ -226,6 +226,7 @@ Route::prefix('/admin')->middleware('admin')->controller(AdminController::class)
 
 Route::prefix('/admin')->middleware('admin')->controller(StaffController::class)->group(function(){
     Route::post('/instantiate-store', 'store')->name('store-instantiate');
+    Route::delete('/staffs/{staff}', 'destroy');
 });
 
 
