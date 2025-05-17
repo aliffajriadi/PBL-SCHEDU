@@ -204,8 +204,23 @@
     <!-- JavaScript untuk Pratinjau File, Modal Tambah, dan Modal Delete -->
     <script>
 
+        const debounce_refresh = debounce(search, 500);
         let note_picked = -1;
         const path = window.location.pathname;
+
+        function debounce_search()
+        {
+            debounce_refresh();
+        }
+
+        function search()
+        {
+            const keyword = document.getElementById('search').value;
+            get_data(`${path}/api?keyword=${keyword}`, show_list);   
+        }
+
+        search();
+
 
         function show_data(id)
         {
@@ -247,13 +262,6 @@
 
         }
 
-        function a()
-        {
-            get_data(path + '/api', show_list);   
-        }
-
-        a();
-
         function insert_data()
         {
             const form = document.getElementById('add-note-form');
@@ -262,14 +270,14 @@
             api_store(path + '/api', formData, file = true);
 
             closeAddNoteModal();
-            a();
+            search();
         }
 
         function delete_data()
         {
             api_destroy(`${path}/api`, note_picked);
             closeDeleteModal();
-            a();
+            search();
 
             document.getElementById('note-null').classList.remove('hidden');
             document.getElementById('note-content').classList.add('hidden');
@@ -282,7 +290,7 @@
             formData.append('_method', 'PATCH');
 
             api_update(path + '/api', formData, note_picked);
-            a();
+            search();
             show_data(note_picked);
         }
 

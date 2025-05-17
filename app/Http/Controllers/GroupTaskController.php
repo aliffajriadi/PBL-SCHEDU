@@ -15,7 +15,7 @@ class GroupTaskController extends Controller
         try{
             $keyword = $request->query('keyword');
             
-            $unit = GroupTaskUnit::query()->with('task')->orderByDesc('created_at');
+            $unit = GroupTaskUnit::query()->with('task')->orderBy('created_at', 'ASC');
             
             if($keyword) {
                 $unit->whereHas('task', function ($model) use ($keyword) {

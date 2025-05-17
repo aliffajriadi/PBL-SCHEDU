@@ -47,24 +47,23 @@ class GroupController extends Controller
             $user->name, $user->email
         ];
     
-        $note_total = GroupNote::where('group_id', $id)->count();
-        $schedule_total = GroupSchedule::where('group_id', $id)->count();
-        $task_total = GroupTask::where('group_id', $id)->count();
+        $note = GroupNote::where('group_id', $id);
+        $schedule = GroupSchedule::where('group_id', $id);
+        $task = GroupTask::where('group_id', $id);
 
-        $notes = GroupNote::orderBy('updated_at', 'DESC')->limit(3)->get();
-    
-
-        $members = MemberOf::with(['user:uuid,name'])->where('group_id', $id)->get();
+        $members = MemberOf::with(['user:uuid,name'])->where('group_id', $id)->limit(5)->get();
 
         return view('group.group-dashboard', [
             'role' => $role, 
             'user' => $user_data,
             'group' => $group,
             'members' => $members,
-            'note_total' => $note_total, 
-            'task_total' => $task_total,
-            'schedule_total' => $schedule_total,
-            'notes' => $notes
+            'note_total' => $note->count(), 
+            'task_total' => $task->count(),
+            'schedule_total' => $schedule->count(),
+            'notes' => $note->orderBy('updated_at', 'DESC')->limit(3)->get(),
+            'tasks' => $task->orderBy('updated_at', 'DESC')->limit(3)->get(),
+            'schedules' => $schedule->orderBy('updated_at', 'DESC')->limit(3)->get()
         ]);
     }
 

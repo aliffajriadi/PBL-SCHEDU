@@ -278,6 +278,15 @@
         const path = window.location.pathname;
         let task_selected = -1;
 
+        const debounce_refresh = debounce(search, 500);
+        let note_picked = -1;
+        const path = window.location.pathname;
+
+        function debounce_search()
+        {
+            debounce_refresh();
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             // Pratinjau File
             reset_list()

@@ -75,7 +75,7 @@
         @elseif ($type == "search")
         <input type="text" id="search" placeholder="Search {{$page}}...."
                class="w-full full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-               onkeyup="getSearch()">
+               oninput="debounce_search()">
         @endif
     </div>
 </div>

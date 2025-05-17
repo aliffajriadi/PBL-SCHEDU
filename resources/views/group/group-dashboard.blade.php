@@ -53,30 +53,6 @@
                     @endforeach
                     
                   
-                    <!-- Anggota 2 -->
-                    <div class="flex items-center gap-3 bg-emerald-50 rounded-2xl p-1">
-                        <img src="{{ asset('image/Ryan-Gosling.jpg') }}" alt="Anggota 2" class="w-12 h-12 rounded-full border border-emerald-400">
-                        <div>
-                            <p class="text-sm font-medium">Ani Lestari</p>
-                            <p class="text-xs text-gray-500">Siswa</p>
-                        </div>
-                    </div>
-                    <!-- Anggota 3 -->
-                    <div class="flex items-center gap-3 bg-emerald-50 rounded-2xl p-1">
-                        <img src="{{ asset('image/Ryan-Gosling.jpg') }}" alt="Anggota 3" class="w-12 h-12 rounded-full border border-emerald-400">
-                        <div>
-                            <p class="text-sm font-medium">Citra Dewi</p>
-                            <p class="text-xs text-gray-500">Siswa</p>
-                        </div>
-                    </div>
-                    <!-- Anggota 4 -->
-                    <div class="flex items-center gap-3 bg-emerald-50 rounded-2xl p-1">
-                        <img src="{{ asset('image/Ryan-Gosling.jpg') }}" alt="Anggota 4" class="w-12 h-12 rounded-full border border-emerald-400">
-                        <div>
-                            <p class="text-sm font-medium">Dedi Pratama</p>
-                            <p class="text-xs text-gray-500">Siswa</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -89,38 +65,20 @@
                 <h2 class="text-lg font-semibold mb-3">Daftar Tugas</h2>
                 <div class="flex flex-col gap-3">
                     <!-- Tugas 1 -->
+                    @foreach ($tasks as $task)
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-emerald-50 transition-all duration-300">
                         <div class="flex items-center gap-3">
                             <img src="{{ asset('assets/bx-task.svg') }}" alt="Tugas" class="w-8 h-8">
                             <div>
-                                <p class="text-sm font-medium">Membuat Puisi</p>
-                                <p class="text-xs text-gray-500">Tenggat: 20 April 2025</p>
+                                <p class="text-sm font-medium">{{ $task->title }}</p>
+                                <p class="text-xs text-gray-500">Tenggat: {{ $task->deadline }}</p>
                             </div>
                         </div>
                         <span class="text-xs bg-emerald-400 text-white px-2 py-1 rounded-full">Belum Selesai</span>
                     </div>
-                    <!-- Tugas 2 -->
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-emerald-50 transition-all duration-300">
-                        <div class="flex items-center gap-3">
-                            <img src="{{ asset('assets/bx-task.svg') }}" alt="Tugas" class="w-8 h-8">
-                            <div>
-                                <p class="text-sm font-medium">Analisis Cerpen</p>
-                                <p class="text-xs text-gray-500">Tenggat: 25 April 2025</p>
-                            </div>
-                        </div>
-                        <span class="text-xs bg-emerald-400 text-white px-2 py-1 rounded-full">Belum Selesai</span>
-                    </div>
-                    <!-- Tugas 3 -->
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-emerald-50 transition-all duration-300">
-                        <div class="flex items-center gap-3">
-                            <img src="{{ asset('assets/bx-task.svg') }}" alt="Tugas" class="w-8 h-8">
-                            <div>
-                                <p class="text-sm font-medium">Latihan Kosa Kata</p>
-                                <p class="text-xs text-gray-500">Tenggat: 18 April 2025</p>
-                            </div>
-                        </div>
-                        <span class="text-xs bg-green-500 text-white px-2 py-1 rounded-full">Selesai</span>
-                    </div>
+                        
+                    @endforeach
+
                 </div>
             </div>
         </div>

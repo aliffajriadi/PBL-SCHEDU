@@ -115,7 +115,11 @@
 
         function open_content(id)
         {
-            document.getElementById(`dot${id}`).remove();
+            const dot = document.getElementById(`dot${id}`);
+
+            if(dot){
+                dot.remove();
+            }
 
             get_data(`notification/api`, set_content, id);  
             document.getElementById('content-open').classList.remove('hidden');
