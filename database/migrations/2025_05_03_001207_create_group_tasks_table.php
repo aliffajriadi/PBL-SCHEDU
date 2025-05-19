@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->date('deadline');
+            $table->datetime('deadline');
             $table->foreignId('group_id')->constrained(
                 table: 'groups',
                 column: 'id'

@@ -6,26 +6,31 @@ use App\Models\NotificationStatus;
 use App\Models\Notification;
 use App\Models\MemberOf;
 use App\Models\Group;
-
-
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class NotificationController extends Controller
 {
-    public static function store($title, $content, $visible_schedule = null, $group_id = null)
+    public static function store($title, $content, $type, $item_id, $is_reminder, $visible_schedule, $group_id = null)
     {
         try{
-            $notif = Notification::create([
+            $field = Notification::create([
                 'title' => $title,
                 'content' => $content,
                 'visible_schedule' => $visible_schedule,
-                'group_id' => $group_id
+                'group_id' => $group_id,
+                'is_reminder' => $is_reminder,
+                'type_type' => $type,
+                'type_id' => $item_id
             ]);
 
-            $notif_id = $notif->id;
-    
+            $field['type'] = $type;
+            $field['item_id'] = $item_id;
+
+            $notif_id = $field->id;
+
             if($group_id != null){
                 $member_ids = MemberOf::where('group_id', $group_id)->pluck('user_uuid');
 
@@ -35,14 +40,13 @@ class NotificationController extends Controller
                     $notif_stats[] = [
                         'user_uuid' => $id,
                         'notif_id' => $notif_id
-                    ];
-                }
+                ];}
 
-                NotificationStatus::insert($notif_stats);
+            NotificationStatus::insert($notif_stats);
 
             }else{
                 NotificationStatus::create([
-                    'notification_id' => $notif->id,
+                    'notification_id' => $field->id,
                     'user_uuid' => Auth::user()->uuid
                 ]);
                 
@@ -64,13 +68,15 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         try {
-            $notifications = NotificationStatus::with('notification')->where('user_uuid', Auth::user()->uuid);
+            $notifications = NotificationStatus::with('notification')->join('notifications', 'notification_statuses.notif_id', '=', 'notifications.id')->where('user_uuid', Auth::user()->uuid)->whereHas('notification', function ($model){
+                $model->where('visible_schedule', '<=', Carbon::now('Asia/Jakarta')->toDateTimeString());  
+            });
+
             $keyword = $request->query('keyword') ?? false;
             $type = $request->query('type') ?? false;
             
             if($keyword) {
                 $notifications->whereHas('notification', function($model)use($keyword) {
-                    // global $keyword;
                     $model->where('title', 'LIKE', "%$keyword%")->orderByRaw(
                     "CASE
                             WHEN title LIKE ? THEN 1
@@ -79,6 +85,8 @@ class NotificationController extends Controller
                         END
                     ", ["$keyword%", "%$keyword%"]);
                 });
+            }else{
+                $notifications->orderBy('notifications.visible_schedule', 'DESC');
             }
 
             if($type === 'personal'){
@@ -96,17 +104,18 @@ class NotificationController extends Controller
             return response()->json([
                 'status' => true,
                 'datas' => $notifications->get(),
-                'keyword' => $keyword
+                'keyword' => $keyword,
+                'carbon_now' => Carbon::now()->toDateTimeString()
             ]);
-
+            
         }catch(\Exception $e) {
             return response()->json([
                 'status' => false, 
                 'message' => $e->getMessage()
             ]);
         }
+    
     }
-
 
     public function show(int $notification)
     {

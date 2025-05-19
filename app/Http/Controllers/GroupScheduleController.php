@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\GroupSchedule;
 use App\Models\Group;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class GroupScheduleController extends Controller
 {
@@ -42,7 +45,7 @@ class GroupScheduleController extends Controller
 
     public function store(Request $request, Group $group)
     {
-        Gate::allows('create');
+        // Gate::allows('create');
         
         try {
             $field = $request->validate([
@@ -54,8 +57,23 @@ class GroupScheduleController extends Controller
 
             $field['group_id'] = $group->id;
 
-            GroupSchedule::create($field);
-            
+            $schedule = GroupSchedule::create($field);
+            $now = now()->setTimezone('Asia/Jakarta');
+
+            $username = Auth::user()->name;
+            NotificationController::store('Jadwal Group Baru', "$username baru saja membuat jadwal untuk grup $group->name", GroupSchedule::class, $schedule->id, false, $now, $group->id);
+
+            $date = Carbon::parse($field['start_datetime']);
+            $end_date = Carbon::parse($field['end_datetime']);
+            $title = $field['title'];
+
+            while($date < $now) $date->addDay();
+
+            while($date <= $end_date){
+                NotificationController::store('Pengingat Jadwal Grup', "Ada jadwal \"$title\" hari ini pada Jam {$date->format('h:i')}", GroupSchedule::class, $schedule->id, true, $date->toDateTimeString(), $group->id);
+                $date->addDay();
+            }
+
             return response()->json([
                 'status' => true,
                 'message' => 'New Schedule Successfully Added'
@@ -72,7 +90,7 @@ class GroupScheduleController extends Controller
     public function update(Request $request, Group $group, GroupSchedule $api)
     {
         try{
-            Gate::allows('permission', [$api]);
+            // Gate::allows('permission', [$api]);
 
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -80,6 +98,21 @@ class GroupScheduleController extends Controller
                 'start_datetime' => 'required',
                 'end_datetime' => 'required'
             ]);
+
+            $notifications = $api->notification()->where('is_reminder', true)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->get();
+            $notifications->each->delete();
+
+            $date = Carbon::parse($field['start_datetime']);
+            $end_date = Carbon::parse($field['end_datetime']);
+            $now = now()->setTimezone('Asia/Jakarta');
+            $title = $field['title'];
+            
+            while($date < $now) $date->addDay();
+
+            while($date <= $end_date){
+                NotificationController::store('Pengingat Jadwal Grup', "Ada jadwal \"$title\" hari ini pada Jam {$date->format('h:i')}", GroupSchedule::class, $api->id, true, $date->toDateTimeString(), $group->id);
+                $date->addDay();
+            }
 
             $api->update($field);
             $api->save();
@@ -100,9 +133,13 @@ class GroupScheduleController extends Controller
     public function destroy(Request $request, Group $group, GroupSchedule $api)
     {
         try {
-            Gate::allows('permission', [$api]);
+            // Gate::allows('permission', [$api]);
+
+            $notifications = $api->notification()->where('is_reminder', true)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->get();
 
             $api->delete();
+            $notifications->each->delete();
+
 
             return response()->json([
                 'status' => true,

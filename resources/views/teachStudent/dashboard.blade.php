@@ -18,7 +18,7 @@
                     <img src="image/Ryan-Gosling.jpg" class="w-20 h-20 md:w-14 md:h-14 border-yellow-300 border-2 rounded-full object-cover"
                         alt="profile">
                     <div class="ps-2 text-center sm:text-left mt-2 sm:mt-0">
-                        <h4 class="text-lg md:text-xl">Ryan Gosling</h4>
+                        <h4 class="text-lg md:text-xl"> {{ $user[0] }} </h4>
                         <p class="text-xs md:text-sm">Student SMP Negeri 7 Batam</p>
                     </div>
                 </div>

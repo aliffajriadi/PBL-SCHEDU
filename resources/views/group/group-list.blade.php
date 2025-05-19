@@ -137,7 +137,6 @@
         parent.innerHTML = '';
         groups.datas.forEach((group) => {
             
-            // group = group.group;
             console.log(`{{asset('storage/app/public/${folder_name}/groups/${group.group_code}/${group.pic}')}}`);
             
             note_count = group.note_count;
@@ -154,7 +153,7 @@
                 </div>
                 <div class="p-4 bg-emerald-400 infogrub transition-colors duration-300 group-hover:bg-emerald-500">
                     <h3 class="text-lg font-semibold text-gray-800 transition-colors duration-300 group-hover:text-white">${group.name}</h3>
-                    <p class="text-sm text-gray-500 transition-colors duration-300 group-hover:text-gray-200">nama pembuat</p>
+                    <p class="text-sm text-gray-500 transition-colors duration-300 group-hover:text-gray-200">${group.user.name}</p>
                     <div class="mt-2 grid grid-cols-3 gap-2 text-xs text-gray-700 transition-colors duration-300 group-hover:text-gray-100">
                         <div class="flex items-center gap-1">
                             <img src="{{ asset('assets/bx-notepad 2.svg') }}" alt="Notes icon" class="w-4 h-4">

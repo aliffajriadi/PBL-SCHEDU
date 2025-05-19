@@ -20,4 +20,9 @@ class GroupTask extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'uuid');
     }
+
+    public function notification()
+    {
+        return $this->morphMany(Notification::class, 'type');
+    }
 }

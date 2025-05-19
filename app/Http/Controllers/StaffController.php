@@ -87,7 +87,7 @@ class StaffController extends Controller
 
             if($request->query('keyword')){
                 $keyword = '%' . $request->query('keyword') . '%';
-                $staffs = $notes->where('name', 'like', $keyword);
+                $staffs = $staffs->where('name', 'like', $keyword);
             }
 
             return response()->json([

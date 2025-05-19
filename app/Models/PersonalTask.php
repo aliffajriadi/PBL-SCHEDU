@@ -4,15 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GroupSchedule extends Model
+class PersonalTask extends Model
 {
     protected $fillable = [
-        'title', 'content', 'start_datetime', 'end_datetime', 'group_id' 
+        'title', 'content', 'deadline', 'user_uuid'
     ];
 
-    public function group()
+    public function user()
     {
-        return $this->belongsTo(Group::class, 'group_id', 'id');
+        return $this->belongsTo(User::class, 'user_uuid', 'uuid');
     }
 
     public function notification()

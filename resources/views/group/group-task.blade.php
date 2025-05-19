@@ -34,7 +34,7 @@
                         @csrf
                         @method('PUT')
                         <input id="content-title" type="text" name="title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                        <input id="content-deadline" type="date" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                        <input id="content-deadline" type="datetime-local" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                         <textarea id="content-description" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
                         <div class="flex gap-4">
                             <button type="button" onclick="update_data()" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Task</button>
@@ -207,7 +207,7 @@
                             <option value="{{ $unit->id }}">{{ $unit->name }}</option>
                         @endforeach
                     </select>
-                    <input type="date" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <input type="datetime-local" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <textarea name="content" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddTaskModal()"
@@ -280,7 +280,6 @@
 
         const debounce_refresh = debounce(search, 500);
         let note_picked = -1;
-        const path = window.location.pathname;
 
         function debounce_search()
         {

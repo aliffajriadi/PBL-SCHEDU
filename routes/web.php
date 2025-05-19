@@ -178,13 +178,13 @@ Route::get('/adm_login', function(){
     return view('admin.login');
 })->name('admin.login');
 
+Route::post('/admin/login', [AdminController::class, 'login']);
+
 Route::prefix('/admin')->middleware('admin')->group(function () {
 
     Route::apiResource('/staffs', StaffController::class);
 
     Route::get('/logout', [AdminController::class, 'logout']);
-
-    Route::post('/login', [AdminController::class, 'login']);
 
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
@@ -206,17 +206,19 @@ Route::prefix('/admin')->middleware('admin')->group(function () {
 });
 
 
+
+Route::get('/staff/login', function () {
+    return view('staff.login');
+});
+
+Route::post('/staff/login', [StaffController::class, 'login']);
+
 // //STAFF ROUTE DUMMY
 Route::middleware('auth:staff')->prefix('/staff')->group(function () {
     // Route::apiResource('/api', StaffController::class);
 
     Route::apiResource('/user', UserController::class);
 
-    Route::get('/login', function () {
-        return view('staff.login');
-    });
-
-    Route::post('/login', [StaffController::class, 'login']);
 
     Route::post('/logout', [StaffController::class, 'logout']);
 

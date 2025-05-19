@@ -65,10 +65,7 @@ class UserController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Logout Successfully'
-            ]);
+            return redirect('/login');
             
         }catch(\Exception $e) {
             return response()->json([

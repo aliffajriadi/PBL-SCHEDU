@@ -11,21 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notification_statuses', function (Blueprint $table) {
+        Schema::create('personal_tasks', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('content');
+            $table->datetime('deadline');
             $table->uuid('user_uuid');
-            $table->foreignId('notif_id')->constrained(
-                table: 'notifications',
-                column: 'id'
-            )->onDelete('cascade')->onUpdate('cascade');
-            $table->boolean('is_read')->default(false);
-
-            $table->primary(['user_uuid', 'notif_id']);
             $table->foreign('user_uuid')->references('uuid')->on('users')->onDelete('cascade')->onUpdate('cascade');
-
-
-            $table->index('user_uuid');
-            $table->index(['user_uuid', 'notif_id']);
-
             $table->timestamps();
         });
     }
@@ -35,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notification_statuses');
+        Schema::dropIfExists('personal_tasks');
     }
 };

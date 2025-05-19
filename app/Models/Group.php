@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Group extends Model
 {
-    protected $fillable = ['name', 'group_code', 'instance_uuid', 'pic'];
+    protected $fillable = ['name', 'group_code', 'instance_uuid', 'pic', 'created_by'];
 
     public function instance()
     {
@@ -33,5 +33,10 @@ class Group extends Model
     public function member()
     {
         return $this->hasMany(MemberOf::class, 'group_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'uuid');
     }
 }

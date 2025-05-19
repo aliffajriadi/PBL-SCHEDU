@@ -74,10 +74,11 @@ class GroupNoteController extends Controller
 
             $field['file'] = $file_name;
             $field['group_id'] = $group->id;
-            GroupNote::create($field);
+            
+            $note = GroupNote::create($field);
 
             $notification = NotificationController::store(
-                'Catatan Group Baru', 'Catatan baru sudah dibuat disuatu grup', null, $group->id
+                'Catatan Group Baru', "Catatan baru sudah dibuat di grup $group->name.", GroupNote::class, $note->id, false, now()->setTimezone('Asia/Jakarta'), $group->id
             );
 
             return response()->json([
@@ -90,8 +91,6 @@ class GroupNoteController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
-                'request' => $request->all()
-
             ]);
         }
     }
@@ -147,6 +146,8 @@ class GroupNoteController extends Controller
     public function destroy(Group $group, GroupNote $api)
     {
         try {
+            $api->notification->delete();
+
             if($api->pic !== null){
                 Storage::disk('public')->delete(Auth::user()->instance->folder_name . '/groups/' . $group->group_code .'/'. $api->pic);
             } 

@@ -84,10 +84,9 @@ class GroupController extends Controller
 
     public function index(Request $request)
     {
-        // $groups = Group::query()->with(['instance:uuid,folder_name'])->where('instance_uuid', Auth::user()->instance_uuid);
         $groups_ids = MemberOf::with('group')->where('user_uuid', Auth::user()->uuid)->where('verified', true)->pluck('group_id');
 
-        $groups = Group::withCount(['note', 'task', 'schedule', 'member'])->whereIn('id', $groups_ids);
+        $groups = Group::with('user:uuid,name')->withCount(['note', 'task', 'schedule', 'member'])->whereIn('id', $groups_ids);
 
         try {
             if($request->query('keyword')){
@@ -119,7 +118,6 @@ class GroupController extends Controller
         try {
 
             Gate::allows('create');
-            // dd($request);
             
             $field = $request->validate([
                 'name' => 'required|max:255',
@@ -141,8 +139,6 @@ class GroupController extends Controller
                 $file = $request->file('pic');
                 $file_name = time() . '.' . $file->getClientOriginalExtension();
 
-                $path = $group_folder . '/' . $file_name;
-    
                 $file->storeAs($group_folder, $file_name, 'public');
             } 
             
@@ -152,7 +148,8 @@ class GroupController extends Controller
                 'group_code' => $field['group_code'],
                 'instance_uuid' => $field['instance_uuid'],
                 'pic' => $field['pic'],
-                'name' => $field['name'] 
+                'name' => $field['name'],
+                'created_by' => Auth::user()->uuid
             ]);
             
             MemberOf::create([

@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\GroupTask;
 use App\Models\GroupTaskUnit;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class GroupTaskController extends Controller
 {
@@ -15,7 +16,7 @@ class GroupTaskController extends Controller
         try{
             $keyword = $request->query('keyword');
             
-            $unit = GroupTaskUnit::query()->with('task')->orderBy('created_at', 'ASC');
+            $unit = GroupTaskUnit::where('group_id', $group->id)->with('task')->orderBy('created_at', 'ASC');
             
             if($keyword) {
                 $unit->whereHas('task', function ($model) use ($keyword) {
@@ -58,6 +59,8 @@ class GroupTaskController extends Controller
 
     public function show(Group $group, GroupTask $api)
     {
+        // Gate::allows('access', $api);
+
         try {
             return response()->json([
                 'status' => true, 
@@ -74,9 +77,9 @@ class GroupTaskController extends Controller
 
     public function store(Request $request, Group $group)
     {
+        Gate::allows('create');
+
         try{
-
-
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'unit_id' => 'required', 
@@ -87,7 +90,15 @@ class GroupTaskController extends Controller
             $field['group_id'] = $group->id;
             $field['created_by'] = Auth::user()->uuid;
 
-            GroupTask::create($field);
+            $task = GroupTask::create($field);
+
+            NotificationController::store(
+                'Tugas grup baru dibuat', "Jadwal grup baru saja dibuat di grup $group->name dengan judul \"{$field['title']}\"", GroupTask::class, $task->id, false, now()->setTimezone('Asia/Jakarta'), $group->id
+            );
+
+            NotificationController::store(
+                'Pengingat Tugas', "Jangan lupa dengan tugas \"{$field['title']}\" dari grup $group->name", GroupTask::class, $task->id, true, $field['deadline'], $group->id
+            );
 
             return response()->json([
                 'status' => true, 
@@ -101,8 +112,10 @@ class GroupTaskController extends Controller
         }
     }
 
-    public function update(Request $request, String $group, GroupTask $api)
+    public function update(Request $request, Group $group, GroupTask $api)
     {
+        // Gate::allows('permission', [$api]);
+
         try{
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -112,9 +125,29 @@ class GroupTaskController extends Controller
 
             $api->update($field);
 
+            $notif = $api->notification()->where('is_reminder', true)->orderBy('created_at', 'DESC')->first();            
+            $now = now()->setTimezone('Asia/Jakarta');
+
+
+            $new_visible_schedule = $field ['deadline'] > $now ? $field['deadline'] : $now;
+
+            if($notif->visible_schedule <= $now){
+                NotificationController::store(
+                    'Pengingat Tugas', "Jangan lupa dengan tugas \"{$field['title']}\" dari grup $group->name", GroupTask::class, $api->id, true, $new_visible_schedule, $group->id
+                );
+            }else{
+                $notif->update([
+                    'title' => 'Pengingat Tugas',
+                    'content' => "Jangan lupa dengan tugas \"{$field['title']}\" dari grup $group->name",
+                    'visible_schedule' => $new_visible_schedule
+                ]);
+                $notif->save();
+            }
+
             return response()->json([
                 'status' => true, 
-                'message' => 'Task Updates Successfully'
+                'message' => 'Task Updates Successfully',
+                'notification' => $api->notification
             ]);
             
         }catch(\Exception $e) {
@@ -127,12 +160,24 @@ class GroupTaskController extends Controller
 
     public function destroy(String $group, GroupTask $api)
     {
+        // Gate::allows('permission', [$api]);
         try{
+            $notifications = $api->notification()->where('is_reminder', true)->orderBy('created_at', 'DESC')->first();
+            
             $api->delete();
+            
+            // if($notifications){
+            //     foreach($notifications as $notif){
+            //         if($notif->visible_schedule > now()->setTimezone('Asia/Jakarta')) $notif->delete();
+            //     }
+            // }
+
+            
             
             return response()->json([
                 'status' => true, 
-                'message' => 'Task Successfully Deleted'
+                'message' => 'Task Successfully Deleted',
+                'notifications' => $notifications
             ]);
         }catch(\Exception $e) {
             return response()->json([

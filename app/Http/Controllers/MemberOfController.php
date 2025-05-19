@@ -8,7 +8,9 @@ use App\Models\MemberOf;
 use App\Models\GroupNote;
 use App\Models\GroupSchedule;
 use App\Models\GroupTask;
-
+use App\Models\Notification;
+use App\Models\NotificationStatus;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -75,18 +77,37 @@ class MemberOfController extends Controller
 
     // diverifikasi 
 
-    public function verifying(String $group, MemberOf $member_of)
+    public function verifying(Group $group, MemberOf $member_of)
     {
         try {
             $member_of->verified = true;
             $member_of->save(); 
+
+            $notif_ids = Notification::where('group_id', $group->id)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->pluck('id');
+
+            if($notif_ids){
+                $uuid = $member_of->user_uuid;
+
+                $datas_to_insert = [];
+
+                foreach($notif_ids as $id){
+                    $datas_to_insert[] = [
+                        'user_uuid' => $uuid,
+                        'notif_id' => $id
+                    ];
+                }
+
+                NotificationStatus::insert($datas_to_insert);
+            }
+
+            NotificationController::store('Anggota Baru', "{$member_of->user->name} baru saja join dengan grup {$group->name}", \App\Models\MemberOf::class, $member_of->id, group_id: $group->id);
 
             return redirect()->back();
         
         }catch(\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         
         }
@@ -98,7 +119,6 @@ class MemberOfController extends Controller
     public function leave_group(Request $request, Group $group, MemberOf $member_of)
     {
         try {
-            // $memberOf = MemberOf::where('id', $member_of)->firstOrFail();
 
             $member_of->delete();
             
