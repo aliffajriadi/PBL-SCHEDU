@@ -292,13 +292,13 @@
             <p>{{ ucfirst($role) }}</p>
             <hr class="my-2">
             <div class="flex-col flex text-start px-2 space-y-2">
-                <a class="flex gap-x-1 hover:bg-emerald-300 cursor-pointer rounded-lg py-1 px-3">
+                <a href="{{ route('profile-admin') }}" class="flex gap-x-1 hover:bg-emerald-300 cursor-pointer rounded-lg py-1 px-3">
                     <img src="{{ asset('assets/profile-green.svg') }}" alt="avatar" class="w-5 h-auto">
                     <p
                         class="text-sm font-semibold text-emerald-800 transition-all duration-500 hover:text-emerald-600">
                         Profile</p>
                 </a>
-                <a class="flex gap-x-1 hover:bg-red-300 rounded-lg cursor-pointer py-1 px-3">
+                <a href="/admin/logout" class="flex gap-x-1 hover:bg-red-300 rounded-lg cursor-pointer py-1 px-3">
                     <img src="{{ asset('assets/Log out (1).svg') }}" alt="avatar" class="w-5 h-auto">
                     <p class="text-sm font-semibold text-red-600 transition-all duration-500 hover:text-red-600 ">
                         Logout</p>

@@ -14,6 +14,8 @@
                             value="{{ old('username', $user->username) }}" required
                             class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300 text-sm"
                             placeholder="Enter new username" aria-describedby="username-error" />
+                        <p id="showWarningUsername" onclick="showModalUsername()" class="text-red-400 text-xs mt-1 hidden">
+                            Username cant same curernt name now</p>
                         @error('username')
                             <p id="username-error" class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -71,7 +73,7 @@
         </div>
     </div>
     <div id="modalNewName"
-        class="z-50 hidden fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm">
+        class="z-50 hidden fixed inset-0 animate-slide-down flex justify-center items-center bg-black/50 backdrop-blur-sm">
         <div class="bg-white p-4 rounded space-y-3">
             <h1 class="text-lg font-semibold">Confirmation Change Username to <span id="nameChange"
                     class="text-red-400"></span></h1>
@@ -93,6 +95,7 @@
 
     <!-- JavaScript for Notifikasi Modal -->
     <script>
+
         function confirmation_password() {
             const password = document.getElementById('password').value;
             const passwordInput = document.getElementById('password_confirmation');
@@ -106,13 +109,25 @@
             }
         }
         function showModalUsername() {
-            document.getElementById('modalNewName').classList.toggle('hidden');
-
-            const newName = document.getElementById('currentUsername').value;
             const confirmName = document.getElementById('nameChange');
+            const currentName = '{{ $user->username }}';
+            const newName = document.getElementById('currentUsername').value;
+
+            if (newName === currentName) {
+                const warning = document.getElementById('showWarningUsername');
+                warning.classList.remove('hidden');
+                setTimeout(() => {
+                    warning.classList.add('hidden');
+                }, 7000);
+
+                return;
+            }
+
             confirmName.innerText = newName;
+            document.getElementById('modalNewName').classList.toggle('hidden');
             document.getElementById('inputNewName').value = newName;
         }
+
 
     </script>
 
@@ -132,38 +147,6 @@
 
         .animate-slide-down {
             animation: slideDown 0.3s ease-out forwards;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            to {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-        }
-
-        .animate-slide-up {
-            animation: slideUp 0.3s ease-in forwards;
-        }
-
-        @keyframes pulseIcon {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.2);
-            }
-        }
-
-        .animate-pulse-icon {
-            animation: pulseIcon 1.5s ease-in-out infinite;
         }
     </style>
 </x-layout-admin>

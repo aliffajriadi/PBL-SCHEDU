@@ -29,11 +29,6 @@ class UserController extends Controller
 
             if(!Auth::attempt($credentials)){
                 return redirect('/login');
-
-                // return response()->json([
-                //     'status' => false,
-                //     'message' => 'Wrong Email or Password'
-                // ]);
             }
 
             $user = Auth::user();
@@ -127,11 +122,6 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-
-            // return response()->json([
-            //     'data' => Auth::guard('staff')->user()
-            // ]);
-
             $field = $request->validate([
                 'name' => 'required|max:255',
                 'email' => 'required|email',
@@ -140,25 +130,13 @@ class UserController extends Controller
                 'is_teacher' => 'required',
                 'password' => 'required'
             ]);
-
             $field['instance_uuid'] = Auth::guard('staff')->user()->uuid;
             $field['password'] = Hash::make($field['password']);
             $field['is_teacher'] = $field['is_teacher'] === 'teacher' ? 1 : 0;
-
-            // dd($field);
-
             User::create($field);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'New User Addedd Successfully'
-            ]);
-
+            return redirect()->back()->with('success', 'Success Create Account');
         }catch(\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            return redirect()->back()->with('success', 'Failed Create Account:' . $e);
         }
     }
 
@@ -247,15 +225,10 @@ class UserController extends Controller
         try {
             $user->delete();
             
-            return response()->json([
-                'status' => true,
-                'message' => 'User Deleted Successfully'
-            ]);
+            return redirect()->back()->with('success', 'Success Deleted Data User');
         }catch (\Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            return redirect()->back()->with('error', $e);
+
         }   
     }
 }

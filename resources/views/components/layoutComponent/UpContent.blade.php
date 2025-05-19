@@ -23,16 +23,18 @@
             </span>
         </div>
         <!-- Profile Image -->
+
         @if ($user->logo_instance !== null)
-            <img src="{{ asset($user->logo_instance) }}"
+            <img src="{{ asset('storage/' . $user->logo_instance) }}"
                 class="w-12 border-2 border-green-500 h-12 rounded-full shadow-md transition-all duration-300 hover:border-emerald-600 cursor-pointer"
-                alt="profile" onclick="dropdown('dropdownMenu')" id="dropdownButton" />
+                alt="{{ $user->instance_name ?? 'Profile' }}" onclick="dropdown('dropdownMenu')" id="dropdownButton" />
         @else
             <div class="bg-emerald-500 border-2 md:flex hidden hover:border-yellow-300 text-white rounded-full w-12 h-12 items-center justify-center text-xl transition-all duration-300 font-semibold cursor-pointer"
                 onclick="dropdown('dropdownMenu')" id="dropdownButton">
-                {{ strtoupper(substr($user->instance_name, 0, 1)) }}
+                {{ strtoupper(substr($user->instance_name ?? 'U', 0, 1)) }}
             </div>
         @endif
+
     </div>
 </div>
 <div id="dropdownMenu"

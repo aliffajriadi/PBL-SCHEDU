@@ -16,7 +16,7 @@ use App\Http\Controllers\GroupNoteController;
 use App\Http\Controllers\GroupScheduleController;
 use App\Http\Controllers\GroupTaskController;
 use App\Http\Controllers\GroupTaskUnitController;
-
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -246,23 +246,20 @@ Route::post('/staff/login', [StaffController::class, 'login']);
 
 //ROUTE FOR WITH MIDDLEWARE STAFF
 Route::prefix('/staff')->middleware('staff')->group(function () {
-
-    Route::apiResource('/user', UserController::class);
-
     Route::controller(StaffController::class)->group(function(){
         Route::get('/dashboard', 'dashboard');
+        Route::get('/account', 'view_account');
         Route::post('/logout', 'logout');
+        Route::put('/user/{uuid}', 'update_user');
+        Route::put('/userpassword', 'update_password_user');
     });
 
     Route::post('/create-user', [UserController::class, 'store']);
+    Route::resource('/user', UserController::class);
 
-    Route::get('/account', function () {
-        $user = Auth::guard('staff')->user();
+
+
         
-        return view('staff.account', [
-            'user' => $user
-        ]);
-    });
 
     Route::get('/group', function () {
         $user = Auth::guard('staff')->user();

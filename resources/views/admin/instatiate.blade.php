@@ -232,7 +232,7 @@
     </div>
 
     <!-- Modal for Deleting Institution -->
-    <div id="deleteInstitutionModal" class="fixed inset-0 bg-gray-900/50 flex items-center justify-center hidden z-50">
+    <div id="deleteInstitutionModal" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md animate-slide-down">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Delete Institution</h3>
             <p class="text-sm text-gray-600 mb-6">
