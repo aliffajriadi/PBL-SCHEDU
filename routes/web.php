@@ -205,7 +205,7 @@ Route::prefix('/group')->group(function () {
 
 
 
-//===================================================================================================
+//===============================================================================================
 //ADMIN ROUTE
 
 // ROUTE FOR ADMIN NON MIDDLEWARE / FOR PUBLIC GUEST
@@ -243,31 +243,19 @@ Route::prefix('/admin')->middleware('admin')->controller(StaffController::class)
 Route::get('/staff/login', [StaffController::class, 'view_login']);
 Route::post('/staff/login', [StaffController::class, 'login']);
 
-
 //ROUTE FOR WITH MIDDLEWARE STAFF
 Route::prefix('/staff')->middleware('staff')->group(function () {
     Route::controller(StaffController::class)->group(function(){
         Route::get('/dashboard', 'dashboard');
+        Route::get('/group', 'view_group');
         Route::get('/account', 'view_account');
         Route::post('/logout', 'logout');
         Route::put('/user/{uuid}', 'update_user');
         Route::put('/userpassword', 'update_password_user');
+        
     });
-
     Route::post('/create-user', [UserController::class, 'store']);
     Route::resource('/user', UserController::class);
-
-
-
-        
-
-    Route::get('/group', function () {
-        $user = Auth::guard('staff')->user();
-        
-        return view('staff.group', [
-            'user' => $user
-        ]);
-    });
 });
 
 

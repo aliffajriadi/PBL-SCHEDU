@@ -8,25 +8,27 @@
     <!-- MENU -->
     <p class="text-sm py-2 text-emerald-100 font-medium">MENU</p>
     <div>
-        <a href="{{ $role== 'staff' ? '/staff/dashboard' : '/dashboard' }}"
-            class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+        @php
+            $isDashboard = $role == 'staff' ? request()->is('staff/dashboard') : request()->is('dashboard');
+        @endphp
+
+        <a href="{{ $role == 'staff' ? '/staff/dashboard' : '/dashboard' }}" class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item 
+          {{ $isDashboard ? 'bg-green-400' : 'hover:bg-green-400' }}">
             <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
             <p class="font-semibold">Dashboard</p>
         </a>
 
+
         @if ($role == 'teacher' or $role == 'student')
-            <a href="/note"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/note" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/bx-notepad 2.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Notes</p>
             </a>
-            <a href="/task"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/task" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/bx-task (1) 2.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Task</p>
             </a>
-            <a href="/schedule"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/schedule" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/calender-white.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Schedule</p>
             </a>
@@ -47,14 +49,12 @@
         <!-- GROUP -->
         <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">GROUP</p>
         <div>
-            <a href="/group"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/group" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Group</p>
             </a>
             <div class="ps-5">
-                <a href="/group"
-                    class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                <a href="/group" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
                     <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Group Dashboard</p>
                 </a>
@@ -93,12 +93,12 @@
         <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">MANAGE</p>
         <div>
             <a href="/staff/account"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                class="flex items-center {{ request()->is('staff/account') ? 'bg-green-400' : 'hover:bg-green-400' }} gap-2 p-2 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Manage Account</p>
             </a>
             <a href="/staff/group"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                class="flex items-center gap-2 p-2 {{ request()->is('staff/group') ? 'bg-green-400' : 'hover:bg-green-400' }} rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Manage Group</p>
             </a>
@@ -110,19 +110,20 @@
     <!-- SETTING -->
     <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">SETTING</p>
     <div>
-        <a href="{{$role !== 'staff' ? '' : '/staff'}}/profile"
+        <a href="{{ $role === 'staff' ? '/staff/profile' : '/profile' }}"
             class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
             <img src="{{ asset('assets/profile.svg') }}" class="w-5 h-auto" />
             <p class="font-semibold">Edit Profile</p>
         </a>
-        <form action="{{ $role == 'staff' ? '/staff/logout' : '/logout'}}" method="POST">
+    
+        <a href="{{ $role === 'staff' ? '/staff/logout' : '/logout' }}" method="POST"
+            class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
             @csrf
-            <button type="submit"
-                class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <div class="flex items-center gap-2 w-full text-left">
                 <img src="{{ asset('assets/Log out.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Logout</p>
-            </button>
-        </form>
-
+            </div>
+        </a>
     </div>
+    
 </aside>

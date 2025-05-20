@@ -51,6 +51,13 @@ class StaffController extends Controller
         $usersInInstance = $query->latest()->paginate(10);
         return view('staff.account', compact('users', 'usersInInstance', 'search'));
     }
+    
+    public function view_group(){
+        $user = Auth::guard('staff')->user();
+        $groupList = Group::where('instance_uuid')->limit(10)->latest();
+        
+        return view('staff.group', compact('user', 'groupList'));
+    }
 
     public function dashboard()
     {
