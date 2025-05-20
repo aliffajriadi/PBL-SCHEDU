@@ -91,13 +91,14 @@ class GroupTaskController extends Controller
             $field['created_by'] = Auth::user()->uuid;
 
             $task = GroupTask::create($field);
+            $visible_schedule = $field['deadline'] < now()->setTimezone('Asia/Jakarta') ? now()->setTimezone('Asia/Jakarta') : $field['deadline'];
 
             NotificationController::store(
                 'Tugas grup baru dibuat', "Jadwal grup baru saja dibuat di grup $group->name dengan judul \"{$field['title']}\"", GroupTask::class, $task->id, false, now()->setTimezone('Asia/Jakarta'), $group->id
             );
 
             NotificationController::store(
-                'Pengingat Tugas', "Jangan lupa dengan tugas \"{$field['title']}\" dari grup $group->name", GroupTask::class, $task->id, true, $field['deadline'], $group->id
+                'Pengingat Tugas', "Jangan lupa dengan tugas \"{$field['title']}\" dari grup $group->name", GroupTask::class, $task->id, true, $visible_schedule, $group->id
             );
 
             return response()->json([
@@ -129,7 +130,7 @@ class GroupTaskController extends Controller
             $now = now()->setTimezone('Asia/Jakarta');
 
 
-            $new_visible_schedule = $field ['deadline'] > $now ? $field['deadline'] : $now;
+            $new_visible_schedule = $field['deadline'] > $now ? $field['deadline'] : $now;
 
             if($notif->visible_schedule <= $now){
                 NotificationController::store(

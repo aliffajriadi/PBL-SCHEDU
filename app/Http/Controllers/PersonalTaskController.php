@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PersonalTask;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PersonalTaskController extends Controller
 {
     public function index()
     {
-
+        return response()->json([
+            'status' => true,
+            'datas' => PersonalTask::all()
+        ]);
     }
 
     public function store(Request $request)
@@ -27,11 +31,14 @@ class PersonalTaskController extends Controller
 
             $task = PersonalTask::create($field);
 
-            NotificationController::store("Pengingat untuk '{$field['title']}'", $field['content'], PersonalTask::class, $task->id, true, $field['deadline']);
+            $visible_schedule = $field['deadline'] < now()->setTimezone('Asia/Jakarta') ? now()->setTimezone('Asia/Jakarta') : $field['deadline'];
+
+            $notif = NotificationController::store("Pengingat untuk '{$field['title']}'", $field['content'], PersonalTask::class, $task->id, true, $visible_schedule);
 
             return response()->json([
-                'status' => false,
-                'message' => 'New Task Added Successfully'
+                'status' => true,
+                'message' => 'New Task Added Successfully',
+                'notif' => $notif
             ]);
 
         }catch(\Exception $e){

@@ -16,7 +16,7 @@ class NotificationController extends Controller
     public static function store($title, $content, $type, $item_id, $is_reminder, $visible_schedule, $group_id = null)
     {
         try{
-            $field = Notification::create([
+            $notif = Notification::create([
                 'title' => $title,
                 'content' => $content,
                 'visible_schedule' => $visible_schedule,
@@ -26,10 +26,7 @@ class NotificationController extends Controller
                 'type_id' => $item_id
             ]);
 
-            $field['type'] = $type;
-            $field['item_id'] = $item_id;
-
-            $notif_id = $field->id;
+            $notif_id = $notif->id;
 
             if($group_id != null){
                 $member_ids = MemberOf::where('group_id', $group_id)->pluck('user_uuid');
@@ -42,12 +39,12 @@ class NotificationController extends Controller
                         'notif_id' => $notif_id
                 ];}
 
-            NotificationStatus::insert($notif_stats);
+                NotificationStatus::insert($notif_stats);
 
             }else{
                 NotificationStatus::create([
-                    'notification_id' => $field->id,
-                    'user_uuid' => Auth::user()->uuid
+                    'notif_id' => $notif_id,
+                    'user_uuid' => Auth::user()->uuid,
                 ]);
                 
             }

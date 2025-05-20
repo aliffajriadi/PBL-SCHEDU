@@ -16,7 +16,8 @@ use App\Http\Controllers\GroupNoteController;
 use App\Http\Controllers\GroupScheduleController;
 use App\Http\Controllers\GroupTaskController;
 use App\Http\Controllers\GroupTaskUnitController;
-
+use App\Http\Controllers\PersonalTaskController;
+use App\Models\PersonalTask;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -62,15 +63,22 @@ Route::middleware('auth:web')->prefix('/')->group(function () {
     
     });
 
-    Route::get('/task', function () {
-        $user = Auth::user();
-        $user_data = [$user->name, $user->email];
+    Route::prefix('/task')->group(function() {
+        Route::get('/', function () {
+            $user = Auth::user();
+            $user_data = [$user->name, $user->email];
 
-        return view('teachStudent.task', [
-            'user' => $user_data
+            return view('teachStudent.task', [
+                'user' => $user_data
 
-        ]);
+            ]);
+        });
+
+        Route::apiResource('/api', PersonalTaskController::class);
+
     });
+
+
 
     Route::get('/schedule', function () {
         $user = Auth::user();

@@ -3,6 +3,8 @@
     <div
         class="bg-white flex items-center justify-between p-3 mt-3 mb-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
         <button id="openModalBtn"
+            onclick="open_add_modal()"
+
             class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">
             Add Task
         </button>
@@ -34,50 +36,12 @@
             class="bg-emerald-500 p-4 h-fit rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
             <h3 class="text-md text-white font-semibold mb-4">Task</h3>
             <!-- Task Item -->
-            @foreach ([1, 2, 3] as $task)
-                <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
-                        <div class="relative">
-                            <button
-                                class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
-                                onclick="toggleDropdown(this)">
-                                Options
-                            </button>
-                            <ul class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
-                                <li>
-                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                            onclick="editTask({{ $task }})">
-                                        Edit
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                            onclick="deleteTask({{ $task }})">
-                                        Delete
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                            onclick="setToProgress({{ $task }})">
-                                        Set to Progress
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p class="text-sm text-emerald-500 opacity-70 mb-3">Monday, 23 January 2024</p>
-                    <p class="text-xs text-gray-600">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa quia deleniti unde laudantium?
-                        Corporis cupiditate officia...
-                    </p>
-                    <button
-                        class="bg-emerald-500 mt-3 text-white rounded-2xl text-xs py-1 px-4 hover:bg-emerald-600 transition-all">
-                        Set to Progress
-                    </button>
-                </div>
-            @endforeach
+            <div id="all-tasks">
+
+            </div>
+            
             <button
+            onclick="open_add_modal()"
                 class="w-full bg-white text-emerald-500 rounded-lg py-2 hover:bg-emerald-300 hover:text-white transition-all duration-500">
                 + Add New Task
             </button>
@@ -186,6 +150,31 @@
         </div>
     </section>
 
+
+      <div id="add-task-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Tugas Baru</h3>
+                <form id="add-form" action="task/api" method="POST">
+                    @csrf
+                    <input type="text" name="title" placeholder="Judul Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+ 
+                    <input type="datetime-local" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <textarea name="content" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                    <div class="flex justify-end gap-4">
+                        <button type="button" onclick="close_add_modal()"
+                            class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                            Batal
+                        </button>
+                        <button type="button"
+                            onclick="insert_data()"
+                            class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     <style>
         /* Dropdown Animation */
         .dropdown-menu {
@@ -206,6 +195,76 @@
     </style>
 
     <script>
+        function open_add_modal()
+        {
+            document.getElementById('add-task-modal').classList.remove('hidden');
+        }
+
+        function close_add_modal()
+        {
+            document.getElementById('add-task-modal').classList.add('hidden');
+        }
+
+        function get_task()
+        {
+            get_data('/task/api', set_list);
+        }
+
+        get_task();
+
+        function set_list(datas){
+            console.log(datas);
+            const all_list = document.getElementById('all-tasks');
+            // const unfinished_list = document.getElementById('unfinished-tasks');
+            // const finished_list = document.getElementById('finished-tasks');
+
+            all_list.innerHTML = '';
+
+            datas.datas.forEach(data => {
+
+                all_list.innerHTML += `<div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-md font-semibold text-gray-800">${data.title}</h3>
+                        <div class="relative">
+                            <button
+                                class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
+                                onclick="toggleDropdown(this)">
+                                Options
+                            </button>
+                            <ul class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
+                                <li>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                            onclick="editTask()">
+                                        Edit
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                            onclick="deleteTask()">
+                                        Delete
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
+                                            onclick="setToProgress(${data.id})">
+                                        Set to Progress
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="text-sm text-emerald-500 opacity-70 mb-3">${data.deadline}</p>
+                    <p class="text-xs text-gray-600">
+                        ${data.content}
+                    </p>
+                    <button
+                        class="bg-emerald-500 mt-3 text-white rounded-2xl text-xs py-1 px-4 hover:bg-emerald-600 transition-all">
+                        Set to Progress
+                    </button>
+                </div>`;
+            });
+        }
+
         // Toggle Dropdown
         function toggleDropdown(button) {
             const dropdown = button.nextElementSibling;
@@ -273,6 +332,14 @@
         function setToInitial(taskId) {
             console.log(`Setting task ${taskId} to Initial`);
             // Add your set to initial logic here
+        }
+
+        function insert_data()
+        {
+            const form = document.getElementById('add-form');
+            const formData = new FormData(form);
+
+            api_store('/task/api', formData);
         }
     </script>
 </x-layout>

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PersonalTask extends Model
 {
     protected $fillable = [
-        'title', 'content', 'deadline', 'user_uuid'
+        'title', 'content', 'deadline', 'user_uuid', 'is_finished'
     ];
 
     public function user()

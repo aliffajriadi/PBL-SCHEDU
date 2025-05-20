@@ -11,7 +11,7 @@ class NotificationStatus extends Model
     protected $primary = 'user_uuid';
     
     protected $fillable = [
-        'user_uuid', 'group_id', 'is_read'
+        'user_uuid', 'notif_id', 'is_read'
     ];
 
     public function notification()

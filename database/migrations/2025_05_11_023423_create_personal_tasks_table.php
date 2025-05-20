@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->datetime('deadline');
+            $table->boolean('is_finished')->default(false);
             $table->uuid('user_uuid');
             $table->foreign('user_uuid')->references('uuid')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
