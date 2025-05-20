@@ -126,8 +126,8 @@ class GroupTaskController extends Controller
 
             $api->update($field);
 
-            $notif = $api->notification()->where('is_reminder', true)->orderBy('created_at', 'DESC')->first();            
             $now = now()->setTimezone('Asia/Jakarta');
+            $notif = $api->notification()->where('is_reminder', true)->orderBy('created_at', 'DESC')->first();            
 
 
             $new_visible_schedule = $field['deadline'] > $now ? $field['deadline'] : $now;

@@ -99,12 +99,12 @@ class GroupScheduleController extends Controller
                 'end_datetime' => 'required'
             ]);
 
-            $notifications = $api->notification()->where('is_reminder', true)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->get();
+            $now = now()->setTimezone('Asia/Jakarta');
+            $notifications = $api->notification()->where('is_reminder', true)->where('visible_schedule', '>', $now)->get();
             $notifications->each->delete();
 
             $date = Carbon::parse($field['start_datetime']);
             $end_date = Carbon::parse($field['end_datetime']);
-            $now = now()->setTimezone('Asia/Jakarta');
             $title = $field['title'];
             
             while($date < $now) $date->addDay();
