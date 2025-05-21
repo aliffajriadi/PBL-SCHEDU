@@ -69,6 +69,8 @@ async function api_update(url, form, id)
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const new_url = `${url}/${id}`;
 
+    form.append('_method', 'PATCH');
+
     const response = fetch(new_url, {
         method: 'POST',
         headers: {

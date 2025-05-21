@@ -15,6 +15,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\GroupNoteController;
 use App\Http\Controllers\GroupScheduleController;
 use App\Http\Controllers\GroupTaskController;
+use App\Http\Controllers\GroupTaskSubmissionController;
 use App\Http\Controllers\GroupTaskUnitController;
 use App\Http\Controllers\PersonalScheduleController;
 use App\Http\Controllers\PersonalTaskController;
@@ -35,6 +36,7 @@ Route::get('/login', function () {
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
 // User Routes
+Route::post('/submit-task/{group_task}', [GroupTaskSubmissionController::class, 'create']);
 
 Route::middleware('auth:web')->prefix('/')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);

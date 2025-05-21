@@ -62,10 +62,10 @@ class PersonalTaskController extends Controller
 
             $api->update($field);
 
-            $notif = $api->notification->where('is_reminder', true)->orderBy('created_at', 'DESC')->first();
+            $notif = $api->notification()->where('is_reminder', true)->orderBy('created_at', 'DESC')->first();
             $now = now()->setTimezone('Asia/Jakarta');            
 
-            $new_visible_schedule = $field['deadline'] > $now ? $field['deadline'] : $now;
+            $new_visible_schedule = Carbon::parse($field['deadline']) > $now ? $field['deadline'] : $now;
 
             if($notif->visible_schedule <= $now){
                 NotificationController::store("Pengingat untuk '{$field['title']}'", $field['content'], PersonalTask::class, $api->id, true, $new_visible_schedule);
@@ -90,8 +90,23 @@ class PersonalTaskController extends Controller
         }
     }
 
-    public function destroy()
+    public function destroy(PersonalTask $api)
     {
+        try{
+            $notifications = $api->notification()->where('is_reminder', true)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->get();
 
+            $notifications->each->delete();
+            $api->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Task Deleted Successfully'
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

@@ -287,7 +287,6 @@
         {
             const form = document.getElementById('note-content');
             const formData = new FormData(form);
-            formData.append('_method', 'PATCH');
 
             api_update(path + '/api', formData, note_picked);
             search();

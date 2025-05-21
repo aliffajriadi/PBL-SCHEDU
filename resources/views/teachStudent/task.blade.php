@@ -3,7 +3,7 @@
     <div
         class="bg-white flex items-center justify-between p-3 mt-3 mb-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
         <button id="openModalBtn"
-            onclick="open_add_modal()"
+            onclick="open_modal('add-task-modal')"
 
             class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">
             Add Task
@@ -41,7 +41,7 @@
             </div>
             
             <button
-            onclick="open_add_modal()"
+            onclick="open_modal('add-task-modal')"
                 class="w-full bg-white text-emerald-500 rounded-lg py-2 hover:bg-emerald-300 hover:text-white transition-all duration-500">
                 + Add New Task
             </button>
@@ -151,7 +151,7 @@
     </section>
 
 
-      <div id="add-task-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
+        <div id="add-task-modal" class="all-modal hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Tugas Baru</h3>
                 <form id="add-form" action="task/api" method="POST">
@@ -161,7 +161,7 @@
                     <input type="datetime-local" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <textarea name="content" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                     <div class="flex justify-end gap-4">
-                        <button type="button" onclick="close_add_modal()"
+                        <button type="button" onclick="close_modal('add-task-modal')"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
@@ -174,6 +174,33 @@
                 </form>
             </div>
         </div>
+        
+        <div id="update-task-modal" class="all-modal hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Task Detail</h3>
+                <form id="update-form" action="task/api" method="POST">
+                    @csrf
+                    <input type="text" id="update-title" name="title" placeholder="Judul Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+ 
+                    <input type="datetime-local" id="update-deadline" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <textarea name="content" id="update-content" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                    <div class="flex justify-end gap-4">
+                        <button type="button" onclick="close_modal('update-task-modal')"
+                            class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                            Batal
+                        </button>
+                        <button type="button"
+                            id="update-button"
+                            onclick="update_data()"
+                            class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        
 
     <style>
         /* Dropdown Animation */
@@ -195,14 +222,30 @@
     </style>
 
     <script>
-        function open_add_modal()
+        function open_modal(id, button = false)
         {
-            document.getElementById('add-task-modal').classList.remove('hidden');
+            if(button !== false){
+
+                const data = JSON.parse(button.getAttribute('data-detail'));
+
+                document.getElementById('update-title').value = data.title;
+                document.getElementById('update-content').value = data.content;
+                document.getElementById('update-deadline').value = data.deadline;
+
+                document.getElementById('update-button').onclick = () => {
+                    update_data(data.id);
+                }
+            }
+
+
+            close_all_modal();
+            document.getElementById(id).classList.remove('hidden');
+            console.log('berhasil');
         }
 
-        function close_add_modal()
+        function close_modal(id)
         {
-            document.getElementById('add-task-modal').classList.add('hidden');
+            document.getElementById(id).classList.add('hidden');
         }
 
         function get_task()
@@ -222,61 +265,42 @@
 
             datas.datas.forEach(data => {
 
+                console.log(data)
+                
                 all_list.innerHTML += `<div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="text-md font-semibold text-gray-800">${data.title}</h3>
                         <div class="relative">
-                       <div class="relative inline-block text-left">
-                        <div>
-                            <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
-                            Options
-                            <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                            </svg>
+                            <div class="relative inline-block text-left">
+                            <button
+                                class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
+                                onclick="open_dropdown('all-task-${data.id}')">
+                                Options
                             </button>
-                        </div>
 
-                        <div 
-                            class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden transition ease-out duration-100 transform opacity-0 scale-95"
-                            role="menu"
-                            aria-orientation="vertical"
-                            aria-labelledby="menu-button"
-                            tabindex="-1"
-                            data-entering="From: transform opacity-0 scale-95 To: transform opacity-100 scale-100"
-                            data-leaving="From: transform opacity-100 scale-100 To: transform opacity-0 scale-95"
-                        >
-                            <div class="py-1" role="none">
-                            <!-- "Active" state can use: bg-gray-100 text-gray-900 outline-hidden -->
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Support</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">License</a>
-                            <form method="POST" action="#" role="none">
-                                <button type="submit" class="block w-full px-4 py-2 text-left text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-3">Sign out</button>
-                            </form>
+                            <!--
+                                Dropdown menu, show/hide based on menu state.
+
+                                Entering: "transition ease-out duration-100"
+                                From: "transform opacity-0 scale-95"
+                                To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                From: "transform opacity-100 scale-100"
+                                To: "transform opacity-0 scale-95"
+                            -->
+                            <div
+                                id="all-task-${data.id}"
+
+                                class="all-modal hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                <div class="py-1" role="none">
+                                <!-- Active: "bg-gray-100 text-gray-900 outline-hidden", Not Active: "text-gray-700" -->
+                                <button data-detail='${JSON.stringify(data).replace(/'/g, "&apos;")}' onclick="open_modal('update-task-modal', this)" type="button" class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-200" role="menuitem" tabindex="-1" id="menu-item-3">Detail</button>
+                                <button type="submit" onclick="delete_data(${data.id})" class="block w-full px-4 py-2 text-left text-sm text-red-700 hover:bg-gray-200" role="menuitem" tabindex="-1" id="menu-item-3">Delete</button>
+                                </div>
                             </div>
-                        </div>
-                        </div>
+                            </div>
 
-                            <ul class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
-                                <li>
-                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                            onclick="editTask()">
-                                        Edit
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                            onclick="deleteTask()">
-                                        Delete
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                            onclick="setToProgress(${data.id})">
-                                        Set to Progress
-                                    </button>
-                                </li>
-                            </ul>
+
                         </div>
                     </div>
                     <p class="text-sm text-emerald-500 opacity-70 mb-3">${data.deadline}</p>
@@ -335,6 +359,12 @@
             });
         }
 
+        function open_dropdown(id)
+        {
+            close_all_modal();
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
         // Placeholder Actions for Dropdown Options
         function editTask(taskId) {
             console.log(`Editing task ${taskId}`);
@@ -368,8 +398,35 @@
 
             api_store('/task/api', formData);
 
-            close_add_modal();
+            close_modal('add-task-modal');
             get_task();
+        }
+
+        function update_data(id)
+        {
+            const form = document.getElementById('update-form');
+            const formData = new FormData(form);
+
+            formData.append('_method', 'PATCH');
+            api_update('/task/api', formData, id);
+
+            close_all_modal();
+            get_task();
+        }
+
+        function delete_data(id)
+        {
+            api_destroy('/task/api', id);
+            get_task();
+        }
+
+        function close_all_modal()
+        {
+            const all_modals = document.querySelectorAll('.all-modal');
+
+            all_modals.forEach(el => {
+                el.classList.add('hidden');
+            });
         }
     </script>
 </x-layout>

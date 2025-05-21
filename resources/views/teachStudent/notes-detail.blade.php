@@ -121,7 +121,6 @@
             const form = document.getElementById('addNote');
             const formData = new FormData(form);
 
-            formData.append('_method', 'POST');
 
             api_store('/note/api', formData);
             closeAddModal();
@@ -141,7 +140,6 @@
             const id = document.getElementById('note_id');
             
             const formData = new FormData(form);
-            formData.append('_method', 'PATCH');
 
             api_update('/note/api', formData, id.value);
             refresh_list();

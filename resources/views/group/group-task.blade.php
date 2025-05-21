@@ -49,7 +49,9 @@
                     <p id="content-description" class="text-gray-700 mb-6">**deskriprsi**</p>
                     <div class="border-t border-gray-200 pt-4">
                         <h4 class="font-semibold text-gray-700 mb-2">Kumpulkan Tugas</h4>
-                        <form action="/submit-task" method="POST" enctype="multipart/form-data" id="submission-form">
+                        <textarea name="content" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+
+                        <form id="submission-form" action="/submit-task" method="POST" enctype="multipart/form-data" id="submission-form">
                             @csrf
                             {{-- <input type="hidden" name="task_id" value="{{ $taskId }}"> --}}
                             <input type="file" name="submissions[]" id="file-input" class="mb-4 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx" multiple>
@@ -456,6 +458,8 @@
                 document.getElementById('content-title').textContent = data.title;
                 document.getElementById('content-deadline').textContent = data.deadline;
                 document.getElementById('content-description').textContent = data.content;
+
+                document.getElementById('submission-form').action = `/submit-task/${data.id}`
             }
         }
 

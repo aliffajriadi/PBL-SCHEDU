@@ -143,7 +143,7 @@
                             <button class="text-white hover:text-gray-700 bg-emerald-500 px-2 focus:outline-none" onclick="toggleDropdown(this)">
                                 <span class="text-lg font-bold hover:text-2xl">⋮</span>
                             </button>
-                            <div class="dropdown-menu hidden absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg z-10">
+                            <div class="all-modal dropdown-menu hidden absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg z-10">
                                 <button data-detail='${JSON.stringify(data).replace(/'/g, "&apos;")}' class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100" onclick="open_update_modal(this)">
                                     Detail
                                 </button>
@@ -185,7 +185,6 @@
     {
         const form = document.getElementById('update-form');
         const formData = new FormData(form);
-        formData.append('_method', 'PATCH');
 
         api_update('/schedule/api', formData, id);
         get_schedule();
