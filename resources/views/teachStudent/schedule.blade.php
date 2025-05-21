@@ -144,8 +144,8 @@
                                 <span class="text-lg font-bold hover:text-2xl">⋮</span>
                             </button>
                             <div class="dropdown-menu hidden absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg z-10">
-                                <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100" onclick="open_update_modal(${data.id})">
-                                    Edit
+                                <button data-detail='${JSON.stringify(data).replace(/'/g, "&apos;")}' class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100" onclick="open_update_modal(this)">
+                                    Detail
                                 </button>
                                 <button class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-emerald-100" onclick="delete_data(${data.id})">
                                     Delete
@@ -203,12 +203,19 @@
         modal.classList.add('hidden')
     }
 
-    function open_update_modal(id)
+    function open_update_modal(el)
     {
+        const schedule = JSON.parse(el.getAttribute('data-detail'));
+        console.log(schedule)
+
         const modal = document.getElementById('update-schedule-modal');
         modal.classList.remove('hidden');
+        document.getElementById('title-update').value = schedule.title;
+        document.getElementById('content-update').value = schedule.content;
+        document.getElementById('start-update').value = schedule.start_datetime;
+        document.getElementById('end-update').value = schedule.end_datetime;
 
-        document.getElementById('update-button').onclick = () => update_data(id);
+        document.getElementById('update-button').onclick = () => update_data(schedule.id);
     }
 
     function close_update_modal()
