@@ -61,10 +61,13 @@ class GroupTaskController extends Controller
     {
         // Gate::allows('access', $api);
 
+        $submission = $api->submission()->get();
+
         try {
             return response()->json([
                 'status' => true, 
-                'data' => $api
+                'data' => $api,
+                'submission' => $submission
             ]);
             
         }catch(\Exception $e){

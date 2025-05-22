@@ -33,9 +33,10 @@
                     <form id="update-task" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        
                         <input id="content-title" type="text" name="title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                         <input id="content-deadline" type="datetime-local" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                        <textarea id="content-description" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
+                        <textarea id="content-description" name="description" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
                         <div class="flex gap-4">
                             <button type="button" onclick="update_data()" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Task</button>
                             <button type="button" onclick="openDeleteModal()"
@@ -49,12 +50,12 @@
                     <p id="content-description" class="text-gray-700 mb-6">**deskriprsi**</p>
                     <div class="border-t border-gray-200 pt-4">
                         <h4 class="font-semibold text-gray-700 mb-2">Kumpulkan Tugas</h4>
-                        <textarea name="content" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
-
+                        
                         <form id="submission-form" action="/submit-task" method="POST" enctype="multipart/form-data" id="submission-form">
                             @csrf
+                            <textarea id="content-submission-description" name="description" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                             {{-- <input type="hidden" name="task_id" value="{{ $taskId }}"> --}}
-                            <input type="file" name="submissions[]" id="file-input" class="mb-4 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx" multiple>
+                            <input type="file" name="file_submissions[]" id="file-input" class="mb-4 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx" multiple>
                             <div id="file-preview" class="flex flex-col gap-2 mb-4"></div>
                             <button type="submit" class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition">Kumpul Tugas</button>
                         </form>
@@ -446,7 +447,7 @@
         function content(task)
         {
             const data = task.data;
-
+            const submission = task.submission;
             document.getElementById('default-content').classList.add('hidden');
             document.getElementById('content-active').classList.remove('hidden');
 
@@ -457,9 +458,18 @@
             }else{
                 document.getElementById('content-title').textContent = data.title;
                 document.getElementById('content-deadline').textContent = data.deadline;
-                document.getElementById('content-description').textContent = data.content;
+                document.getElementById('content-submission-description').textContent = data.content;
 
-                document.getElementById('submission-form').action = `/submit-task/${data.id}`
+                if(submission !== null){
+                    // document.getElementById('content-description').value = data.description;
+                }
+
+                console.log(submission);
+
+   
+                
+
+                document.getElementById('submission-form').action = `${path}/submit/${data.id}`
             }
         }
 

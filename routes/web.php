@@ -77,8 +77,13 @@ Route::middleware('auth:web')->prefix('/')->group(function () {
             ]);
         });
 
+
         Route::apiResource('/api', PersonalTaskController::class);
 
+    });
+
+    Route::prefix('/submit')->group(function() {
+        Route::post('/{group_task}', [GroupTaskSubmissionController::class, 'store']);
     });
 
     Route::prefix('/schedule')->group(function(){
@@ -162,6 +167,7 @@ Route::middleware('auth:web')->prefix('/group')->group(function () {
         Route::prefix('/task')->group(function () {
             Route::get('/', [GroupTaskController::class, 'dashboard']);
             Route::post('/unit', [GroupTaskUnitController::class, 'store']);
+            Route::post('/submit/{group_task}', [GroupTaskSubmissionController::class, 'store']);
 
             Route::apiResource('/api', GroupTaskController::class);
         });

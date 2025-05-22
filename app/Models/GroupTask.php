@@ -25,4 +25,9 @@ class GroupTask extends Model
     {
         return $this->morphMany(Notification::class, 'type');
     }
+
+    public function submission()
+    {
+        return $this->hasMany(GroupTaskSubmission::class, 'group_task_id');
+    }
 }

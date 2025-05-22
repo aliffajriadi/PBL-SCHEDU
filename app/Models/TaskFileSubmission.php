@@ -21,7 +21,7 @@ class TaskFileSubmission extends Model
     
     
     protected $fillable = [
-        'submission_id'
+        'submission_id', 'fileable_type', 'fileable_id'
     ];
 
     public $incrementing = false;
