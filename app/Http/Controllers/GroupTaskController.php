@@ -61,7 +61,7 @@ class GroupTaskController extends Controller
     {
         // Gate::allows('access', $api);
 
-        $submission = $api->submission()->get();
+        $submission = $api->submission()->orderBy('id', 'DESC')->first();
 
         try {
             return response()->json([
