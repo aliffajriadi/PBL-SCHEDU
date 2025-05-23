@@ -37,6 +37,8 @@
                         <input id="content-title" type="text" name="title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                         <input id="content-deadline" type="datetime-local" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                         <textarea id="content-description" name="description" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
+                        
+                        
                         <div class="flex gap-4">
                             <button type="button" onclick="update_data()" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Task</button>
                             <button type="button" onclick="openDeleteModal()"
@@ -55,8 +57,26 @@
                             @csrf
                             <textarea id="content-submission-description" name="description" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                             {{-- <input type="hidden" name="task_id" value="{{ $taskId }}"> --}}
+                        {{-- <x-multiple-file></x-multiple-file> --}}
+
                             <input type="file" name="file_submissions[]" id="file-input" class="mb-4 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx" multiple>
                             <div id="file-preview" class="flex flex-col gap-2 mb-4"></div>
+                                <!-- Drag & Drop Upload with Preview (Blade + Tailwind + JS) -->
+<div class="w-full max-w-xl mx-auto mt-10">
+    <div 
+      id="drop-area"
+      class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-all duration-200 hover:bg-gray-100 cursor-pointer"
+      onclick="document.getElementById('fileElem').click();"
+      ondragover="event.preventDefault(); this.classList.add('bg-green-100', 'border-green-400');"
+      ondragleave="this.classList.remove('bg-green-100', 'border-green-400');"
+      ondrop="handleDrop(event);"
+    >
+      <input type="file" id="fileElem" multiple accept="image/*" class="hidden" onchange="handleFiles(this.files)">
+      <p class="text-gray-500">Drag and drop files here or click to upload</p>
+    </div>
+  
+    <div id="preview" class="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+  </div>
                             <button type="submit" class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition">Kumpul Tugas</button>
                         </form>
                     </div>
@@ -458,10 +478,10 @@
             }else{
                 document.getElementById('content-title').textContent = data.title;
                 document.getElementById('content-deadline').textContent = data.deadline;
-                document.getElementById('content-submission-description').textContent = data.content;
+                document.getElementById('content-description').textContent = data.content;
 
                 if(submission !== null){
-                    // document.getElementById('content-description').value = data.description;
+                    document.getElementById('content-submission-description').value = task.description;
                 }
 
                 console.log(submission);
@@ -509,4 +529,35 @@
         }
 
     </script>
+
+
+
+<script>
+  function handleDrop(event) {
+    event.preventDefault();
+    const dt = event.dataTransfer;
+    const files = dt.files;
+    document.getElementById('drop-area').classList.remove('bg-green-100', 'border-green-400');
+    handleFiles(files);
+  }
+
+  function handleFiles(files) {
+    const preview = document.getElementById('preview');
+    preview.innerHTML = ''; // clear previous
+
+    [...files].forEach(file => {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'w-full h-32 object-cover rounded border';
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+</script>
+
 </x-layout>
