@@ -7,27 +7,16 @@ use Illuminate\Support\Str;
 
 
 class TaskFileSubmission extends Model
-{
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function($model) {
-            if(empty($model->{$model->getKeyName()})){
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
-    
-    
+{    
     protected $fillable = [
-        'submission_id', 'fileable_type', 'fileable_id'
+        'stored_name', 'original_name', 'submission_id', 'fileable_type', 'fileable_id'
     ];
 
-    public $incrementing = false;
-    protected $primaryKey = 'file_name';
-    protected $keyType = 'string';
     public $timestamps = false;
 
-    
+    public function submission()
+    {
+        return $this->morphTo();
+    }
+
 }

@@ -53,114 +53,21 @@
                     <div class="border-t border-gray-200 pt-4">
                         <h4 class="font-semibold text-gray-700 mb-2">Kumpulkan Tugas</h4>
                         
-                        <form id="submission-form" action="/submit-task" method="POST" enctype="multipart/form-data" id="submission-form">
+                        <form id="submission-form" action="/group/bPXpTh/task/submit/1" method="POST" enctype="multipart/form-data" id="submission-form">
                             @csrf
                             <textarea id="content-submission-description" name="description" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
-                            {{-- <input type="hidden" name="task_id" value="{{ $taskId }}"> --}}
-                        {{-- <x-multiple-file></x-multiple-file> --}}
+                            {{-- <input type="file" name="file_submmissions[]" multiple>//// --}}
+                            
+                            <div id="content-file-list" class="hidden">
+                                <ul id="file-list" class="list-disc pl-5 text-sm text-gray-600">
+                                </ul>
+                            </div>
 
-                            <input type="file" name="file_submissions[]" id="file-input" class="mb-4 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx" multiple>
-                            <div id="file-preview" class="flex flex-col gap-2 mb-4"></div>
-                                <!-- Drag & Drop Upload with Preview (Blade + Tailwind + JS) -->
-<div class="w-full max-w-xl mx-auto mt-10">
-    <div 
-      id="drop-area"
-      class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-all duration-200 hover:bg-gray-100 cursor-pointer"
-      onclick="document.getElementById('fileElem').click();"
-      ondragover="event.preventDefault(); this.classList.add('bg-green-100', 'border-green-400');"
-      ondragleave="this.classList.remove('bg-green-100', 'border-green-400');"
-      ondrop="handleDrop(event);"
-    >
-      <input type="file" id="fileElem" multiple accept="image/*" class="hidden" onchange="handleFiles(this.files)">
-      <p class="text-gray-500">Drag and drop files here or click to upload</p>
-    </div>
-  
-    <div id="preview" class="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
-  </div>
-                            <div data-hs-file-upload='{
-  "url": "/upload",
-  "extensions": {
-    "default": {
-      "class": "shrink-0 size-5"
-    },
-    "xls": {
-      "class": "shrink-0 size-5"
-    },
-    "zip": {
-      "class": "shrink-0 size-5"
-    },
-    "csv": {
-      "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/><path d=\"m5 12-3 3 3 3\"/><path d=\"m9 18 3-3-3-3\"/></svg>",
-      "class": "shrink-0 size-5"
-    }
-  }
-}'>
-  <template data-hs-file-upload-preview="">
-    <div class="p-3 bg-white border border-solid border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600">
-      <div class="mb-1 flex justify-between items-center">
-        <div class="flex items-center gap-x-3">
-          <span class="size-10 flex justify-center items-center border border-gray-200 text-gray-500 rounded-lg dark:border-neutral-700 dark:text-neutral-500" data-hs-file-upload-file-icon="">
-            <img class="rounded-lg hidden" data-dz-thumbnail="">
-          </span>
-          <div>
-            <p class="text-sm font-medium text-gray-800 dark:text-white">
-              <span class="truncate inline-block max-w-75 align-bottom" data-hs-file-upload-file-name=""></span>.<span data-hs-file-upload-file-ext=""></span>
-            </p>
-            <p class="text-xs text-gray-500 dark:text-neutral-500" data-hs-file-upload-file-size=""></p>
-          </div>
-        </div>
-        <div class="flex items-center gap-x-2">
-          <button type="button" class="text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200 dark:focus:text-neutral-200" data-hs-file-upload-remove="">
-            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 6h18"></path>
-              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-              <line x1="10" x2="10" y1="11" y2="17"></line>
-              <line x1="14" x2="14" y1="11" y2="17"></line>
-            </svg>
-          </button>
-        </div>
-      </div>
+                            <x-multiple-file></x-multiple-file>
 
-      <div class="flex items-center gap-x-3 whitespace-nowrap">
-        <div class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-hs-file-upload-progress-bar="">
-          <div class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition-all duration-500 hs-file-upload-complete:bg-green-500" style="width: 0" data-hs-file-upload-progress-bar-pane=""></div>
-        </div>
-        <div class="w-10 text-end">
-          <span class="text-sm text-gray-800 dark:text-white">
-            <span data-hs-file-upload-progress-bar-value="">0</span>%
-          </span>
-        </div>
-      </div>
-    </div>
-  </template>
+                            <br>
 
-  <div class="cursor-pointer p-12 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600" data-hs-file-upload-trigger="">
-    <div class="text-center">
-      <span class="inline-flex justify-center items-center size-16 bg-gray-100 text-gray-800 rounded-full dark:bg-neutral-700 dark:text-neutral-200">
-        <svg class="shrink-0 size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="17 8 12 3 7 8"></polyline>
-          <line x1="12" x2="12" y1="3" y2="15"></line>
-        </svg>
-      </span>
-
-      <div class="mt-4 flex flex-wrap justify-center text-sm/6 text-gray-600">
-        <span class="pe-1 font-medium text-gray-800 dark:text-neutral-200">
-          Drop your file here or
-        </span>
-        <span class="bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-hidden focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 dark:bg-neutral-800 dark:text-blue-500 dark:hover:text-blue-600">browse</span>
-      </div>
-
-      <p class="mt-1 text-xs text-gray-400 dark:text-neutral-400">
-        Pick a file up to 2MB.
-      </p>
-    </div>
-  </div>
-
-  <div class="mt-4 space-y-2 empty:mt-0" data-hs-file-upload-previews=""></div>
-</div>
-                            <button type="submit" class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition">Kumpul Tugas</button>
+                            <button onclick="insert_data2()" type="button" class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition">Kumpul Tugas</button>
                         </form>
                     </div>
                 @endif
@@ -392,11 +299,18 @@
             debounce_refresh();
         }
 
+        // function submit()
+        // {
+        //     const form = new FormData('submissions');
+        //     api_store(`${path}/submit/1`, );
+
+        // }
+
         document.addEventListener('DOMContentLoaded', function () {
             // Pratinjau File
             reset_list()
 
-            const fileInput = document.getElementById('file-input');
+            const fileInput = document.getElementById('hidden-input');
             if (fileInput) {
                 fileInput.addEventListener('change', function(event) {
                     const filePreview = document.getElementById('file-preview');
@@ -562,13 +476,29 @@
                 document.getElementById('content-title').textContent = data.title;
                 document.getElementById('content-deadline').textContent = data.deadline;
                 document.getElementById('content-description').textContent = data.content;
-
+                // document.getElementById('content-files').
                 if(submission !== null){
-<<<<<<< HEAD
-                    document.getElementById('content-submission-description').value = task.description;
-=======
                     document.getElementById('content-submission-description').value = submission.description;
->>>>>>> refs/remotes/origin/backend
+
+                    console.log(task.file)
+
+                    if(task.file !== null){
+                        document.getElementById('content-file-list').classList.remove('hidden');
+                        const file_list = document.getElementById('file-list');
+
+                        const files = task.file;
+                        files.forEach(file => {
+                            console.log(file);
+
+                            file_list.innerHTML +=                `<li>
+                                            <a href="{{  }}" target="_blank" class="text-emerald-400 hover:underline">
+                                                ${file.stored_name}
+                                            </a>       <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                                        </li>`
+                        });
+                    }
                 }
 
                 console.log(submission);
@@ -619,32 +549,220 @@
 
 
 
-<script>
-  function handleDrop(event) {
-    event.preventDefault();
-    const dt = event.dataTransfer;
-    const files = dt.files;
-    document.getElementById('drop-area').classList.remove('bg-green-100', 'border-green-400');
-    handleFiles(files);
-  }
+    <script>
+    function handleDrop(event) {
+        event.preventDefault();
+        const dt = event.dataTransfer;
+        const files = dt.files;
+        document.getElementById('drop-area').classList.remove('bg-green-100', 'border-green-400');
+        handleFiles(files);
+    }
 
-  function handleFiles(files) {
-    const preview = document.getElementById('preview');
-    preview.innerHTML = ''; // clear previous
+    function handleFiles(files) {
+        const preview = document.getElementById('preview');
+        preview.innerHTML = ''; // clear previous
 
-    [...files].forEach(file => {
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.className = 'w-full h-32 object-cover rounded border';
-          preview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
-</script>
+        [...files].forEach(file => {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'w-full h-32 object-cover rounded border';
+            preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+        });
+    }
+
+    const fileTempl = document.getElementById("file-template"),
+    imageTempl = document.getElementById("image-template"),
+    empty = document.getElementById("empty");
+
+    // use to store pre selected files
+    let FILES = {};
+
+    // check if file is of type image and prepend the initialied
+    // template to the target element
+    function addFile(target, file) {
+    const isImage = file.type.match("image.*"),
+        objectURL = URL.createObjectURL(file);
+
+    const clone = isImage
+        ? imageTempl.content.cloneNode(true)
+        : fileTempl.content.cloneNode(true);
+
+    clone.querySelector("h1").textContent = file.name;
+    clone.querySelector("li").id = objectURL;
+    clone.querySelector(".delete").dataset.target = objectURL;
+    clone.querySelector(".size").textContent =
+        file.size > 1024
+        ? file.size > 1048576
+            ? Math.round(file.size / 1048576) + "mb"
+            : Math.round(file.size / 1024) + "kb"
+        : file.size + "b";
+
+    isImage &&
+        Object.assign(clone.querySelector("img"), {
+        src: objectURL,
+        alt: file.name
+        });
+
+    empty.classList.add("hidden");
+    target.prepend(clone);
+
+    FILES[objectURL] = file;
+    }
+
+    const gallery = document.getElementById("gallery"),
+    overlay = document.getElementById("overlay");
+
+    // click the hidden input of type file if the visible button is clicked
+    // and capture the selected files
+    const hidden = document.getElementById("hidden-input");
+    document.getElementById("button").onclick = () => hidden.click();
+    hidden.onchange = (e) => {
+    for (const file of e.target.files) {
+        addFile(gallery, file);
+    }
+    };
+
+    // use to check if a file is being dragged
+    const hasFiles = ({ dataTransfer: { types = [] } }) =>
+    types.indexOf("Files") > -1;
+
+    // use to drag dragenter and dragleave events.
+    // this is to know if the outermost parent is dragged over
+    // without issues due to drag events on its children
+    let counter = 0;
+
+    // reset counter and append file to gallery when file is dropped
+    function dropHandler(ev) {
+    ev.preventDefault();
+    for (const file of ev.dataTransfer.files) {
+        addFile(gallery, file);
+        overlay.classList.remove("draggedover");
+        counter = 0;
+    }
+    }
+
+    // only react to actual files being dragged
+    function dragEnterHandler(e) {
+    e.preventDefault();
+    if (!hasFiles(e)) {
+        return;
+    }
+    ++counter && overlay.classList.add("draggedover");
+    }
+
+    function dragLeaveHandler(e) {
+    1 > --counter && overlay.classList.remove("draggedover");
+    }
+
+    function dragOverHandler(e) {
+    if (hasFiles(e)) {
+        e.preventDefault();
+    }
+    }
+
+    // event delegation to caputre delete events
+    // fron the waste buckets in the file preview cards
+    // gallery.onclick = ({ target }) => {
+    // if (target.classList.contains("delete")) {
+    //     const ou = target.dataset.target;
+    //     document.getElementById(ou).remove(ou);
+    //     gallery.children.length === 1 && empty.classList.remove("hidden");
+    //     delete FILES[ou];
+    // }
+    // };
+
+    // // print all selected files
+    // document.getElementById("submit").onclick = () => {
+    // alert(`Submitted Files:\n${JSON.stringify(FILES)}`);
+    // console.log(FILES);
+    // };
+
+    // // clear entire selection
+    // document.getElementById("cancel").onclick = () => {
+    // while (gallery.children.length > 0) {
+    //     gallery.lastChild.remove();
+    // }
+    // FILES = {};
+    // empty.classList.remove("hidden");
+    // gallery.append(empty);
+    // };
+
+    // document.getElementById("submission-form").onsubmit = function (e) {
+    //   e.preventDefault();
+
+    // function insert_data2(){
+
+    // const formData = new FormData();
+    // formData.append("description", document.getElementById("content-submission-description").value);
+
+    // // Tambahkan file dari FILES
+    // Object.values(FILES).forEach((file, index) => {
+    //     formData.append("file_submissions[]", file);
+    // });
+
+    // fetch(`${path}/submit/1`, {
+    //     method: "POST",
+    //     body: formData,
+    //     headers: {
+    //     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+    //     }
+    // })
+    //     .then(response => response.json())
+    //     .then(data => console.log(data))
+    //     .catch(error => console.error("Upload failed", error));
+    // };
+
+    function createFileList(files) {
+        const dataTransfer = new DataTransfer(); // untuk Chrome, Firefox
+        files.forEach(file => dataTransfer.items.add(file));
+        return dataTransfer.files;
+    }
+
+
+    function insert_data2() {
+        // Buat form baru secara dinamis
+        const form = document.createElement('form');
+        form.action = `${path}/submit/1`;
+        form.method = 'POST';
+        form.enctype = 'multipart/form-data';
+
+        // Tambahkan CSRF token
+        const csrf = document.querySelector('input[name="_token"]').value;
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = csrf;
+        form.appendChild(csrfInput);
+
+        // Tambahkan description
+        const description = document.getElementById("content-submission-description").value;
+        const descriptionInput = document.createElement('input');
+        descriptionInput.type = 'hidden';
+        descriptionInput.name = 'description';
+        descriptionInput.value = description;
+        form.appendChild(descriptionInput);
+
+        // Tambahkan file satu per satu sebagai input[type=file] (workaround)
+        Object.values(FILES).forEach((file, index) => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.name = 'file_submissions[]';
+            fileInput.files = createFileList([file]); // <- pakai helper
+            form.appendChild(fileInput);
+        });
+
+        // Tambahkan form ke body dan submit
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+
+    </script>
 
 </x-layout>

@@ -10,5 +10,8 @@ class GroupTaskSubmission extends Model
         'description', 'score', 'user_uuid', 'group_task_id'
     ];
 
-    
+    public function file()
+    {
+        return $this->morphMany(TaskFileSubmission::class, 'fileable');
+    }
 }

@@ -61,13 +61,14 @@ class GroupTaskController extends Controller
     {
         // Gate::allows('access', $api);
 
-        $submission = $api->submission()->orderBy('id', 'DESC')->first();
+        $submission = $api->submission()->with('file')->orderBy('id', 'DESC')->first();
 
         try {
             return response()->json([
                 'status' => true, 
                 'data' => $api,
-                'submission' => $submission
+                'submission' => $submission,
+                'file' => $submission->file ?? null
             ]);
             
         }catch(\Exception $e){

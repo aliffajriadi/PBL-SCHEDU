@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('task_file_submissions', function (Blueprint $table) {
-            $table->uuid('file_name')->primary();
+            $table->id();
+            $table->string('stored_name')->nullable();
+            $table->text('original_name');
             $table->foreignId('submission_id')->constrained(
                 table: 'group_task_submissions',
                 column: 'id'

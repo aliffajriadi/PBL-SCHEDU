@@ -15,10 +15,12 @@ class GroupTaskSubmissionController extends Controller
     {
         try{
             $field = $request->validate([
-                'description' => 'string',
+                'description',
                 'file_submissions' => 'array',
                 'file_submissions.*' => 'file'
             ]);
+
+            // dd($request->all());
 
             $field['user_uuid'] = Auth::user()->uuid;
             $field['group_task_id'] = $group_task;
@@ -35,12 +37,16 @@ class GroupTaskSubmissionController extends Controller
                 foreach($files as $file){
                     if($file->isValid()){
                         $task_file = TaskFileSubmission::create([
+                            'original_name' => $file->getClientOriginalName(),
                             'submission_id' => $group_task,
                             'fileable_type' => $fileable_type,
-                            'fileable_id' => $group_task
+                            'fileable_id' => $submission->id
                         ]);
 
-                        $file->storeAs($folder_name , $task_file->file_name . '.' . $file->getClientOriginalExtension(), 'public');
+                        $task_file->stored_name = $task_file->id . '.' . $file->getClientOriginalExtension();
+                        $task_file->save();
+
+                        $file->storeAs($folder_name , $task_file->stored_name, 'public');
                     }
                 }
             }

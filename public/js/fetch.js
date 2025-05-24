@@ -48,8 +48,7 @@ async function api_store(url, form, file = false)
     };
 
 
-
-    // if(file) headers_data['Content-Type'] = 'multipart/form-data';
+    if(file) headers_data['Content-Type'] = 'multipart/form-data';
 
     const response = fetch(`${url}`, {
         method: 'POST',
