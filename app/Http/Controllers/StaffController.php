@@ -51,12 +51,18 @@ class StaffController extends Controller
         $usersInInstance = $query->latest()->paginate(10);
         return view('staff.account', compact('users', 'usersInInstance', 'search'));
     }
-    
-    public function view_group(){
+
+    public function view_group()
+    {
         $user = Auth::guard('staff')->user();
         $groupList = Group::where('instance_uuid')->limit(10)->latest();
-        
+
         return view('staff.group', compact('user', 'groupList'));
+    }
+    public function view_profile()
+    {
+        $user = Auth::guard('staff')->user();
+        return view('staff.profile', compact('user'));
     }
 
     public function dashboard()
@@ -132,27 +138,6 @@ class StaffController extends Controller
         }
     }
 
-    public function index(Request $request)
-    {
-        try {
-            $staffs = Staff::query();
-
-            if ($request->query('keyword')) {
-                $keyword = '%' . $request->query('keyword') . '%';
-                $staffs = $notes->where('name', 'like', $keyword);
-            }
-
-            return response()->json([
-                'status' => true,
-                'datas' => $staffs->get()
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
 
     public function store(Request $request)
     {
@@ -183,59 +168,61 @@ class StaffController extends Controller
         }
     }
 
-    public function update(Request $request, Staff $staff)
+    public function update(Request $request)
     {
         try {
-            $field = $request->validate([
-                'instance_name' => 'required|max:255',
-                'address' => 'required|max:255',
-                'phone_no' => 'required|max:255',
-                'address' => 'required|max:255'
+            /** @var \App\Models\Staff $staff */
+            $staff = Auth::guard('staff')->user();
+
+            $request->validate([
+                'instance_name' => 'required',
+                'email' => 'required|email|unique:staff,email,' . $staff->uuid . ',uuid',
+                'phone' => 'required',
+                'address' => 'required',
+                'logo_instance' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
 
-            $staff->update($field);
+            $staff->instance_name = $request->instance_name;
+            $staff->email = $request->email;
+            $staff->phone_no = $request->phone;
+            $staff->address = $request->address;
+
+            if ($request->hasFile('logo_instance')) {
+                Storage::disk('public')->delete($staff->logo_instance);
+                $file = $request->file('logo_instance');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+
+                $path = $file->storeAs($staff->folder_name, $fileName, 'public');
+                $staff->logo_instance = $path;
+            }
 
             $staff->save();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Instance Updated Successfully'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            return redirect()->back()->with('success', 'Berhasil memperbarui data.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $th->getMessage());
         }
     }
 
-    public function change_password(Request $request, Staff $staff)
+
+    public function update_password(Request $request)
     {
         try {
             $request->validate([
-                'old_password' => 'required',
-                'password' => 'required|confirmed|max:255'
+                'current_password' => 'required',
+                'new_password' => 'required|min:6',
             ]);
-
-            if (!Hash::check($request->input('old_password'), Auth::guard('staff')->user()->password)) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Wrong Old Password'
-                ]);
+            /** @var \App\Models\Staff $userLogin */
+            $userLogin = Auth::guard('staff')->user();
+            if (!Hash::check($request['current_password'], $userLogin->password)) {
+                return redirect()->back()->with('error', 'Current Password Instance not match');
             }
-
-            $staff->password = $request->input('password');
-            $staff->save();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Password Updated Successfully'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            $passwordNew = Hash::make($request['new_password']);
+            $userLogin->password = $passwordNew;
+            $userLogin->save();
+            return redirect()->back()->with('success', 'Success Change Password');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
 
@@ -258,7 +245,7 @@ class StaffController extends Controller
             $userInstance->save();
             return back()->with('success', 'Password updated successfully.');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Failed change password' . $th);
+            return redirect()->back()->with('error', 'Failed change password' . $th->getMessage());
         }
     }
 

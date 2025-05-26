@@ -249,6 +249,9 @@ Route::prefix('/staff')->middleware('staff')->group(function () {
         Route::get('/dashboard', 'dashboard');
         Route::get('/group', 'view_group');
         Route::get('/account', 'view_account');
+        Route::get('/profile', 'view_profile');
+        Route::put('/profile/update', 'update');
+        Route::put('/profile/password', 'update_password');
         Route::post('/logout', 'logout');
         Route::put('/user/{uuid}', 'update_user');
         Route::put('/userpassword', 'update_password_user');

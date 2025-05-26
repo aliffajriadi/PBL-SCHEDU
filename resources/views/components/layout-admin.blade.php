@@ -172,7 +172,7 @@
                 {{ Request::is('admin/instatiate') ? 'bg-green-400' : 'hover:bg-green-400' }}">
                 <div class="flex items-center gap-2">
                     <img src="{{ asset('assets/edit.svg') }}" class="w-5 h-auto" />
-                    <p class="font-semibold">Manage instantiate</p>
+                    <p class="font-semibold">Manage institutions</p>
                 </div>
             </a>
 
@@ -247,7 +247,7 @@
             <a href="/admin/instatiate"
                 class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item hover:bg-green-400 active:bg-green-400 {{ request()->is('admin/instatiate') ? 'bg-green-400' : '' }}">
                 <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
-                <p class="font-semibold">Manage instantiate</p>
+                <p class="font-semibold">Manage institutions</p>
             </a>
 
 
