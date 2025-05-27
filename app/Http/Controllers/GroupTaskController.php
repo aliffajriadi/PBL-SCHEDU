@@ -13,34 +13,39 @@ class GroupTaskController extends Controller
 {
     public function index(Request $request, Group $group)
     {
-        try{
+        try {
             $keyword = $request->query('keyword');
-            
-            $unit = GroupTaskUnit::where('group_id', $group->id)->with('task')->orderBy('created_at', 'ASC');
-            
-            if($keyword) {
-                $unit->whereHas('task', function ($model) use ($keyword) {
-                    $model->where('title', 'LIKE', "%$keyword%")->orderByRaw("
-                        CASE 
-                            WHEN title LIKE ? THEN 1
-                            WHEN title LIKE ? THEN 2
-                            ELSE 3
-                        END", ["$keyword", "%$keyword%"]);
+
+            $unit = GroupTaskUnit::where('group_id', $group->id);
+
+            if ($keyword) {
+                // Filter hanya unit yang punya task sesuai keyword
+                $unit->whereHas('task', function ($query) use ($keyword) {
+                    $query->where('title', 'LIKE', "%$keyword%");
                 });
+
+                // Hanya ambil task yang sesuai keyword
+                $unit->with(['task' => function ($query) use ($keyword) {
+                    $query->where('title', 'LIKE', "%$keyword%");
+                }]);
+            } else {
+                // Ambil semua task kalau tidak ada keyword
+                $unit->with('task');
             }
 
             return response()->json([
                 'status' => true,
-                'datas' => $unit->get()
+                'datas' => $unit->get(),
+                'keyword' => $keyword
             ]);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
             ]);
         }
     }
+
 
     public function dashboard(Group $group)
     {

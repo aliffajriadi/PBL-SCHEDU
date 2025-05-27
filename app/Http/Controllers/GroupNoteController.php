@@ -88,7 +88,7 @@ class GroupNoteController extends Controller
                         $note_file->stored_name = $note_file->id . '.' . $file->getClientOriginalExtension();
                         $note_file->save();
 
-                        $file->storeAs( "{$folder_name}/groups/{$group}" , $note_file->stored_name, 'public');
+                        $file->storeAs( "{$folder_name}/groups/{$group->group_code}" , $note_file->stored_name, 'public');
                     }
                 }
             }
@@ -110,6 +110,8 @@ class GroupNoteController extends Controller
     public function update(Request $request, Group $group, GroupNote $api)
     {
         try {
+            // return ['request' => $request->all()];
+
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required',
@@ -139,7 +141,7 @@ class GroupNoteController extends Controller
                         $task_file->stored_name = $task_file->id . '.' . $file->getClientOriginalExtension();
                         $task_file->save();
 
-                        $file->storeAs($folder_name , $task_file->stored_name, 'public');
+                        $file->storeAs("{$folder_name}/groups/{$group->group_code}" , $task_file->stored_name, 'public');
                     }
                 }
             }
@@ -156,8 +158,6 @@ class GroupNoteController extends Controller
                 'status' => false,
                 'message' => $e->getMessage(),
                 'request' => $field['title']
-
-
             ]);
         }
     }
@@ -194,8 +194,8 @@ class GroupNoteController extends Controller
     {
         $folder_name = Auth::user()->instance->folder_name;
 
-        $path  = Storage::disk('public')->path("/{$folder_name}/groups/{$group}/$stored_name");
-        dd(Storage::exists($path), $path);
+        $path  = Storage::disk('public')->path("/$folder_name/groups/$group/$stored_name");
+        // dd(Storage::exists($path), $path);
         return response()->download($path);
     }
 

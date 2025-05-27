@@ -29,7 +29,7 @@
                     @method('PUT') --}}
                     <input id="title" type="text" name="title" value="aaaa" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <textarea id="content" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
-                    <input type="file" name="attachments[]" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
+                    <input type="file" name="files[]" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
                     <div class="mt-2">
                         <p class="text-sm font-medium text-gray-700">File:</p>
                         <ul id="content-files" class="list-disc pl-5 text-sm text-gray-600">
@@ -294,9 +294,10 @@
             const form = document.getElementById('note-content');
             const formData = new FormData(form);
 
-            api_update(path + '/api', formData, note_picked);
-            search();
-            show_data(note_picked);
+            api_update(path + '/api', formData, note_picked).then(response => {
+                search();
+                show_data(note_picked);
+            });
         }
 
         function delete_file(stored_name, id)

@@ -277,6 +277,13 @@
         {
             debounce_refresh();
         }
+
+        function search()
+        {
+            const keyword = document.getElementById('search').value;
+            get_data(`${path}/api?keyword=${keyword}`, show_task_list);   
+        }
+
     
         document.addEventListener('DOMContentLoaded', function () {
             // Pratinjau File

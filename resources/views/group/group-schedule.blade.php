@@ -108,18 +108,36 @@
 
     <!-- JavaScript untuk Modal -->
     <script>
+
         const path = window.location.pathname;
         let schedule_selected = -1;
+        const debounce_refresh = debounce(search, 500);
+
+        function debounce_search()
+        {
+            debounce_refresh();
+        }
+
+        function search()
+        {
+            const keyword = document.getElementById('search').value;
+            get_data(`${path}/api?keyword=${keyword}`, schedule_list);   
+        }
+
+        search();
+
+   
 
         console.log(path)
         function insert_data()
         {
             const form = document.getElementById('add-form');
             const formData = new FormData(form);
-            api_store(`${path}/api`, formData);
+            api_store(`${path}/api`, formData).then(response => {
+                search();
+            });
         
             closeAddScheduleModal();
-            all_schedule();
         }
 
         function schedule_list(schedules)
@@ -156,29 +174,25 @@
             });
         }
 
-        function all_schedule()
-        {
-            get_data(`${path}/api`, schedule_list);
-        }
-
-        all_schedule()
 
         function update_data()
         {
             const form = document.getElementById('edit-schedule-form');
             const formData = new FormData(form);
 
-            api_update(`${path}/api`, formData, schedule_selected);
+            api_update(`${path}/api`, formData, schedule_selected).then(response => {
+                search();
+            });
         
             closeEditScheduleModal();
-            all_schedule();
         }
 
         function delete_data()
         {
-            api_destroy(`${path}/api`, schedule_selected);
+            api_destroy(`${path}/api`, schedule_selected).then(resposne => {
+                search();
+            });
             closeDeleteModal();
-            all_schedule();
         }
 
         document.addEventListener('DOMContentLoaded', function () {

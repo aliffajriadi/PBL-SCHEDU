@@ -32,7 +32,7 @@ class GroupScheduleController extends Controller
 
             return response()->json([
                 'status' => true,
-                'datas' => GroupSchedule::all()
+                'datas' => $schedules->get(),
             ]);
             
         }catch(\Exception $e){

@@ -396,10 +396,11 @@
             const form = document.getElementById('add-form');
             const formData = new FormData(form);
 
-            api_store('/task/api', formData);
+            api_store('/task/api', formData).then(response => {
+                get_task();
+            });
 
             close_modal('add-task-modal');
-            get_task();
         }
 
         function update_data(id)
@@ -408,16 +409,18 @@
             const formData = new FormData(form);
 
             formData.append('_method', 'PATCH');
-            api_update('/task/api', formData, id);
+            api_update('/task/api', formData, id).then(response => {
+                get_task();
+            });
 
             close_all_modal();
-            get_task();
         }
 
         function delete_data(id)
         {
-            api_destroy('/task/api', id);
-            get_task();
+            api_destroy('/task/api', id).the(response => {
+                get_task();
+            });
         }
 
         function close_all_modal()
