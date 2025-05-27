@@ -70,9 +70,16 @@
             </div>
 
             <div class="mt-6 bg-white p-6 border-dashed border-2 border-gray-300 rounded-xl flex flex-col items-center justify-center text-center h-40">
-                <span class="material-icons text-4xl text-gray-400">upload_file</span>
+                {{-- <span class="material-icons text-4xl text-gray-400">upload_file</span>
                 <p class="text-sm text-gray-500">Drag and Drop file <br><span class="text-emerald-600 font-medium">or</span></p>
-                <button class="mt-2 px-4 py-1 border border-emerald-600 text-emerald-600 rounded hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">Browse</button>
+                <button class="mt-2 px-4 py-1 border border-emerald-600 text-emerald-600 rounded hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">Browse</button> --}}
+            
+                <form action="/staff/account/insert" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('POST')
+                    <input type="file" name="student_list">
+                    <button type="submit">submit</button>
+                </form>
             </div>
         </div>
 

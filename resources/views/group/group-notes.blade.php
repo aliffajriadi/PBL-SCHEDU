@@ -16,50 +16,7 @@
             </div>
             <!-- Daftar Catatan -->
             <div id="note-list" class="flex flex-col gap-3 max-h-96 overflow-auto">
-                @php
-                    $notes = [
-                        1 => [
-                            'title' => 'Nasi Padang',
-                            'created_at' => '2025-04-14 10:00',
-                            'content' => 'Catatan tentang resep dan sejarah Nasi Padang. Termasuk daftar lauk pauk seperti rendang dan ayam pop.',
-                            'attachments' => [['name' => 'resep_nasi_padang.pdf', 'path' => 'notes/resep_nasi_padang.pdf']],
-                        ],
-                        2 => [
-                            'title' => 'Nasi Goreng',
-                            'created_at' => '2025-04-14 08:00',
-                            'content' => 'Panduan membuat nasi goreng spesial dengan telur dan kecap manis.',
-                            'attachments' => [],
-                        ],
-                        3 => [
-                            'title' => 'Sate Ayam',
-                            'created_at' => '2025-04-13',
-                            'content' => 'Tips marinasi sate ayam agar empuk dan bumbu meresap.',
-                            'attachments' => [['name' => 'foto_sate.jpg', 'path' => 'notes/foto_sate.jpg']],
-                        ],
-                        4 => [
-                            'title' => 'Rendang Daging',
-                            'created_at' => '2025-04-11',
-                            'content' => 'Resep rendang daging otentik dengan santan kental.',
-                            'attachments' => [],
-                        ],
-                        5 => [
-                            'title' => 'Gado-Gado',
-                            'created_at' => '2025-04-09',
-                            'content' => 'Cara membuat gado-gado dengan saus kacang yang lezat.',
-                            'attachments' => [['name' => 'resep_gado_gado.docx', 'path' => 'notes/resep_gado_gado.docx']],
-                        ],
-                    ];
-                @endphp
-                @foreach ($notes as $id => $note)
-                    <div onclick="show_data(1)"
-                        class="block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50 transition-all duration-300">
-                        <div class="flex justify-between items-center">
-                            <h3 class="font-medium text-gray-800">{{ $note['title'] }}</h3>
-                            <p class="text-sm text-gray-500">{{ $loop->iteration }}</p>
-                        </div>
-                        <p class="text-sm text-gray-500">Created at {{ $note['created_at'] }}</p>
-                    </div>
-                @endforeach
+          
             </div>
         </div>
 

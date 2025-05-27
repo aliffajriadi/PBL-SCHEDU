@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 use App\Models\User;
 
@@ -254,5 +258,55 @@ class UserController extends Controller
                 'message' => $e->getMessage()
             ]);
         }   
+    }
+
+    public function insert(Request $request)
+    {
+        try {
+            $field = $request->validate([
+                'student_list' => 'file'
+            ]);
+
+            $instance_uuid = Auth::guard('staff')->user()->uuid;
+            $password = Hash::make('password');
+
+            $participant_list = [];
+
+            $spreadsheet = IOFactory::load($request->file('student_list')->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            
+            $start_row = 2;
+            $end_row = $sheet->getHighestRow();
+            
+            for($row = $start_row; $row <= $end_row; $row++)
+            {
+                $data = [];
+                $data['uuid'] = Str::uuid();
+                $data['name'] = $sheet->getCell("B$row")->getValue();                
+                $data['email'] = $sheet->getCell("C$row")->getValue();
+                $data['birth_date'] = Date::excelToDateTimeObject($sheet->getCell("E$row")->getValue())->format('Y-m-d');
+                $data['gender'] = $sheet->getCell("D$row")->getValue();
+                $data['is_teacher'] = $sheet->getCell("F$row")->getValue() === 'teacher' ? 1 : 0;
+                $data['password'] = $password;
+                $data['instance_uuid'] = $instance_uuid;
+            
+                $participant_list[] = $data; 
+            }
+
+            User::insert($participant_list);
+
+
+
+            return response()->json([
+                'status' => true,
+                'message' => 'New User Addedd Successfully'
+            ]);
+
+        }catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

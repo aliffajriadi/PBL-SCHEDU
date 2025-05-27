@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('group_task_submissions', function (Blueprint $table) {
             $table->id();
             $table->text('description')->nullable();
-            $table->integer('score')->nullable()->default(null);
+            $table->integer('score')->nullable()->default(0);
             $table->uuid('user_uuid');
             $table->foreign('user_uuid')->references('uuid')->on('users');
             $table->foreignId('group_task_id')->constrained(

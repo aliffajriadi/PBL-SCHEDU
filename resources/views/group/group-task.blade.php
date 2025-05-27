@@ -53,7 +53,7 @@
                     <div class="border-t border-gray-200 pt-4">
                         <h4 class="font-semibold text-gray-700 mb-2">Kumpulkan Tugas</h4>
                         
-                        <form id="submission-form" action="/group/bPXpTh/task/submit/1" method="POST" enctype="multipart/form-data" id="submission-form">
+                        <form id="submission-form" method="POST" enctype="multipart/form-data">
                             @csrf
                             <textarea id="content-submission-description" name="description" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                             {{-- <input type="file" name="file_submmissions[]" multiple>//// --}}
@@ -67,7 +67,15 @@
 
                             <br>
 
-                            <button onclick="insert_data2()" type="button" class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition">Kumpul Tugas</button>
+                            <div id="submitted-button">
+                                <button id="update-submission" type="button" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Submission</button>
+                                <button id="delete-submission" type="button" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Delete Submission</button>
+                            </div>
+
+                            <div id="not-submitted-button">
+                                <button id="submit-submission" type="button" class="bg-emerald-400 text-white px-6 py-2 rounded-lg hover:bg-emerald-500 transition">Kumpul Tugas</button>
+                            </div>
+
                         </form>
                     </div>
                 @endif
@@ -124,51 +132,22 @@
             ];
         @endphp
 
-        @if(request()->query('task') && $role === 'teacher')
+        @if($role === 'teacher')
             @php
                 $taskId = request()->query('task');
                 $filteredSubmissions = array_filter($submissions, function($submission) use ($taskId) {
                     return $submission['task_id'] == $taskId;
                 });
             @endphp
-            @if(!empty($filteredSubmissions))
-                <div class="flex flex-col gap-3 max-h-96 overflow-auto">
-                    @foreach($filteredSubmissions as $submission)
-                        <div class="bg-white border border-gray-200 rounded-md p-3">
-                            <p class="text-gray-800 font-medium">{{ $submission['title'] }} - {{ $submission['student_name'] }}</p>
-                            <p class="text-sm text-gray-500">Dikumpulkan: {{ $submission['submitted_at'] }}</p>
-                            <div class="mt-2">
-                                <p class="text-sm font-medium text-gray-700">File:</p>
-                                <ul class="list-disc pl-5 text-sm text-gray-600">
-                                    @foreach($submission['files'] as $file)
-                                        <li>
-                                            <a href="{{ asset('storage/' . $file['path']) }}" target="_blank" class="text-emerald-400 hover:underline">
-                                                {{ $file['name'] }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <div class="mt-2">
-                                <p class="text-sm font-medium text-gray-700">Nilai:</p>
-                                <form action="/grade-task/{{ $submission['task_id'] }}" method="POST" class="flex gap-2 items-center">
-                                    @csrf
-                                    <input type="number" name="grade" value="{{ $submission['grade'] ?? '' }}" min="0" max="100"
-                                        class="p-1 border border-gray-200 rounded-lg w-20" placeholder="0-100">
-                                    <input type="hidden" name="student_name" value="{{ $submission['student_name'] }}">
-                                    <button type="submit" class="bg-emerald-400 text-white px-3 py-1 rounded-lg hover:bg-emerald-500 transition">
-                                        Simpan Nilai
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    @endforeach
+                <span id="history-title"></span>
+
+                <div id="submission-list" class="flex flex-col gap-3 max-h-96 overflow-auto">
+                    
                 </div>
-            @else
-                <div class="text-gray-500 text-center">
+            
+                {{-- <div class="text-gray-500 text-center">
                     <p>Belum ada pengumpulan untuk tugas ini.</p>
-                </div>
-            @endif
+                </div> --}}
         @elseif($role === 'student')
             <div class="flex flex-col gap-3 max-h-96 overflow-auto">
                 @foreach($submissions as $submission)
@@ -298,14 +277,7 @@
         {
             debounce_refresh();
         }
-
-        // function submit()
-        // {
-        //     const form = new FormData('submissions');
-        //     api_store(`${path}/submit/1`, );
-
-        // }
-
+    
         document.addEventListener('DOMContentLoaded', function () {
             // Pratinjau File
             reset_list()
@@ -338,6 +310,11 @@
                         filePreview.appendChild(fileItem);
                     }
                 });
+            }
+
+            function get_student_submission(id)
+            {
+                get_data();
             }
 
             // Fungsi Modal Tambah Tugas
@@ -378,179 +355,9 @@
             };
         });
 
-
-        function reset_list()
-        {
-            get_data(`${path}/api`, show_task_list);
-        }
-
-
-        // function show_task_list(units)
-        // {
-        //     console.log(units)
-
-        //     const parent = document.getElementById('task-list');
-        //     parent.innerHTML = '';
-
-        //     units.datas.forEach(unit => {
-        //         let subparent = `
-        //         <div class="bg-white border border-gray-200 rounded-md p-3">
-        //             <p class="text-gray-800 font-medium mb-2">${unit.name}</p>
-        //             <div class="flex flex-col gap-2">`;
-
-        //         console.log(unit.task)
-
-        //         unit.task.forEach(data => {
-        //             subparent.innerHTML += `
-        //             <a href="${data.id}" class="tasks block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50">
-        //                 <p class="font-medium text-gray-800">${data.title}</p>
-        //                 <p class="text-sm text-gray-500">Tenggat: ${data.deadline} </p>
-        //             </a>`;
-        //         });
-
-        //         subparent.innerHTML += `
-        //             </div>
-        //         </div>`
-
-        //         parent.innerHTML += subparent;
-        //     });
-        // }
-
-        function show_task_list(units) {
-            const parent = document.getElementById('task-list');
-            parent.innerHTML = '';
-
-            units.datas.forEach(unit => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'bg-white border border-gray-200 rounded-md p-3';
-
-                const title = document.createElement('p');
-                title.className = 'text-gray-800 font-medium mb-2';
-                title.textContent = unit.name;
-
-                const container = document.createElement('div');
-                container.className = 'flex flex-col gap-2';
-
-                unit.task.forEach(data => {
-                    const a = document.createElement('a');
-                    // a.href = data.id;
-                    a.className = 'tasks block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50';
-
-                    const p1 = document.createElement('p');
-                    p1.className = 'font-medium text-gray-800';
-                    p1.textContent = data.title;
-
-                    const p2 = document.createElement('p');
-                    p2.className = 'text-sm text-gray-500';
-                    p2.textContent = `Tenggat: ${data.deadline}`;
-
-                    a.appendChild(p1);
-                    a.appendChild(p2);
-                    container.appendChild(a);
-
-
-                    a.onclick = () => {
-                        show_data(data.id)
-                    };
-                });
-
-                wrapper.appendChild(title);
-                wrapper.appendChild(container);
-                parent.appendChild(wrapper);
-
-            });
-        }
-
-        function content(task)
-        {
-            const data = task.data;
-            const submission = task.submission;
-            document.getElementById('default-content').classList.add('hidden');
-            document.getElementById('content-active').classList.remove('hidden');
-
-            if('{{ $role }}' == 'teacher'){
-                document.getElementById('content-title').value = data.title;
-                document.getElementById('content-deadline').value = data.deadline;
-                document.getElementById('content-description').value = data.content;
-            }else{
-                document.getElementById('content-title').textContent = data.title;
-                document.getElementById('content-deadline').textContent = data.deadline;
-                document.getElementById('content-description').textContent = data.content;
-                // document.getElementById('content-files').
-                if(submission !== null){
-                    document.getElementById('content-submission-description').value = submission.description;
-
-                    console.log(task.file)
-
-                    if(task.file !== null){
-                        document.getElementById('content-file-list').classList.remove('hidden');
-                        const file_list = document.getElementById('file-list');
-
-                        const files = task.file;
-                        files.forEach(file => {
-                            console.log(file);
-
-                            file_list.innerHTML +=                `<li>
-                                            <a href="{{  }}" target="_blank" class="text-emerald-400 hover:underline">
-                                                ${file.stored_name}
-                                            </a>       <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                                        </li>`
-                        });
-                    }
-                }
-
-                console.log(submission);
-
-   
-                
-
-                document.getElementById('submission-form').action = `${path}/submit/${data.id}`
-            }
-        }
-
-        function insert_data()
-        {
-            const form = document.getElementById('add-form');
-            const formData = new FormData(form);
-
-            api_store(`${path}/api`, formData);
-
-            closeAddTaskModal();
-            reset_list();
-            
-        }
-
-        function update_data()
-        {
-            const form = document.getElementById('update-task');
-            const formData =  new FormData(form);
-
-            api_update(`${path}/api`, formData, task_selected);
-            reset_list();
-        }
-
-        function delete_data()
-        {
-            api_destroy(`${path}/api`, task_selected);
-
-            closeDeleteModal();
-            reset_list();
-        }
-
-        function show_data(id)
-        {
-            task_selected = id;
-            get_data(`${path}/api`, content, id);
-        }
-
-    </script>
-
-
-
-    <script>
-    function handleDrop(event) {
+        
+    @if($role == 'student')
+         function handleDrop(event) {
         event.preventDefault();
         const dt = event.dataTransfer;
         const files = dt.files;
@@ -621,11 +428,11 @@
     // click the hidden input of type file if the visible button is clicked
     // and capture the selected files
     const hidden = document.getElementById("hidden-input");
-    document.getElementById("button").onclick = () => hidden.click();
-    hidden.onchange = (e) => {
-    for (const file of e.target.files) {
-        addFile(gallery, file);
-    }
+        document.getElementById("button").onclick = () => hidden.click();
+        hidden.onchange = (e) => {
+        for (const file of e.target.files) {
+            addFile(gallery, file);
+        }
     };
 
     // use to check if a file is being dragged
@@ -640,11 +447,11 @@
     // reset counter and append file to gallery when file is dropped
     function dropHandler(ev) {
     ev.preventDefault();
-    for (const file of ev.dataTransfer.files) {
-        addFile(gallery, file);
-        overlay.classList.remove("draggedover");
-        counter = 0;
-    }
+        for (const file of ev.dataTransfer.files) {
+            addFile(gallery, file);
+            overlay.classList.remove("draggedover");
+            counter = 0;
+        }
     }
 
     // only react to actual files being dragged
@@ -666,102 +473,299 @@
     }
     }
 
-    // event delegation to caputre delete events
-    // fron the waste buckets in the file preview cards
-    // gallery.onclick = ({ target }) => {
-    // if (target.classList.contains("delete")) {
-    //     const ou = target.dataset.target;
-    //     document.getElementById(ou).remove(ou);
-    //     gallery.children.length === 1 && empty.classList.remove("hidden");
-    //     delete FILES[ou];
-    // }
-    // };
-
-    // // print all selected files
-    // document.getElementById("submit").onclick = () => {
-    // alert(`Submitted Files:\n${JSON.stringify(FILES)}`);
-    // console.log(FILES);
-    // };
-
-    // // clear entire selection
-    // document.getElementById("cancel").onclick = () => {
-    // while (gallery.children.length > 0) {
-    //     gallery.lastChild.remove();
-    // }
-    // FILES = {};
-    // empty.classList.remove("hidden");
-    // gallery.append(empty);
-    // };
-
-    // document.getElementById("submission-form").onsubmit = function (e) {
-    //   e.preventDefault();
-
-    // function insert_data2(){
-
-    // const formData = new FormData();
-    // formData.append("description", document.getElementById("content-submission-description").value);
-
-    // // Tambahkan file dari FILES
-    // Object.values(FILES).forEach((file, index) => {
-    //     formData.append("file_submissions[]", file);
-    // });
-
-    // fetch(`${path}/submit/1`, {
-    //     method: "POST",
-    //     body: formData,
-    //     headers: {
-    //     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-    //     }
-    // })
-    //     .then(response => response.json())
-    //     .then(data => console.log(data))
-    //     .catch(error => console.error("Upload failed", error));
-    // };
-
     function createFileList(files) {
         const dataTransfer = new DataTransfer(); // untuk Chrome, Firefox
         files.forEach(file => dataTransfer.items.add(file));
         return dataTransfer.files;
     }
 
+    @endif
+   
 
-    function insert_data2() {
-        // Buat form baru secara dinamis
-        const form = document.createElement('form');
-        form.action = `${path}/submit/1`;
-        form.method = 'POST';
-        form.enctype = 'multipart/form-data';
-
-        // Tambahkan CSRF token
-        const csrf = document.querySelector('input[name="_token"]').value;
-        const csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = '_token';
-        csrfInput.value = csrf;
-        form.appendChild(csrfInput);
-
-        // Tambahkan description
-        const description = document.getElementById("content-submission-description").value;
-        const descriptionInput = document.createElement('input');
-        descriptionInput.type = 'hidden';
-        descriptionInput.name = 'description';
-        descriptionInput.value = description;
-        form.appendChild(descriptionInput);
-
-        // Tambahkan file satu per satu sebagai input[type=file] (workaround)
-        Object.values(FILES).forEach((file, index) => {
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.name = 'file_submissions[]';
-            fileInput.files = createFileList([file]); // <- pakai helper
-            form.appendChild(fileInput);
-        });
-
-        // Tambahkan form ke body dan submit
-        document.body.appendChild(form);
-        form.submit();
+    function reset_list()
+    {
+        get_data(`${path}/api`, show_task_list);
     }
 
+    function show_task_list(units) {
+        const parent = document.getElementById('task-list');
+        parent.innerHTML = '';
+
+        units.datas.forEach(unit => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'bg-white border border-gray-200 rounded-md p-3';
+
+            const title = document.createElement('p');
+            title.className = 'text-gray-800 font-medium mb-2';
+            title.textContent = unit.name;
+
+            const container = document.createElement('div');
+            container.className = 'flex flex-col gap-2';
+
+            unit.task.forEach(data => {
+                const a = document.createElement('a');
+                // a.href = data.id;
+                a.className = 'tasks block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50';
+
+                const p1 = document.createElement('p');
+                p1.className = 'font-medium text-gray-800';
+                p1.textContent = data.title;
+
+                const p2 = document.createElement('p');
+                p2.className = 'text-sm text-gray-500';
+                p2.textContent = `Tenggat: ${data.deadline}`;
+
+                a.appendChild(p1);
+                a.appendChild(p2);
+                container.appendChild(a);
+
+
+                a.onclick = () => {
+                    
+                    show_data(data.id)
+                };
+            });
+
+            wrapper.appendChild(title);
+            wrapper.appendChild(container);
+            parent.appendChild(wrapper);
+
+        });
+    }
+
+    function insert_data2(id) 
+    {
+        // Buat objek FormData
+        const form = document.getElementById('submission-form');
+        const formData = new FormData(form);
+
+        // Tambahkan file satu per satu
+        Object.values(FILES).forEach((file) => {
+            formData.append('file_submissions[]', file);
+        });
+
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+
+        api_store(`${path}/s/${id}`, formData, true).then((response) => {
+            show_data(id)
+        });
+    }
+
+    function update_submission(id, task_id)
+    {
+        const form = document.getElementById('submission-form');
+
+        const formData = new FormData(form);
+
+        // Tambahkan file satu per satu
+        Object.values(FILES).forEach((file) => {
+            formData.append('file_submissions[]', file);
+        });
+
+        api_update(`${path}/s`, formData, id, true).then((response) => {
+            show_data(task_id)
+        });
+    }
+
+    function delete_submission(id, task_id)
+    {
+        api_destroy(`${path}/s`, id).then((response) => {
+            show_data(task_id)
+        });
+
+    }
+
+    function content(task)
+    {
+        console.log('a');
+        console.log(task);
+        const data = task.data;
+        console.log(task);
+        const submission = task.submission;
+        document.getElementById('default-content').classList.add('hidden');
+        document.getElementById('content-active').classList.remove('hidden');
+
+        const submission_list = document.getElementById('submission-list');
+
+        if('{{ $role }}' == 'teacher'){
+            document.getElementById('content-title').value = data.title;
+            document.getElementById('content-deadline').value = data.deadline;
+            document.getElementById('content-description').value = data.content;
+            document.getElementById('history-title').innerHTML = data.title;
+            submission.forEach(result => {
+                submission_list.innerHTML += `
+                 <div class="bg-white border border-gray-200 rounded-md p-3">
+                            <p class="text-gray-800 font-medium">${result.user.name}</p>
+                            <span>Description : </span>
+                                <br>
+                            <span> ${result.description} </span>
+                                <br>
+                            <span> Score : ${result.score ? result.score : 'Belum Dinilai'} </span>
+                            
+
+                            <p class="text-sm text-gray-500">Dikumpulkan: ${result.updated_at}</p>
+                            <div class="mt-2 ${!result.file ? '': 'hidden'}">
+                                <p class="text-sm font-medium text-gray-700">File:</p>
+                                <ul class="list-disc pl-5 text-sm text-gray-600">
+                                `;                                
+                
+                // console.log(file);
+
+                result.file.forEach((file) => {
+                    submission_list.innerHTML += `        
+                    <li>
+                        <a href="${path}/file/${file.stored_name}" target="_blank" class="text-emerald-400 hover:underline">
+                            ${file.original_name}
+                        </a>
+                    </li>`;
+                });
+
+                submission_list.innerHTML += `
+                                </ul>
+                            </div>
+                            <div class="mt-2">
+                                <p class="text-sm font-medium text-gray-700">Nilai:</p>
+                                <form class="grade-form flex gap-2 items-center">
+                                    <input type="number" name="score" min="0" max="100" class="p-1 border border-gray-200 rounded-lg w-20" placeholder="0-100">
+                                    <input type="hidden" value="${result.id}" name="submission_id">
+                                    <button type="button" onclick="scoring(this)" class="bg-emerald-400 text-white px-3 py-1 rounded-lg hover:bg-emerald-500 transition">
+                                        Simpan Nilai
+                                    </button>
+                                </form>
+                            </div>
+                        </div>`;
+            });
+
+        }else{
+            document.getElementById('content-title').textContent = data.title;
+            document.getElementById('content-deadline').textContent = data.deadline;
+            document.getElementById('content-description').textContent = data.content;
+
+            const file_list = document.getElementById('file-list');
+            file_list.innerHTML = ''; 
+
+            document.getElementById('content-submission-description').value = '';
+
+            
+            if(submission !== null){
+                document.getElementById('submitted-button').classList.remove('hidden');
+                document.getElementById('not-submitted-button').classList.add('hidden');
+
+                document.getElementById('delete-submission').onclick = () => {
+                    delete_submission(submission.id, data.id);
+                };
+
+                document.getElementById('update-submission').onclick = () => {
+                    update_submission(submission.id, data.id);
+                };
+
+                document.getElementById('content-submission-description').value = submission.description;
+
+            
+                console.log(task.file)
+
+                if(task.file !== null){
+                    document.getElementById('content-file-list').classList.remove('hidden');
+                    const files = task.file;
+
+                    files.forEach(file => {
+
+                        file_list.innerHTML +=                `<li>
+                                        <a href="${path}/file/${file.stored_name}" target="_blank" class="text-emerald-400 hover:underline">
+                                            ${file.original_name}
+                                        </a>
+                                        <button type="button" onclick="delete_file('${file.stored_name}')"> <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg></button>
+                                    </li>`
+                    });
+                }
+            }else{
+                document.getElementById('submitted-button').classList.add('hidden');
+                document.getElementById('not-submitted-button').classList.remove('hidden');
+
+                document.getElementById('submit-submission').onclick = () => {
+                    insert_data2(data.id);
+                }
+            }
+            
+            document.getElementById('submission-form').action = `${path}/submit/${data.id}`
+        }
+    }
+
+    function delete_file(stored_name)
+    {
+        api_destroy(`${path}/file`, stored_name);
+    }
+
+    function insert_data()
+    {
+        const form = document.getElementById('add-form');
+        const formData = new FormData(form);
+
+        api_store(`${path}/api`, formData);
+
+        closeAddTaskModal();
+        reset_list();
+        
+    }
+
+    function update_data()
+    {
+        const form = document.getElementById('update-task');
+        const formData =  new FormData(form);
+
+        api_update(`${path}/api`, formData, task_selected);
+        reset_list();
+    }
+
+    function delete_data()
+    {
+        api_destroy(`${path}/api`, task_selected);
+
+        closeDeleteModal();
+        reset_list();
+    }
+
+    function show_data(id)
+    {
+        task_selected = id;
+        
+        console.log(id);
+        get_data(`${path}/api`, content, id);
+
+        @if($role === 'student')
+            document.getElementById("gallery").innerHTML = '';
+            document.getElementById("hidden-input").value = '';
+            FILES = {};
+            empty.classList.remove("hidden");
+        @endif
+    }
+
+    document.querySelectorAll('.grade-form').forEach(el => {
+        el.addEventListener('submit', function (e) {
+            
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            
+            console.log(formData.get("id"));
+            return ;
+
+
+ 
+        })
+    });
+
+    function scoring(button)
+    {
+        const form = button.closest('form');
+        const formData = new FormData(form);
+
+        api_update(`${path}/s`, formData, formData.get('submission_id'));
+    }
 
     </script>
 

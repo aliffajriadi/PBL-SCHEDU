@@ -19,6 +19,7 @@ use App\Http\Controllers\GroupTaskSubmissionController;
 use App\Http\Controllers\GroupTaskUnitController;
 use App\Http\Controllers\PersonalScheduleController;
 use App\Http\Controllers\PersonalTaskController;
+use App\Models\GroupTaskSubmission;
 use App\Models\PersonalTask;
 use Illuminate\Support\Facades\Auth;
 
@@ -167,9 +168,15 @@ Route::middleware('auth:web')->prefix('/group')->group(function () {
         Route::prefix('/task')->group(function () {
             Route::get('/', [GroupTaskController::class, 'dashboard']);
             Route::post('/unit', [GroupTaskUnitController::class, 'store']);
-            Route::post('/submit/{group_task}', [GroupTaskSubmissionController::class, 'store']);
+            Route::post('/s/{group_task}', [GroupTaskSubmissionController::class, 'store']);
+            Route::patch('/s/{submission}', [GroupTaskSubmissionController::class, 'update']);
+            Route::delete('/s/{submission}', [GroupTaskSubmissionController::class, 'destroy']);
+
+            Route::get('/file/{stored_name}', [GroupTaskSubmissionController::class, 'download_file']);
+            Route::delete('/file/{taskFileSubmission:stored_name}', [GroupTaskSubmissionController::class, 'delete_file']);
 
             Route::apiResource('/api', GroupTaskController::class);
+            // Route::apiResource('/submission', GroupTaskSubmissionController::class);
         });
 
         Route::prefix('/settings')->group(function () {
@@ -258,6 +265,8 @@ Route::middleware('auth:staff')->prefix('/staff')->group(function () {
             'user' => $user
         ]);
     });
+
+    Route::post('/account/insert', [UserController::class, 'insert']);
 
     Route::get('/group', function () {
         $user = Auth::guard('staff')->user();
