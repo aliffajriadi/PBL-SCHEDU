@@ -28,8 +28,16 @@
                     {{-- @csrf
                     @method('PUT') --}}
                     <input id="title" type="text" name="title" value="aaaa" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <textarea id="content" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required>{{ $note['content'] }}</textarea>
+                    <textarea id="content" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
                     <input type="file" name="attachments[]" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
+                    <div class="mt-2">
+                        <p class="text-sm font-medium text-gray-700">File:</p>
+                        <ul id="content-files" class="list-disc pl-5 text-sm text-gray-600">
+    
+                        </ul>
+                    </div>
+
+                    <br>
                     <div class="flex gap-4">
                         <button type="button" onclick="update_data()" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Note</button>
                         <button type="button" onclick="openDeleteModal(1, a)"
@@ -41,6 +49,12 @@
                 <div id="note-content" class="hidden">
                     <h3 id="title" class="text-xl font-bold text-gray-800 mb-2">a</h3>
                     <p  class="text-sm text-gray-500 mb-4">Created at: a</p>
+                    <div class="mt-2">
+                        <p class="text-sm font-medium text-gray-700">File:</p>
+                        <ul id="content-files" class="list-disc pl-5 text-sm text-gray-600">
+ 
+                        </ul>
+                    </div>
                     <p id="content" class="text-gray-700 mb-6">x</p>
                 </div>
             @endif
@@ -116,7 +130,10 @@
                     @csrf
                     <input id="add-title" type="text" name="title" placeholder="Note Title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <textarea id="add-content" name="content" placeholder="Note Content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
-                    <input type="file" name="file" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
+                    {{-- <input type="file" name="file" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx,.jpg,.png" multiple> --}}
+                        <x-multiple-file></x-multiple-file>
+
+                    <br>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddNoteModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
@@ -185,7 +202,8 @@
 
             get_data(path + `/api`, function (data) {
                 const note = data.data;
-                
+                const files = data.files;
+
                 document.getElementById('note-null').classList.add('hidden');
                 document.getElementById('note-content').classList.remove('hidden');
                 
@@ -196,6 +214,24 @@
                     title.textContent = note.title;
                     content.textContent = note.content;
                 }
+
+                const file_list = document.getElementById('content-files');
+                file_list.innerHTML = '';
+
+                files.forEach((file) => {
+                    file_list.innerHTML += `
+                        <li>
+                                        <a href="${path}/file/${file.stored_name}" target="_blank" class="text-emerald-400 hover:underline">
+                                            ${file.original_name}
+                                        </a>
+                                        <button type="button" onclick="delete_file('${file.stored_name}', ${id})"> <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg></button>
+                                    </li>
+                    `;
+                })
+                
+
             }, id);
         }
 
@@ -224,7 +260,20 @@
             const form = document.getElementById('add-note-form');
             const formData = new FormData(form);
 
-            api_store(path + '/api', formData, file = true);
+            Object.values(FILES).forEach((file) => {
+                formData.append('files[]', file);
+            });
+
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
+            api_store(path + '/api', formData, file = true).then((response) =>{
+                document.getElementById("gallery").innerHTML = '';
+                document.getElementById("hidden-input").value = '';
+                FILES = {};
+                empty.classList.remove("hidden");
+            });
 
             closeAddNoteModal();
             search();
@@ -248,6 +297,13 @@
             api_update(path + '/api', formData, note_picked);
             search();
             show_data(note_picked);
+        }
+
+        function delete_file(stored_name, id)
+        {
+            api_destroy(`${path}/file`, stored_name).then(response => {
+                show_data(id);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', function () {

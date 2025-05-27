@@ -15,10 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('stored_name')->nullable();
             $table->text('original_name');
-            $table->foreignId('submission_id')->constrained(
-                table: 'group_task_submissions',
-                column: 'id'
-            );
             $table->morphs('fileable');
 
         });

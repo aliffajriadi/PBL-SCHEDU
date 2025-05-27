@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GroupNote extends Model
 {
-    protected $fillable = ['title', 'content', 'group_id', 'created_by', 'pic'];
+    protected $fillable = ['title', 'content', 'group_id', 'created_by'];
 
     public function user()
     {
@@ -22,5 +22,10 @@ class GroupNote extends Model
     public function notification()
     {
         return $this->morphOne(Notification::class, 'type');
+    }
+
+    public function file()
+    {
+        return $this->morphMany(TaskFileSubmission::class, 'fileable');
     }
 }

@@ -17,8 +17,8 @@ class GroupTaskSubmissionController extends Controller
         try{
             $field = $request->validate([
                 'description' => 'string',
-                'file_submissions' => 'array',
-                'file_submissions.*' => 'file'
+                'files' => 'array',
+                'files.*' => 'file'
             ]);
 
             // dd($request->all());
@@ -31,8 +31,8 @@ class GroupTaskSubmissionController extends Controller
 
             $folder_name = Auth::user()->instance->folder_name . '/groups/' . $group;
 
-            if($request->hasFile('file_submissions')){
-                $files = $request->file('file_submissions');
+            if($request->hasFile('files')){
+                $files = $request->file('files');
 
                 $fileable_type = GroupTaskSubmission::class;
 
@@ -40,7 +40,6 @@ class GroupTaskSubmissionController extends Controller
                     if($file->isValid()){
                         $task_file = TaskFileSubmission::create([
                             'original_name' => $file->getClientOriginalName(),
-                            'submission_id' => $submission->id,
                             'fileable_type' => $fileable_type,
                             'fileable_id' => $submission->id
                         ]);
@@ -76,8 +75,8 @@ class GroupTaskSubmissionController extends Controller
             $field = $request->validate([
                 'description' => 'string',
                 'score' => 'int',
-                'file_submissions' => 'array',
-                'file_submissions.*' => 'file' 
+                'files' => 'array',
+                'files.*' => 'file' 
             ]);
 
             // return $request->all();
@@ -91,8 +90,8 @@ class GroupTaskSubmissionController extends Controller
             $submission->save();
 
 
-            if($request->hasFile('file_submissions')){
-                $files = $request->file('file_submissions');
+            if($request->hasFile('files')){
+                $files = $request->file('files');
                 $folder_name = Auth::user()->instance->folder_name . '/groups/' . $group;
 
                 $fileable_type = GroupTaskSubmission::class;
@@ -101,7 +100,6 @@ class GroupTaskSubmissionController extends Controller
                     if($file->isValid()){
                         $task_file = TaskFileSubmission::create([
                             'original_name' => $file->getClientOriginalName(),
-                            'submission_id' => $submission->id,
                             'fileable_type' => $fileable_type,
                             'fileable_id' => $submission->id
                         ]);
@@ -171,7 +169,6 @@ class GroupTaskSubmissionController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-
     }
 
     public function download_file(String $group, String $stored_name)

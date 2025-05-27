@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Group;
 use App\Models\GroupNote;
-
+use App\Models\TaskFileSubmission;
 use Illuminate\Support\Facades\Auth;
 
 class GroupNoteController extends Controller
@@ -39,7 +39,8 @@ class GroupNoteController extends Controller
         try {
 
             return response()->json([
-                'data' => $api
+                'data' => $api,
+                'files' => $api->file
             ]);
         }catch(\Exception $e){
             return response()->json([
@@ -52,27 +53,15 @@ class GroupNoteController extends Controller
     public function store(Request $request, Group $group)
     {
         try {
+
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required',
-                'file'
+                'files' => 'array',
+                'files.*' => 'file'
             ]);
 
             $field['created_by'] = Auth::user()->uuid;
-
-            $file_name = null;
-
-            if($request->hasFile('file'))
-            {
-                $file = $request->file('file');
-                
-                $folder_path = $group->instance->folder_name . '/groups/' . $group->group_code;
-                $file_name = time() . '.' . $file->getClientOriginalExtension();
-
-                Storage::storeAs($folder_path, $file_name, 'public');            
-            }
-
-            $field['file'] = $file_name;
             $field['group_id'] = $group->id;
             
             $note = GroupNote::create($field);
@@ -80,6 +69,29 @@ class GroupNoteController extends Controller
             $notification = NotificationController::store(
                 'Catatan Group Baru', "Catatan baru sudah dibuat di grup $group->name.", GroupNote::class, $note->id, false, now()->setTimezone('Asia/Jakarta'), $group->id
             );
+
+            if($request->hasFile('files')){
+                $files = $request->file('files');
+
+                $fileable_type = GroupNote::class;
+
+                $folder_name = Auth::user()->instance->folder_name;
+
+                foreach($files as $file){
+                    if($file->isValid()){
+                        $note_file = TaskFileSubmission::create([
+                            'original_name' => $file->getClientOriginalName(),
+                            'fileable_type' => $fileable_type,
+                            'fileable_id' => $note->id
+                        ]);
+
+                        $note_file->stored_name = $note_file->id . '.' . $file->getClientOriginalExtension();
+                        $note_file->save();
+
+                        $file->storeAs( "{$folder_name}/groups/{$group}" , $note_file->stored_name, 'public');
+                    }
+                }
+            }
 
             return response()->json([
                 'status' => 200,
@@ -101,29 +113,36 @@ class GroupNoteController extends Controller
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required',
-                'file' => 'nullable|file'
+                'files' => 'array',
+                'files.*' => 'file'
             ]);
-
-            if($api->pic !== null){
-                Storage::disk('public')->delete(Auth::user()->instance->folder_name . '/groups/' . $group->group_code .'/'. $api->pic);
-            } 
-            
-            $file_name = null;
-
-            if($request->hasFile('file'))
-            {
-                $file = $request->file('file');
-                
-                $folder_path = $group->instance->folder_name . '/groups/' . $group->group_code;
-                $file_name = time() . '.' . $file->getClientOriginalExtension();
-
-                Storage::storeAs($folder_path, $file_name, 'public');            
-            }
-
-            $field['file'] = $file_name;
 
             $api->update($field);
             // $note->save();
+
+
+            if($request->hasFile('files')){
+                $files = $request->file('files');
+
+                $fileable_type = GroupNote::class;
+
+                $folder_name = Auth::user()->instance->folder_name;
+
+                foreach($files as $file){
+                    if($file->isValid()){
+                        $task_file = TaskFileSubmission::create([
+                            'original_name' => $file->getClientOriginalName(),
+                            'fileable_type' => $fileable_type,
+                            'fileable_id' => $api->id
+                        ]);
+
+                        $task_file->stored_name = $task_file->id . '.' . $file->getClientOriginalExtension();
+                        $task_file->save();
+
+                        $file->storeAs($folder_name , $task_file->stored_name, 'public');
+                    }
+                }
+            }
 
             return response()->json([
                 'status' => true,
@@ -167,6 +186,35 @@ class GroupNoteController extends Controller
                 'status' => false,
                 'message' => $e->getMessage()
 
+            ]);
+        }
+    }
+
+    public function download_file(String $group, String $stored_name)
+    {
+        $folder_name = Auth::user()->instance->folder_name;
+
+        $path  = Storage::disk('public')->path("/{$folder_name}/groups/{$group}/$stored_name");
+        dd(Storage::exists($path), $path);
+        return response()->download($path);
+    }
+
+    public function delete_file(String $group, TaskFileSubmission $taskFileSubmission)
+    {
+        try {
+            $folder_name = Auth::user()->instance->folder_name;
+         
+            Storage::disk('public')->delete("{$folder_name}/groups/{$group}/{$taskFileSubmission->stored_name}");
+            $taskFileSubmission->delete();
+
+            return response()->json([
+                'status'=> true, 
+                'message' => 'File deleted successfully'
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
             ]);
         }
     }

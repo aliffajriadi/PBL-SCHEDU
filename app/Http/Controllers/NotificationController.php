@@ -88,7 +88,7 @@ class NotificationController extends Controller
 
             if($type === 'personal'){
                 $notifications->whereHas('notification', function($query) {
-                    $query->where('group_id', '==', null);
+                    $query->where('group_id', '=', null);
                 });
             } 
 
@@ -96,7 +96,9 @@ class NotificationController extends Controller
                 $notifications->whereHas('notification', function($query) {
                     $query->where('group_id', '!=', null);
                 });
-            } 
+            }else{
+                
+            }
 
             return response()->json([
                 'status' => true,

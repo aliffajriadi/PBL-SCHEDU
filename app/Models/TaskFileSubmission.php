@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class TaskFileSubmission extends Model
 {    
     protected $fillable = [
-        'stored_name', 'original_name', 'submission_id', 'fileable_type', 'fileable_id'
+        'stored_name', 'original_name', 'fileable_type', 'fileable_id'
     ];
 
     public $timestamps = false;

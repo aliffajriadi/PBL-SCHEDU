@@ -146,6 +146,8 @@ Route::middleware('auth:web')->prefix('/group')->group(function () {
                 ]);
             });
             Route::apiResource('/api', GroupNoteController::class);
+            Route::get('/file/{stored_name}', [GroupNoteController::class, 'download_file']);
+            Route::delete('/file/{taskFileSubmission:stored_name}', [GroupNoteController::class, 'delete_file']);
         });
 
         Route::prefix('/schedule')->group(function () {
