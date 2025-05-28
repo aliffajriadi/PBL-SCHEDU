@@ -23,9 +23,18 @@ class UserController extends Controller
         ]);
     }
 
+    public function login_page()
+    {
+        if(Auth::user() !== null) redirect('/dashboard');
+
+        return view('login');
+    }
+
     public function login(Request $request)
     {
         try {
+            if(Auth::user() !== null) redirect('/dashboard');
+
             $credentials = $request->validate([
                 'email' => 'required',
                 'password' => 'required'
@@ -86,8 +95,13 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function home()
-    {
-        return view('teachStudent.dashboard');
+    {   
+        $user = Auth::user();
+        $user_data = [$user->name, $user->email];
+    
+        return view('teachStudent.dashboard', [
+            'user' => $user_data
+        ]);
     }
 
     public function profile()

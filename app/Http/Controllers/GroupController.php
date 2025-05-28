@@ -211,6 +211,8 @@ class GroupController extends Controller
 
             $group->delete();
 
+
+
             return response()->json([
                 'status' => true,
                 'message' => 'Group Deleted Successfully'

@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class PersonalScheduleController extends Controller
 {
+    public function home()
+    {
+        $user = Auth::user();
+        $user_data = [$user->name, $user->email];
+    
+        return view('teachStudent.schedule', [
+            'user' => $user_data
+        ]);
+    }
+
     public function index(Request $request)
     {
         return response()->json([

@@ -30,9 +30,7 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/login', function () {
-    return view('login');
-});
+Route::get('/login', [UserController::class, 'login_page']);
 
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
@@ -42,75 +40,37 @@ Route::post('/submit-task/{group_task}', [GroupTaskSubmissionController::class, 
 Route::middleware('auth:web')->prefix('/')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
 
-    Route::get('/dashboard', function () {
-        $user = Auth::user();
-        $user_data = [$user->name, $user->email];
-    
-        return view('teachStudent.dashboard', [
-            'user' => $user_data
-        ]);
-    });
+    Route::get('/dashboard', [UserController::class, 'home']);
 
     Route::get('/profile', [UserController::class, 'profile']);
 
     Route::prefix('/note')->group(function () {
 
-        Route::get('/', function () {
-            $user = Auth::user();
-            $user_data = [$user->name, $user->email];
-            return view('teachStudent.notes-detail', [
-                'user' => $user_data
-            ]);
-        });
+        Route::get('/', [PersonalNoteController::class, 'home']);
     
         Route::apiResource('/api', PersonalNoteController::class);
     
     });
 
     Route::prefix('/task')->group(function() {
-        Route::get('/', function () {
-            $user = Auth::user();
-            $user_data = [$user->name, $user->email];
-
-            return view('teachStudent.task', [
-                'user' => $user_data
-
-            ]);
-        });
+        Route::get('/', [PersonalTaskController::class, 'home']);
 
 
         Route::apiResource('/api', PersonalTaskController::class);
 
     });
 
-    Route::prefix('/submit')->group(function() {
-        Route::post('/{group_task}', [GroupTaskSubmissionController::class, 'store']);
-    });
+
 
     Route::prefix('/schedule')->group(function(){
-        Route::get('/', function () {
-            $user = Auth::user();
-            $user_data = [$user->name, $user->email];
-        
-            return view('teachStudent.schedule', [
-                'user' => $user_data
-            ]);
-        });
+        Route::get('/', [PersonalScheduleController::class, 'home']);
 
         Route::apiResource('/api', PersonalScheduleController::class);
     });
     
     Route::prefix('/notification')->group(function () {
     
-        Route::get('/', function () {
-            $user = Auth::user();
-            $user_data = [$user->name, $user->email];
-    
-            return view('notification', [
-                'user' => $user_data,
-                'role' => $user->is_teacher ? 'teacher' : 'student'
-            ]);
-        });
+        Route::get('/', [NotificationController::class, 'home']);
     
         Route::apiResource('/api', NotificationController::class);
     });
@@ -132,37 +92,14 @@ Route::middleware('auth:web')->prefix('/group')->group(function () {
         Route::get('/', [GroupController::class, 'dashboard']);
 
         Route::prefix('/note')->group(function () {
-            Route::get('/', function () {
-                $role = session('role');
-                $user = Auth::user();
-                $user_data = [
-                    $user->name, $user->email
-                ];
-                
-            
-                return view('group.group-notes', [
-                    'role' => $role, 
-                    'user' => $user_data
-                ]);
-            });
+            Route::get('/', [GroupNoteController::class, 'home']);
             Route::apiResource('/api', GroupNoteController::class);
             Route::get('/file/{stored_name}', [GroupNoteController::class, 'download_file']);
             Route::delete('/file/{taskFileSubmission:stored_name}', [GroupNoteController::class, 'delete_file']);
         });
 
         Route::prefix('/schedule')->group(function () {
-            Route::get('/', function () {
-                $role = session('role');
-                $user = Auth::user();
-                $user_data = [
-                    $user->name, $user->email
-                ];
-            
-                return view('group.group-schedule', [
-                    'role' => $role, 
-                    'user' => $user_data
-                ]);
-            });
+            Route::get('/', [GroupScheduleController::class, 'home']);
 
             Route::apiResource('/api', GroupScheduleController::class);
         });

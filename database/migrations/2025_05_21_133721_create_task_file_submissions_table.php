@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('stored_name')->nullable();
             $table->text('original_name');
             $table->morphs('fileable');
-
         });
     }
 

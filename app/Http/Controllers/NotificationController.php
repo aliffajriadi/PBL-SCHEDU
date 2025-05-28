@@ -62,6 +62,17 @@ class NotificationController extends Controller
         }
     }
 
+    public function home()
+    {
+        $user = Auth::user();
+        $user_data = [$user->name, $user->email];
+
+        return view('notification', [
+            'user' => $user_data,
+            'role' => $user->is_teacher ? 'teacher' : 'student'
+        ]);
+    }
+
     public function index(Request $request)
     {
         try {

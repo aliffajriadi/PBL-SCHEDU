@@ -16,11 +16,11 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('score')->nullable()->default(0);
             $table->uuid('user_uuid');
-            $table->foreign('user_uuid')->references('uuid')->on('users');
+            $table->foreign('user_uuid')->references('uuid')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('group_task_id')->constrained(
                 table: 'group_tasks',
                 column: 'id'
-            );
+            )->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

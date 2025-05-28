@@ -20,7 +20,6 @@ class PersonalNoteController extends Controller
             'user' => $user_data
         ]);
     
-    
     }
 
     public function index(Request $request)

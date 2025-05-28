@@ -24,7 +24,6 @@ class MemberOfController extends Controller
         $user_data = [
             $user->name, $user->email
         ];
-    
         
         $members = MemberOf::with('user:uuid,name,email')->where('user_uuid', '!=', Auth::user()->uuid)->where('group_id', $group->id)->where('verified', true)->get();
         $pending_requests = MemberOf::with('user:uuid,name,email')->where('user_uuid', '!=', Auth::user()->uuid)->where('group_id', $group->id)->where('verified', false)->get();
@@ -61,10 +60,7 @@ class MemberOfController extends Controller
                 'verified' => false
             ]);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Successfully Join The Group'
-            ]);           
+            return redirect()->back();         
 
         }catch(\Exception $e) {
             return response()->json([
@@ -82,25 +78,6 @@ class MemberOfController extends Controller
         try {
             $member_of->verified = true;
             $member_of->save(); 
-
-            $notif_ids = Notification::where('group_id', $group->id)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->pluck('id');
-
-            if($notif_ids){
-                $uuid = $member_of->user_uuid;
-
-                $datas_to_insert = [];
-
-                foreach($notif_ids as $id){
-                    $datas_to_insert[] = [
-                        'user_uuid' => $uuid,
-                        'notif_id' => $id
-                    ];
-                }
-
-                NotificationStatus::insert($datas_to_insert);
-            }
-
-            NotificationController::store('Anggota Baru', "{$member_of->user->name} baru saja join dengan grup {$group->name}", \App\Models\MemberOf::class, $member_of->id, group_id: $group->id);
 
             return redirect()->back();
         

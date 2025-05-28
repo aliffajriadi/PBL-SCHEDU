@@ -12,6 +12,20 @@ use Carbon\Carbon;
 
 class GroupScheduleController extends Controller
 {
+    public function home()
+    {
+        $role = session('role');
+        $user = Auth::user();
+        $user_data = [
+            $user->name, $user->email
+        ];
+    
+        return view('group.group-schedule', [
+            'role' => $role, 
+            'user' => $user_data
+        ]);
+    }
+
     public function index(Request $request, Group $group)
     {
         try {

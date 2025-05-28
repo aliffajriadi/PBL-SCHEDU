@@ -11,6 +11,20 @@ use Illuminate\Support\Facades\Auth;
 
 class GroupNoteController extends Controller
 {
+    public function home()
+    {
+        $role = session('role');
+        $user = Auth::user();
+        $user_data = [
+            $user->name, $user->email
+        ];
+
+        return view('group.group-notes', [
+            'role' => $role, 
+            'user' => $user_data
+        ]);
+    }
+
     public function index(Request $request, Group $group)
     {
         try {
