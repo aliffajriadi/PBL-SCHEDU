@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-
 use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -27,7 +30,7 @@ class UserController extends Controller
                 'password' => 'required'
             ]);
 
-            if(!Auth::attempt($credentials)){
+            if (!Auth::attempt($credentials)) {
                 return redirect('/login');
             }
 
@@ -44,8 +47,7 @@ class UserController extends Controller
                 'data' => Auth::user(),
                 'role' => session('role')
             ]);
-            
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -53,7 +55,7 @@ class UserController extends Controller
         }
     }
 
-    public function logout(Request $request) 
+    public function logout(Request $request)
     {
         try {
             Auth::logout();
@@ -64,14 +66,80 @@ class UserController extends Controller
                 'status' => true,
                 'message' => 'Logout Successfully'
             ]);
-            
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
             ]);
         }
     }
+
+    public function insert_file(Request $request)
+    {
+        try {
+            // Validasi file
+            $request->validate([
+                'student_list' => 'required|file|mimes:xlsx,xls,csv'
+            ]);
+
+            $instance_uuid = Auth::guard('staff')->user()->uuid;
+            $default_password = Hash::make('password');
+
+            $participant_list = [];
+
+            // Load file Excel
+            $spreadsheet = IOFactory::load($request->file('student_list')->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $start_row = 2; // baris data, baris 1 biasanya header
+            $end_row = $sheet->getHighestRow();
+
+            for ($row = $start_row; $row <= $end_row; $row++) {
+                $name = trim($sheet->getCell("A$row")->getValue());
+                $email = trim($sheet->getCell("B$row")->getValue());
+                $birthDateCell = $sheet->getCell("C$row")->getValue();
+                $gender = trim($sheet->getCell("D$row")->getValue());
+                $role = trim(strtolower($sheet->getCell("E$row")->getValue()));
+
+                // Lewati baris kosong
+                if (empty($name) && empty($email)) {
+                    continue;
+                }
+
+                // Konversi tanggal lahir
+                if (is_numeric($birthDateCell)) {
+                    $birth_date = Date::excelToDateTimeObject($birthDateCell)->format('Y-m-d');
+                } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', trim($birthDateCell))) {
+                    $birth_date = trim($birthDateCell);
+                } else {
+                    throw new \Exception("Format birth date not failed $row. Nilai: '$birthDateCell'");
+                }
+
+                // Siapkan data user
+                $data = [
+                    'uuid' => Str::uuid(),
+                    'name' => $name,
+                    'email' => $email,
+                    'birth_date' => $birth_date,
+                    'gender' => $gender,
+                    'is_teacher' => $role === 'teacher' ? 1 : 0,
+                    'password' => $default_password,
+                    'instance_uuid' => $instance_uuid,
+                ];
+
+                $participant_list[] = $data;
+            }
+
+            // Simpan ke database
+            User::insert($participant_list);
+
+            return redirect()->back()->with('success', 'Add  '. count($participant_list) . ' User Successfuly.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Add User Failed.');
+
+        }
+    }
+
 
 
 
@@ -97,7 +165,7 @@ class UserController extends Controller
 
         $users = User::query()->where('instance_uuid', $instance_uuid);
 
-        if($request->query('keyword')){
+        if ($request->query('keyword')) {
             $keyword = '%' . $request->query('keyword') . '%';
             $users = $users->where('name', 'like', 'keyword');
         }
@@ -135,7 +203,7 @@ class UserController extends Controller
             $field['is_teacher'] = $field['is_teacher'] === 'teacher' ? 1 : 0;
             User::create($field);
             return redirect()->back()->with('success', 'Success Create Account');
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->back()->with('success', 'Failed Create Account:' . $e);
         }
     }
@@ -169,16 +237,16 @@ class UserController extends Controller
                 'birth_Date' => 'required|date',
                 'is_teacher' => 'required|boolean',
             ]);
-    
+
             $user->update($field);
-    
+
             $user->save();
-    
+
             return response()->json([
                 'status' => true,
                 'message' => 'User Updated Successfully'
             ]);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -190,11 +258,11 @@ class UserController extends Controller
     {
         try {
             $request->validate([
-                'old_password' => 'required', 
+                'old_password' => 'required',
                 'password' => 'required|confirmed|max:255'
             ]);
-    
-            if(!Hash::check($request->input('old_password'), Auth::user()->password)) {
+
+            if (!Hash::check($request->input('old_password'), Auth::user()->password)) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Wrong Old Password'
@@ -208,8 +276,7 @@ class UserController extends Controller
                 'status' => true,
                 'message' => 'Password Updated Successfully'
             ]);
-
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -224,11 +291,10 @@ class UserController extends Controller
     {
         try {
             $user->delete();
-            
-            return redirect()->back()->with('success', 'Success Deleted Data User');
-        }catch (\Exception $e){
-            return redirect()->back()->with('error', $e);
 
-        }   
+            return redirect()->back()->with('success', 'Success Deleted Data User');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e);
+        }
     }
 }

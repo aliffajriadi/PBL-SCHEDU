@@ -215,7 +215,7 @@
         <h2 class="text-lg font-semibold mb-4">Create Account</h2>
 
         @if (session('success'))
-            <p id="statusSuccess" class="font-semibold text-white bg-emerald-400 my-2 p-2 rounded">
+            <p id="statusSuccess" class="font-semibold text-white bg-emerald-400 my-2 p-2 rounded w-fit">
                 {{ session('success') }}
             </p>
             <script>
@@ -271,16 +271,62 @@
             </form>
 
             <!-- Upload Box (1/3 width) -->
-            <div
-                class="border-dashed border-2 border-gray-300 rounded-xl flex flex-col items-center justify-center text-center p-4 min-h-48">
-                <span class="material-icons text-4xl text-gray-400">upload_file</span>
-                <p class="text-sm text-gray-500 my-2">Drag and Drop file <br><span
-                        class="text-emerald-600 font-medium">or</span></p>
-                <button
-                    class="mt-2 px-4 py-1 border border-emerald-600 text-emerald-600 rounded hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                    Browse
-                </button>
+            <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 min-h-48 flex flex-col items-center justify-center text-center space-y-4 bg-white shadow-sm">
+                <span class="material-icons text-5xl text-gray-400">upload_file</span>
+                <p class="text-sm text-gray-500">
+                    Upload file here <br>
+                    <span class="text-emerald-600 font-semibold">xlsx,xls,csv</span>
+                </p>
+            
+                <form action="/staff/account/insert-file" method="POST" enctype="multipart/form-data" class="w-full max-w-sm mx-auto">
+                    @csrf
+                    @method('POST')
+                
+                    <div 
+                        id="dropzone"
+                        class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition text-center px-4"
+                    >
+                        <div id="dropContent">
+                            <svg class="w-10 h-10 text-gray-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 16v-4m0 0v-4m0 4h4m-4 0H8m12 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
+                            </svg>
+                            <p class="text-gray-500">Drag & drop your Excel file here</p>
+                            <p class="text-sm text-gray-400">or click to browse</p>
+                        </div>
+                
+                        <div id="filePreview" class="hidden items-center space-x-2 mt-2">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4 16v1a2 2 0 002 2h8m4-18H6a2 2 0 00-2 2v1m0 12a2 2 0 002 2h8m4-2v-1M4 8h16M4 12h16m-7 8l4-4m0 0l-4-4m4 4H8">
+                                </path>
+                            </svg>
+                            <span id="fileName" class="text-sm text-gray-700"></span>
+                        </div>
+                
+                        <input 
+                            id="fileInput"
+                            type="file" 
+                            name="student_list" 
+                            accept=".xls,.xlsx,.csv"
+                            class="hidden"
+                        />
+                    </div>
+                
+                    <button 
+                        type="submit"
+                        class="mt-4 w-full bg-emerald-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition duration-200"
+                    >
+                        Upload File
+                    </button>
+                </form>
+                
+                
             </div>
+            
         </div>
     </div>
 
@@ -356,4 +402,55 @@
             }
         });
     </script>
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileName');
+        const filePreview = document.getElementById('filePreview');
+        const dropContent = document.getElementById('dropContent');
+    
+        // Fungsi untuk handle preview file
+        function showFilePreview(file) {
+            dropContent.classList.add('hidden');
+            filePreview.classList.remove('hidden');
+            fileNameDisplay.textContent = file.name;
+        }
+    
+        // Klik dropzone = buka file dialog
+        dropzone.addEventListener('click', () => fileInput.click());
+    
+        // File dari dialog
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                showFilePreview(fileInput.files[0]);
+            }
+        });
+    
+        // Drag masuk
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('bg-emerald-50', 'border-emerald-400');
+            }, false);
+        });
+    
+        // Drag keluar
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('bg-emerald-50', 'border-emerald-400');
+            }, false);
+        });
+    
+        // Drop file langsung
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                showFilePreview(files[0]);
+            }
+        });
+    </script>
+    
 </x-layout-staff>

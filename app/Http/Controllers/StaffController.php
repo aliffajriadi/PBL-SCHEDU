@@ -85,6 +85,8 @@ class StaffController extends Controller
                 ->limit(5)
                 ->select('id', 'created_at', 'name')
                 ->get();
+
+
             return view('staff.dashboard', compact('user', 'dataCount', 'notifications', 'groups'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Error Get Data');

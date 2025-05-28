@@ -258,6 +258,7 @@ Route::prefix('/staff')->middleware('staff')->group(function () {
         
     });
     Route::post('/create-user', [UserController::class, 'store']);
+    Route::post('/account/insert-file', [UserController::class, 'insert_file']);
     Route::resource('/user', UserController::class);
 });
 
