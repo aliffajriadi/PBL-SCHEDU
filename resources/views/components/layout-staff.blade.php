@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <title>{{$title}}</title>
     @vite('resources/css/app.css')
     <link rel="icon" class="" href="{{asset('/image/logoP.png')}}" type="image/png" />
@@ -19,8 +19,8 @@
         rel="stylesheet" />
 
     <script src="/js/fetch.js"></script>
-    
-    
+
+
     <x-layoutComponent.layoutCss />
 </head>
 
@@ -44,9 +44,19 @@
             <img src="{{ asset('image/image4.png') }}" class="w-32 h-auto" alt="schedu" />
         </div>
         <div>
-            <img src="{{ asset('image/Ryan-Gosling.jpg')}}"
-                class="w-12 border-2 border-green-500 h-12 rounded-full shadow-md transition-all duration-300 hover:border-emerald-600 cursor-pointer"
-                alt="profile" onclick="dropdown('dropdownMenu')" id="dropdownButton" />
+
+            @if ($user->logo_instance !== null)
+                <img src="{{ asset($user->logo_instance) }}"
+                    class="w-12 border-2 border-green-500 h-12 rounded-full shadow-md transition-all duration-300 hover:border-emerald-600 cursor-pointer"
+                    alt="profile" onclick="dropdown('dropdownMenu')" id="dropdownButton" />
+            @else
+                <div class="bg-emerald-500 border-2 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl transition-all duration-300 font-semibold cursor-pointer"
+                    onclick="dropdown('dropdownMenu')" id="dropdownButton">
+                    {{ strtoupper(substr($user->instance_name, 0, 1)) }}
+                </div>
+            @endif
+
+
         </div>
     </nav>
 
@@ -58,16 +68,18 @@
     <!-- Main Content -->
     <main class="flex-1 flex mt-16 md:mt-0 flex-col md:ml-64 px-6 pt-8 text-emerald-800">
         <!-- up content -->
-        <x-layoutComponent.UpContent :role="$role" :title="$title" :user="$user"/>
+        <x-layoutComponent.UpContent :role="$role" :title="$title" :user="$user" />
 
         {{-- dinamis content --}}
         {{$slot}}
 
     </main>
 
+    <x-modal.toast />
 
 
-    
+
+
     <script>
         function toggleMenu() {
             const menuMobile = document.getElementById("menuMobile");
@@ -100,5 +112,7 @@
 
         }
     </script>
+    
 </body>
+
 </html>

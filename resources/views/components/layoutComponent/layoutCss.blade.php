@@ -50,14 +50,14 @@
 
 
     .fade-in-right {
-        animation: fadeInRight 1s ease-out forwards;
+        animation: fadeInRight 0.6s ease-out forwards;
     }
     .fade-in-left {
         animation: fadeInLeft 1s ease-out forwards;
     }
 
     .slide-down {
-        animation: slideDown 0.5s ease-in-out;
+        animation: slideDown 0.3s ease-in-out;
     }
     .slide-out {
         animation: slideOutUp 0.5s ease-in-out;

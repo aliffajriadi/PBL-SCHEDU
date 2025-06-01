@@ -14,6 +14,9 @@ class Group extends Model
     {
         return $this->belongsTo(Staff::class, 'instance_uuid', 'uuid');
     }
+    public function user(){
+        return $this->belongsTo(User::class, 'pic', 'uuid');
+    }
 
     public function note()
     {
@@ -35,8 +38,8 @@ class Group extends Model
         return $this->hasMany(MemberOf::class, 'group_id', 'id');
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'created_by', 'uuid');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class, 'created_by', 'uuid');
+    // }
 }

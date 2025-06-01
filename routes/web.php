@@ -1,27 +1,26 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\StaffController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PersonalNoteController;
+use App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\MemberOfController;
-use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\GroupNoteController;
-use App\Http\Controllers\GroupScheduleController;
 use App\Http\Controllers\GroupTaskController;
-use App\Http\Controllers\GroupTaskSubmissionController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PersonalNoteController;
+use App\Http\Controllers\PersonalTaskController;
+use App\Http\Controllers\GroupScheduleController;
 use App\Http\Controllers\GroupTaskUnitController;
 use App\Http\Controllers\PersonalScheduleController;
-use App\Http\Controllers\PersonalTaskController;
-use App\Models\GroupTaskSubmission;
-use App\Models\PersonalTask;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\GroupTaskSubmissionController;
 
 
 Route::get('user-check', [UserController::class, 'user_check']);
@@ -136,85 +135,64 @@ Route::middleware('auth:web')->prefix('/group')->group(function () {
 
 });
 
+//===============================================================================================
+//ADMIN ROUTE
 
-// //admin route dummy
+// ROUTE FOR ADMIN NON MIDDLEWARE / FOR PUBLIC GUEST
+Route::controller(AdminController::class)->group(function () {
+    Route::post('/admin/login', 'login');
+    Route::get('/admin/logout', 'logout');
+    Route::get('/admin/login', 'view_login');
+});
 
-Route::get('/adm_login', function(){
-    return view('admin.login');
-})->name('admin.login');
+// ROUTE ADMIN WITH MIDDLEWARE
+Route::prefix('/admin')->middleware('admin')->controller(AdminController::class)->group(function () {
+    Route::get('/dashboard', 'index');
+    Route::post('/password', 'edit_password');
+    Route::post('/username', 'edit_username');
+    Route::get('/profile', 'profile')->name('profile-admin');
+    Route::get('/instatiate', 'instatiate')->name('instantiate_manage');
+});
 
-Route::post('/admin/login', [AdminController::class, 'login']);
-
-Route::prefix('/admin')->middleware('admin')->group(function () {
-
-    Route::apiResource('/staffs', StaffController::class);
-
-    Route::get('/logout', [AdminController::class, 'logout']);
-
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    });
-
-    Route::get('/instatiate', function () {
-        $user = Auth::guard('admin')->user();
-        $user_data = [
-            $user->username, 'admin'
-        ];
-        return view('admin.instatiate', [
-            'user' => $user_data
-        ]);
-    });
-    
-    Route::get('/staff', function () {
-        return view('admin.staff');
-    });
+Route::prefix('/admin')->middleware('admin')->controller(StaffController::class)->group(function(){
+    Route::post('/instantiate-store', 'store')->name('store-instantiate');
+    Route::delete('/staffs/{staff}', 'destroy');
 });
 
 
+//END ADMIN ROUTE
+//===============================================================================================
 
-Route::get('/staff/login', function () {
-    return view('staff.login');
-});
 
+
+//===============================================================================================
+//STAFF ROUTE
+
+
+//STAFF NON MIDDLEWARE / FOR PUBLIC GUEST
+Route::get('/staff/login', [StaffController::class, 'view_login']);
 Route::post('/staff/login', [StaffController::class, 'login']);
 
-// //STAFF ROUTE DUMMY
-Route::middleware('auth:staff')->prefix('/staff')->group(function () {
-    // Route::apiResource('/api', StaffController::class);
-
-    Route::apiResource('/user', UserController::class);
-
-
-    Route::post('/logout', [StaffController::class, 'logout']);
-
+//ROUTE FOR WITH MIDDLEWARE STAFF
+Route::prefix('/staff')->middleware('staff')->group(function () {
+    Route::controller(StaffController::class)->group(function(){
+        Route::get('/dashboard', 'dashboard');
+        Route::get('/group', 'view_group');
+        Route::get('/account', 'view_account');
+        Route::get('/profile', 'view_profile');
+        Route::put('/profile/update', 'update');
+        Route::put('/profile/password', 'update_password');
+        Route::post('/logout', 'logout');
+        Route::put('/user/{uuid}', 'update_user');
+        Route::put('/userpassword', 'update_password_user');
+        
+    });
     Route::post('/create-user', [UserController::class, 'store']);
-
-    Route::get('/dashboard', function () {
-        $user = Auth::guard('staff')->user();
-        $data_user = [$user->username, $user->instance_name];
-        return view('staff.dashboard', [
-            'user' => $data_user
-        ]);
-    });
-
-    Route::get('/account', function () {
-        $user = Auth::guard('staff')->user();
-        
-        return view('staff.account', [
-            'user' => $user
-        ]);
-    });
-
-    Route::post('/account/insert', [UserController::class, 'insert']);
-
-    Route::get('/group', function () {
-        $user = Auth::guard('staff')->user();
-        
-        return view('staff.group', [
-            'user' => $user
-        ]);
-    });
-
-
-
+    Route::post('/account/insert-file', [UserController::class, 'insert_file']);
+    Route::resource('/user', UserController::class);
 });
+
+
+//END ROUTE FOR STAFF / INSTANSI
+//===============================================================================================
+

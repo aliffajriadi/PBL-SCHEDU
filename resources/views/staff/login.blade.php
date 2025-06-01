@@ -37,7 +37,7 @@
             @csrf
           <div class="flex flex-col space-y-4">
             <div class="flex flex-col text-start">
-              <label for="username" class="text-green-600 ps-2">Email</label>
+              <label for="email" class="text-green-600 ps-2">Email</label>
               <input
                 type="text"
                 placeholder="Type here ..."
@@ -82,6 +82,7 @@
         </a>
       </div>
     </section>
+    <x-modal.toast/>
   </body>
 </html>
 

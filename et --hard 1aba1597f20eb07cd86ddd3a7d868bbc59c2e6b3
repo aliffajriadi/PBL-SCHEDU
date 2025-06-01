@@ -1,0 +1,221 @@
+[33mcommit 94061fe2de9ff33ad14c1c594999252264ace87d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mbackend2[m[33m)[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Thu May 15 00:45:57 2025 +0700
+
+    test
+
+[33mcommit 1aba1597f20eb07cd86ddd3a7d868bbc59c2e6b3[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/backend2[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat May 10 22:26:53 2025 +0700
+
+    Update README.md
+
+[33mcommit 7bd24c0809d94bfdcc10dd694db094b5d64f78b2[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat May 10 22:26:09 2025 +0700
+
+    Update README.md
+
+[33mcommit 828921768ebb0824fdd75de50a591e74c96b4cf1[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat May 10 22:24:30 2025 +0700
+
+    Update README.md
+
+[33mcommit 48201ca0da1690405275e866addff959aef5c498[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat May 10 22:22:59 2025 +0700
+
+    Update README.md
+
+[33mcommit 5918dbe76d8ed6ac95b3af39b2bca3fc00014619[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat May 10 22:22:40 2025 +0700
+
+    Update README.md
+
+[33mcommit d68173524685a1cae3caa6b0ae4c988093f54208[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat May 10 22:20:51 2025 +0700
+
+    Update README.md
+
+[33mcommit 23b256d43603c7dae76465cfad2bbea0b01b4f60[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat May 10 22:16:29 2025 +0700
+
+    Update README.md
+
+[33mcommit af5e336a75493d6059b0c92c6dace56681bf558c[m
+Author: bastian <144505365+bastian1603@users.noreply.github.com>
+Date:   Wed May 7 13:21:56 2025 +0700
+
+    Update web.php
+
+[33mcommit 8aa3e9d78ecdb9666ddf823678ee9385d62ec861[m
+Author: Dwiky Putra <dwikyputradachi21@gmail.com>
+Date:   Wed May 7 13:21:49 2025 +0700
+
+    Update instatiate.blade.php
+    
+    Mengedit Tampilan Manage Instance
+
+[33mcommit aa59e4f7d063cc4a1eb6b086ec5e66051affa63c[m
+Author: bastian <144505365+bastian1603@users.noreply.github.com>
+Date:   Wed May 7 13:21:33 2025 +0700
+
+    Update Mobilebar.blade.php
+
+[33mcommit 0a34287397ea524154160cb279736d4e75a8d1f4[m
+Author: bastian <144505365+bastian1603@users.noreply.github.com>
+Date:   Wed May 7 13:19:19 2025 +0700
+
+    Update SidebarDesktop.blade.php
+
+[33mcommit 29b947f03e754460caa44f633f54b50a287ba9be[m
+Author: Dwiky Putra <dwikyputradachi21@gmail.com>
+Date:   Wed May 7 13:18:02 2025 +0700
+
+    Update staff.blade.php
+    
+    Mengedit tampilan dashboard staff
+
+[33mcommit 3610820c50ef550e06d98e79eee760f71fdc86b1[m
+Author: bastian <144505365+bastian1603@users.noreply.github.com>
+Date:   Wed May 7 13:15:00 2025 +0700
+
+    Update dashboard.blade.php
+
+[33mcommit 934b8546d5a2a2f2a6d2d88d9ca4f2280d4ac02c[m
+Author: bastian <144505365+bastian1603@users.noreply.github.com>
+Date:   Wed May 7 13:14:18 2025 +0700
+
+    Update instatiate.blade.php
+
+[33mcommit eb058eeef63f0b7a89ad44d64aa94475b2e52eb4[m
+Author: bastian <144505365+bastian1603@users.noreply.github.com>
+Date:   Wed May 7 13:13:13 2025 +0700
+
+    Update staff.blade.php
+
+[33mcommit 36e1cad8d2c99aeafbf212e564902230593218f3[m
+Author: bastian <144505365+bastian1603@users.noreply.github.com>
+Date:   Wed May 7 13:11:29 2025 +0700
+
+    Update layout-admin.blade.php
+
+[33mcommit ff0b6a87d9fbf4f93f0f18af1dfb35b6825d3cff[m
+Author: Dwiky Putra <dwikyputradachi21@gmail.com>
+Date:   Wed May 7 13:10:25 2025 +0700
+
+    Update login.blade.php
+    
+    Mengedit tampilan login page
+
+[33mcommit 7f7b012ce476610202a4629a39fdc638a69c36b2[m
+Author: Dwiky Putra <dwikyputradachi21@gmail.com>
+Date:   Wed May 7 13:07:59 2025 +0700
+
+    Update login.blade.php
+    
+    Mengedit tampilan login page
+
+[33mcommit 7b15bdd0d9a2f9e5b7a2c9e3888d348b334fbe91[m
+Author: bastian <144505365+bastian1603@users.noreply.github.com>
+Date:   Wed May 7 13:06:26 2025 +0700
+
+    Update web.php routingnya
+
+[33mcommit 1023efec71d8007c97cec926edba9f23a71203c0[m
+Author: Dwiky Putra <dwikyputradachi21@gmail.com>
+Date:   Wed May 7 13:04:17 2025 +0700
+
+    Update home.blade.php
+    
+    Mengedit landing page dan mengedit beberapa tampilan landing page
+
+[33mcommit a427dd27043a8e17fc8d73f6fc3b46b18aa86be4[m
+Author: Rafif <Rafifihsaan123@gmail.com>
+Date:   Wed Apr 30 12:23:46 2025 +0700
+
+    Update dashboard.blade.php
+    
+    perbaikan gambar Dashboard Admin
+
+[33mcommit 29d3fe9286ffd75b826de902302617d7837acb96[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat Apr 19 22:35:53 2025 +0700
+
+    apr 19 new
+
+[33mcommit 924766ff1ef6d27a4a9247553a11608668ae30a9[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat Apr 19 20:18:30 2025 +0700
+
+    memecah kode menjadi beberapa komponen
+
+[33mcommit 4c0790a19f57ae56f8f7b7dcb3b55f7a9cfd30e3[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat Apr 19 01:36:41 2025 +0700
+
+    memecah kode menjadi komponen
+
+[33mcommit a2adf68b1e069057f3256df3de2af570702b4bea[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Fri Apr 18 22:50:37 2025 +0700
+
+    15apr
+
+[33mcommit 7a63ed1db64fd079945cc1ebe75c296af0ef0e8f[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Tue Apr 15 01:00:58 2025 +0700
+
+    15apr
+
+[33mcommit cbdc83d90bad3efbc12c8ca6818104fa3579f5db[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sat Apr 12 16:18:49 2025 +0700
+
+    12 apr
+
+[33mcommit ee72e3c9f83f753384731b35508ff72a97552790[m
+Author: aliffajradi <aliffajradi@gmail.com>
+Date:   Fri Apr 11 01:24:20 2025 +0700
+
+    11 apr
+
+[33mcommit 3b4d22d1aaef4232ba836d77ab512d1220b2701a[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Thu Apr 3 17:45:50 2025 +0700
+
+    03 apr
+
+[33mcommit fed9f17ea0acbcaec03c128b09fc0dd547763ee7[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Tue Apr 1 01:35:36 2025 +0700
+
+    1 aprl
+
+[33mcommit bbded8b659cc2214fe3014f27418146cb1e54c5f[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Sun Mar 30 18:02:04 2025 +0700
+
+    updated 30 mar
+
+[33mcommit b5c7c544ede95c26db3308b19e25395b075021e0[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Thu Mar 27 23:15:43 2025 +0700
+
+    profile update
+
+[33mcommit df81af53e9c703c608b093a82297054016cce435[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Thu Mar 27 21:54:40 2025 +0700
+
+    Menambahkan semua file project
+
+[33mcommit f9a19322dc827b2c5d71db9aecc887c01b176d29[m
+Author: aliffajriadi <aliffajriadi@gmail.com>
+Date:   Thu Mar 27 21:51:26 2025 +0700
+
+    first commit

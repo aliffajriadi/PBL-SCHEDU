@@ -19,7 +19,6 @@
         rel="stylesheet" />
 
     <script src="/js/fetch.js"></script>
-    
     <x-layoutComponent.layoutCss />
 </head>
 

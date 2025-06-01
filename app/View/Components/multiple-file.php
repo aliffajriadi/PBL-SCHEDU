@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class multiple-file extends Component
+class multiplefile extends Component
 {
     /**
      * Create a new component instance.
