@@ -20,14 +20,22 @@
                 <div class="lg:col-span-1">
                     <div class="text-center">
                         <div class="relative inline-block mb-4">
-                            <img id="profilePhoto"
-                                src="{{ $user->logo_instance ? asset('storage/' . $user->logo_instance) : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' }}"
-                                alt="Profile photo of {{ $user->instance_name }}"
-                                class="w-48 h-48 rounded-full object-cover border-4 border-gray-100 shadow-lg transition-transform duration-300 hover:scale-105 {{ $user->logo_instance ? '' : 'bg-emerald-500 initial-display' }}"
-                                data-initial="{{ strtoupper(substr($user->instance_name, 0, 1) ?? 'U') }}">
+
+                            @if ($user->logo_instance)
+                                <img id="profilePhoto" src="{{ asset('storage/' . $user->logo_instance) }}"
+                                    alt="Profile photo of {{ $user->instance_name }}"
+                                    class="w-48 h-48 rounded-full object-cover border-4 border-gray-100 shadow-lg transition-transform duration-300 hover:scale-105">
+                            @else
+                                <div id="profilePhoto"
+                                    class="w-48 h-48 rounded-full border-4 border-gray-100 shadow-lg bg-emerald-500 flex items-center justify-center text-white text-6xl font-bold">
+                                    {{ strtoupper(substr($user->instance_name, 0, 1) ?? 'U') }}
+                                </div>
+                            @endif
+
+
                         </div>
                         <h4 class="text-xl font-semibold text-gray-600 mb-1">{{ $user->instance_name }}</h4>
-                        <p class="text-gray-500 text-sm uppercase tracking-wide">{{ $user->role ?? 'Staff' }}</p>
+                        <p class="text-gray-500 text-sm uppercase tracking-wide">Instance</p>
                     </div>
                 </div>
 
@@ -320,14 +328,14 @@
 
     <!-- JavaScript for Image Preview and Modal Handling -->
     <script>
-        function formPassword(){
+        function formPassword() {
             const newPass = document.getElementById('new_password').value;
             const newPassConfirmId = document.getElementById('new_password_confirmation');
             const newPassConfirm = newPassConfirmId.value;
             const form = document.getElementById('formPassword');
-            if (newPass === newPassConfirm){
+            if (newPass === newPassConfirm) {
                 form.submit();
-            } else{
+            } else {
                 document.getElementById('notifWrongPassword').innerText = 'Password Not Match';
                 newPassConfirmId.value = '';
             }

@@ -190,7 +190,9 @@ class StaffController extends Controller
             $staff->address = $request->address;
 
             if ($request->hasFile('logo_instance')) {
-                Storage::disk('public')->delete($staff->logo_instance);
+                if ($staff->logo_instance) {
+                    Storage::disk('public')->delete($staff->logo_instance);
+                }
                 $file = $request->file('logo_instance');
                 $fileName = time() . '_' . $file->getClientOriginalName();
 
