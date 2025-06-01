@@ -24,7 +24,8 @@
         </div>
         <!-- Profile Image -->
 
-        @if ($user->logo_instance !== null)
+        @if ($role == "staff")
+            @if ($user->logo_instance !== null)
             <img src="{{ asset('storage/' . $user->logo_instance) }}"
                 class="w-12 border-2 border-green-500 h-12 rounded-full shadow-md transition-all duration-300 hover:border-emerald-600 cursor-pointer"
                 alt="{{ $user->instance_name ?? 'Profile' }}" onclick="dropdown('dropdownMenu')" id="dropdownButton" />
@@ -34,13 +35,16 @@
                 {{ strtoupper(substr($user->instance_name ?? 'U', 0, 1)) }}
             </div>
         @endif
+        @endif
+
+        
 
     </div>
 </div>
 <div id="dropdownMenu"
     class="hidden slide-down origin-top-right right-0 md:mt-12 h-auto me-6 w-56 rounded-md text-sm text-emerald-900 text-center shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-2 z-30 fixed md:absolute">
-    <p class="text-md font-semibold">{{ $user->instance_name }}</p>
-    <p style="font-size: smaller">{{ $user->email }}</p>
+    <p class="text-md font-semibold">{{ $role == "staff" ? $user->instance_name : $user[0] }}</p>
+    <p style="font-size: smaller">{{$role == "staff" ? $user->email : $user[1]}}</p>
     <p>{{ ucfirst($role) }}</p>
     <hr class="my-2">
     <div class="flex-col flex text-start px-2 space-y-2">
