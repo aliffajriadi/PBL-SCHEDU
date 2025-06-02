@@ -124,7 +124,8 @@ class GroupNoteController extends Controller
     public function update(Request $request, Group $group, GroupNote $api)
     {
         try {
-            // return ['request' => $request->all()];
+            return ['request' => $request->file('files')];
+
 
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -171,7 +172,7 @@ class GroupNoteController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
-                'request' => $field['title']
+                // 'request' => $field['title']
             ]);
         }
     }

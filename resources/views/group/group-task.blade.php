@@ -36,7 +36,7 @@
                         
                         <input id="content-title" type="text" name="title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                         <input id="content-deadline" type="datetime-local" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                        <textarea id="content-description" name="description" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
+                        <textarea id="content-description" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
                         
                         
                         <div class="flex gap-4">

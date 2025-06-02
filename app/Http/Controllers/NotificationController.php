@@ -107,10 +107,7 @@ class NotificationController extends Controller
                 $notifications->whereHas('notification', function($query) {
                     $query->where('group_id', '!=', null);
                 });
-            }else{
-                
             }
-
             return response()->json([
                 'status' => true,
                 'datas' => $notifications->get(),

@@ -418,7 +418,7 @@
 
         function delete_data(id)
         {
-            api_destroy('/task/api', id).the(response => {
+            api_destroy('/task/api', id).then(response => {
                 get_task();
             });
         }

@@ -16,7 +16,7 @@ class PersonalNoteController extends Controller
         $user = Auth::user();
         $user_data = [$user->name, $user->email];
 
-        return view('teachStudent.notes', [
+        return view('teachStudent.notes-detail', [
             'user' => $user_data
         ]);
     

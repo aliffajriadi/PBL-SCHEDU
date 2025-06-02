@@ -58,12 +58,7 @@
 
             @if(Request::segment(1) === 'group' && Request::segment(2) !== null)
             <div class="ps-5">
-<<<<<<< HEAD
-                <a href="{{ $path }}"
-                    class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-=======
                 <a href="/group" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
->>>>>>> origin/backend3
                     <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                     <p class="font-semibold">Group Dashboard</p>
                 </a>

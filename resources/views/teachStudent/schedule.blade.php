@@ -37,31 +37,7 @@
                     ];
                 @endphp
 
-                @foreach ($notes as $note)
-                    <div class="relative mb-3 border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-300 notelist">
-                        <div class="block w-full">
-                            <div class="flex justify-between items-center">
-                                <h3 class="text-lg">{{ $note['title'] }}</h3>
-                                <p>{{ $loop->iteration }}</p>
-                            </div>
-                            <p class="text-xs opacity-60">Created at {{ $note['created_at'] }}</p>
-                        </div>
-                        <!-- Dropdown Menu -->
-                        <div class="absolute right-7 top-0">
-                            <button class="text-white hover:text-gray-700 bg-emerald-500 px-2 focus:outline-none" onclick="toggleDropdown(this)">
-                                <span class="text-lg font-bold hover:text-2xl">⋮</span>
-                            </button>
-                            <div class="dropdown-menu hidden absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg z-10">
-                                <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100" onclick="editNote('{{ $note['title'] }}')">
-                                    Edit
-                                </button>
-                                <button class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-emerald-100" onclick="deleteNote('{{ $note['title'] }}')">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+
             </div>
         </div>
 

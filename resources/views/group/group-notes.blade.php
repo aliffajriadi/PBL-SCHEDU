@@ -29,7 +29,7 @@
                     @method('PUT') --}}
                     <input id="title" type="text" name="title" value="aaaa" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <textarea id="content" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
-                    <input type="file" name="files[]" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
+                    <input id="update-file" type="file" name="files[]" multiple class="mb-2 p-2 border border-gray-200 rounded-lg w-full">
                     <div class="mt-2">
                         <p class="text-sm font-medium text-gray-700">File:</p>
                         <ul id="content-files" class="list-disc pl-5 text-sm text-gray-600">
@@ -40,7 +40,7 @@
                     <br>
                     <div class="flex gap-4">
                         <button type="button" onclick="update_data()" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Note</button>
-                        <button type="button" onclick="openDeleteModal(1, a)"
+                        <button id="delete-button" type="button" onclick="openDeleteModal(1, a)"
                             class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Delete Note</button>
                     </div>
                 </form>
@@ -206,7 +206,11 @@
 
                 document.getElementById('note-null').classList.add('hidden');
                 document.getElementById('note-content').classList.remove('hidden');
-                
+                document.getElementById('update-file').value = '';
+                document.getElementById('delete-button').onclick = () => {
+                    openDeleteModal(data.id, data.title)
+                };
+
                 if('{{$role}}' === 'teacher'){
                     title.value = note.title;
                     content.value = note.content;
@@ -216,6 +220,7 @@
                 }
 
                 const file_list = document.getElementById('content-files');
+
                 file_list.innerHTML = '';
 
                 files.forEach((file) => {
@@ -292,9 +297,18 @@
         function update_data()
         {
             const form = document.getElementById('note-content');
+            const fileInputs = document.getElementById('update-file');
             const formData = new FormData(form);
 
-            api_update(path + '/api', formData, note_picked).then(response => {
+            formData.delete('files[]');
+
+            console.log(fileInputs.files.length)
+
+            for(let i = 0; i < fileInputs.files.length; i++){
+                formData.append('files[]', fileInputs.files[i]);
+            }
+
+            api_update(`${path}/api`, formData, note_picked).then(response => {
                 search();
                 show_data(note_picked);
             });
