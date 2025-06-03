@@ -163,7 +163,8 @@ class UserController extends Controller
         $user_data = [$user->name, $user->email];
     
         return view('teachStudent.dashboard', [
-            'user' => $user_data,
+            'user' => $user, 
+            'user_data' => $user_data,
             'schedules' => PersonalSchedule::where('user_uuid', $user->uuid)->get()
         ]);
     }
@@ -272,13 +273,15 @@ class UserController extends Controller
         }
     }
 
-    public function change_password(Request $request, User $user)
+    public function change_password(Request $request)
     {
         try {
             $request->validate([
                 'old_password' => 'required',
                 'password' => 'required|confirmed|max:255'
             ]);
+
+            // dd($request->input('old_password'));
 
             if (!Hash::check($request->input('old_password'), Auth::user()->password)) {
                 return response()->json([
@@ -287,7 +290,9 @@ class UserController extends Controller
                 ]);
             }
 
-            $user->password = $request->input('password');
+            $user = Auth::user();
+
+            $user->password = Hash::make($request->input('password'));
             $user->save();
 
             return response()->json([
@@ -340,8 +345,6 @@ class UserController extends Controller
     
             $user->email = $request->input('email');
             $user->save();
-
-            dd($user);
 
             return redirect()->back();
 

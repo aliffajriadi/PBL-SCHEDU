@@ -1,5 +1,7 @@
-<x-layout title="Dashboard" role="teacher" :user="$user">
+<x-layout title="Dashboard" role="teacher" :user="$user_data">
     <!-- Main container with responsive padding -->
+
+    {{-- @dd($user) --}}
 
     <!-- Top section that stacks on mobile, side-by-side on larger screens -->
     <div class="flex flex-col lg:flex-row lg:space-x-3 space-y-3 lg:space-y-0 animate-fadeIn">
@@ -15,10 +17,10 @@
 
                 <div
                     class="bg-emerald-500 rounded-2xl py-4 md:rounded-full md:p-2 flex flex-col sm:flex-row items-center text-white">
-                    <img src="image/Ryan-Gosling.jpg" class="w-20 h-20 md:w-14 md:h-14 border-yellow-300 border-2 rounded-full object-cover"
+                    <img src="{{  $user->profile_pic !== null ? asset('storage/' . $user->instance->folder_name . '/' . $user->profile_pic) : 'image/Ryan-Gosling.jpg'}}" class="w-20 h-20 md:w-14 md:h-14 border-yellow-300 border-2 rounded-full object-cover"
                         alt="profile">
                     <div class="ps-2 text-center sm:text-left mt-2 sm:mt-0">
-                        <h4 class="text-lg md:text-xl"> {{ $user[0] }} </h4>
+                        <h4 class="text-lg md:text-xl"> {{ $user->name }} </h4>
                         <p class="text-xs md:text-sm">Student SMP Negeri 7 Batam</p>
                     </div>
                 </div>
@@ -117,8 +119,6 @@
 
 
         document.addEventListener('DOMContentLoaded', function () {
-        
-
             set_calendar(@json($schedules) )
         });
 

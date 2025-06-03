@@ -45,6 +45,8 @@ Route::middleware('auth:web')->prefix('/')->group(function () {
 
     Route::patch('/profile/update', [UserController::class, 'update_profile']);
 
+    Route::patch('/profile/change_password', [UserController::class, 'change_password']);
+
     Route::prefix('/note')->group(function () {
 
         Route::get('/', [PersonalNoteController::class, 'home']);

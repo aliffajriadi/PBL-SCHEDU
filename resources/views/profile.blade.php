@@ -1,10 +1,12 @@
 <x-layout title="Profile" role="student" :user="$user_data">
 
+    {{-- @dd($user) --}}
+
     <!-- start here! -->
     <main class="flex-1 flex md:mt-0 flex-col text-emerald-800 w-full">
         <div class="max-w-3xl w-full md:max-w-full">
             <div class="bg-white p-6 rounded-xl shadow-md flex flex-col sm:flex-row items-center gap-4 w-full">
-                <img src="{{ asset('storage/' . $user->instance->folder_name . '/' . $user->profile_pic) }}" class="w-16 h-16 rounded-full object-cover border-2 border-emerald-500" alt="Profile Picture">
+                <img src="{{  $user->profile_pic != null ? asset('storage/' . $user->instance->folder_name . '/' . $user->profile_pic) : 'image/Ryan-Gosling.jpg'}}" class="w-16 h-16 rounded-full object-cover border-2 border-emerald-500" alt="Profile Picture">
                 <div class="flex-1 text-center sm:text-left">
                     <h2 class="text-lg font-semibold">{{ $user->name ?? 'Ryan Gosling' }}</h2>
                     <p class="text-gray-500">{{ $user->is_teacher ? 'teacher' : 'student' }}</p>
@@ -158,7 +160,7 @@
     <div class="modal fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm" id="changePasswordModal">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white rounded-lg shadow-xl max-w-md w-full slide-down max-h-[90vh] overflow-hidden">
-                <form action="/staff/profile/password" id="formPassword" method="POST">
+                <form action="/profile/change_password" id="formPassword" method="POST">
                     @csrf
                     @method('PATCH')
 
@@ -179,37 +181,37 @@
                     <div class="p-6 space-y-6">
                         <!-- Current Password -->
                         <div>
-                            <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Current
+                            <label for="old_password" class="block text-sm font-medium text-gray-700 mb-1">Current
                                 Password <span class="text-red-500">*</span></label>
                             <input type="password"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('current_password') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
-                                id="current_password" name="current_password" required>
-                            @error('current_password')
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('old_password') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+                                id="old_password" name="old_password" required>
+                            @error('old_password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <!-- New Password -->
                         <div>
-                            <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">New Password
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New Password
                                 <span class="text-red-500">*</span></label>
                             <input type="password"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('new_password') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
-                                id="new_password" name="new_password" required>
-                            @error('new_password')
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('password') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+                                id="password" name="password" required>
+                            @error('password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <!-- Confirm New Password -->
                         <div>
-                            <label for="new_password_confirmation"
+                            <label for="password_confirmation"
                                 class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password <span
                                     class="text-red-500">*</span></label>
                             <input type="password"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                id="new_password_confirmation" name="new_password_confirmation" required>
-                            @error('new_password_confirmation')
+                                id="password_confirmation" name="password_confirmation" required>
+                            @error('password_confirmation')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
@@ -222,7 +224,7 @@
                             class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors">
                             Cancel
                         </button>
-                        <button type="button" onclick="formPassword()"
+                        <button type="submit"
                             class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors flex items-center">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 aria-hidden="true">

@@ -123,14 +123,14 @@
             <p class="font-semibold">Edit Profile</p>
         </a>
     
-        <a href="{{ $role === 'staff' ? '/staff/logout' : '/logout' }}" method="POST"
+        <form action="{{ $role === 'staff' ? '/staff/logout' : '/logout' }}" method="POST"
             class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
             @csrf
-            <div class="flex items-center gap-2 w-full text-left">
+            <button type="submit" class="flex items-center gap-2 w-full text-left">
                 <img src="{{ asset('assets/Log out.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Logout</p>
-            </div>
-        </a>
+            </button>
+        </form>
     </div>
     
 </aside>
