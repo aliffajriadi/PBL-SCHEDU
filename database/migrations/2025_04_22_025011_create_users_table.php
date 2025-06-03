@@ -21,7 +21,8 @@ return new class extends Migration
             $table->boolean('is_teacher');
             $table->uuid('instance_uuid');
             $table->foreign('instance_uuid')->references('uuid')->on('staff')->onDelete('cascade')->onUpdate('cascade');
-            
+            $table->string('profile_pic')->nullable();
+
             // $table->foreignId('instance_id')->constrained(
             //     table: 'staff',
             //     column: 'id'

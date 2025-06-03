@@ -46,7 +46,7 @@ class User extends Authenticatable
         'birth_date',
         'is_teacher',
         'instance_uuid',
-        
+        'profile_pic'        
     ];
 
     /**

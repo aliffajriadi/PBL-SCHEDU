@@ -149,8 +149,10 @@
 
         function delete_data(id)
         {
-            api_destroy('/note/api', id);
-            refresh_list();
+            api_destroy('/note/api', id).then(response => {
+                closeContent()
+                refresh_list();
+            });
         }
 
         function show_list(datas) {

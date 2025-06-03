@@ -51,12 +51,12 @@ class UserController extends Controller
 
             return redirect('/dashboard');
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Login Successfully',
-                'data' => Auth::user(),
-                'role' => session('role')
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'Login Successfully',
+            //     'data' => Auth::user(),
+            //     'role' => session('role')
+            // ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -171,7 +171,8 @@ class UserController extends Controller
     public function profile()
     {
         return view('profile', [
-            'user' => Auth::user()->instance
+            'user_data' => Auth::user()->instance,
+            'user' => Auth::user()
         ]);
     }
 
@@ -250,8 +251,9 @@ class UserController extends Controller
                 'name' => 'required|max:255',
                 'email' => 'required|email',
                 'gender' => 'required|max:255',
-                'birth_Date' => 'required|date',
+                'birth_date' => 'required|date',
                 'is_teacher' => 'required|boolean',
+                'profile_pic' => 'file'
             ]);
 
             $user->update($field);
@@ -312,5 +314,42 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e);
         }
+    }
+
+    public function update_profile(Request $request)
+    {
+        try{
+            $request->validate([
+                'profile_pic' => 'file',
+                'email' => 'email|required'
+            ]);
+    
+            $file_name = '';
+            $user = Auth::user();
+
+            if($request->hasFile('profile_pic')){
+                
+                $file = $request->file('profile_pic');
+
+                $file_name = $user->uuid . '.' . $file->getClientOriginalExtension();
+
+                $file->storeAs($user->instance->folder_name, $file_name, 'public');
+            
+                $user->profile_pic = $file_name;
+            }
+    
+            $user->email = $request->input('email');
+            $user->save();
+
+            dd($user);
+
+            return redirect()->back();
+
+        }catch(\Exception $e){
+            return redirect()->back();
+        }
+
+
+        
     }
 }
