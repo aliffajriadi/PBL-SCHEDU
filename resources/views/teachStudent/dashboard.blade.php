@@ -118,8 +118,8 @@
 
         document.addEventListener('DOMContentLoaded', function () {
         
-            console.log({{$schedules}});
-            set_calendar({{ $schedules }})
+
+            set_calendar(@json($schedules) )
         });
 
         function updateProgress(doneTasks, totalTasks) {
