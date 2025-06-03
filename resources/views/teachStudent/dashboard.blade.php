@@ -114,6 +114,14 @@
 
 
     <script>
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+        
+            console.log({{$schedules}});
+            set_calendar({{ $schedules }})
+        });
+
         function updateProgress(doneTasks, totalTasks) {
             const progressBar = document.getElementById("progress-bar");
             const progressText = document.getElementById("progress-text");

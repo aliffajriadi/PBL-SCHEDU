@@ -54,6 +54,11 @@ Route::middleware('auth:web')->prefix('/')->group(function () {
     Route::prefix('/task')->group(function() {
         Route::get('/', [PersonalTaskController::class, 'home']);
 
+        Route::patch('/set_finished/{task}', [PersonalTaskController::class, 'set_finish']);
+
+        Route::patch('/reset_finished/{task}', [PersonalTaskController::class, 'reset_finish']);
+
+        Route::patch('/reset_finished/{task}');
 
         Route::apiResource('/api', PersonalTaskController::class);
 

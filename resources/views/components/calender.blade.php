@@ -24,30 +24,9 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var events = [
-      {
-        title: "Project Meeting",
-        start: "2025-03-19",
-        end: "2025-03-22",
-        description: "Team project meeting."
-      },
-      {
-        title: "Assignment Deadline",
-        start: "2025-03-25",
-        description: "Final assignment submission deadline."
-      },
-      {
-        title: "Presentation",
-        start: "2025-03-28T10:00:00",
-        end: "2025-03-28T12:00:00",
-        description: "Class presentation."
-      }
-    ];
 
-    // Function to adapt calendar height based on window size
+  <script>
+        // Function to adapt calendar height based on window size
     function getCalendarHeight() {
       if (window.innerWidth < 640) { // Small mobile
         return 350;
@@ -58,181 +37,195 @@
       }
     }
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      height: getCalendarHeight(),
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: '' // Removed the month button
-      },
-      buttonText: {
-        today: 'Today',
-      },
-      events: events,
-      eventTimeFormat: {
-        hour: '2-digit',
-        minute: '2-digit',
-        meridiem: true
-      },
-      // Custom styling for buttons
-      buttonIcons: {
-        prev: 'chevron-left',
-        next: 'chevron-right'
-      },
-      // Custom CSS classes for the calendar
-      themeSystem: 'standard',
-      bootstrapFontAwesome: false,
-      // Style for the header buttons
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: ''
-      },
-      eventClick: function(info) {
-        // Show modal when an event is clicked
-        document.getElementById('eventTitle').textContent = info.event.title;
+    function set_calendar(schedules)
+    {
+        var calendarEl = document.getElementById('calendar');
 
-        const startDate = info.event.start.toLocaleDateString('en-US', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
+        const events = schedules.map(function (e) {
+            return {
+                title : e.title,
+                description : e.content,
+                start : e.start_datetime,
+                end : e.end_datetime
+            };
         });
 
-        let dateText = startDate;
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: getCalendarHeight(),
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: '' // Removed the month button
+            },
+            buttonText: {
+                today: 'Today',
+            },
+            events: events,
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                meridiem: true
+            },
+            // Custom styling for buttons
+            buttonIcons: {
+                prev: 'chevron-left',
+                next: 'chevron-right'
+            },
+            // Custom CSS classes for the calendar
+            themeSystem: 'standard',
+            bootstrapFontAwesome: false,
+            // Style for the header buttons
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            eventClick: function(info) {
+            // Show modal when an event is clicked
+            document.getElementById('eventTitle').textContent = info.event.title;
 
-        if (info.event.end) {
-          const endDate = info.event.end.toLocaleDateString('en-US', {
+            const startDate = info.event.start.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric'
-          });
-          dateText += ' - ' + endDate;
-        }
-
-        document.getElementById('eventDate').textContent = dateText;
-
-        if (info.event.start.toTimeString().substring(0, 5) !== "00:00") {
-          const timeStart = info.event.start.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit'
-          });
-
-          let timeText = timeStart;
-
-          if (info.event.end && info.event.end.toTimeString().substring(0, 5) !== "00:00") {
-            const timeEnd = info.event.end.toLocaleTimeString('en-US', {
-              hour: '2-digit',
-              minute: '2-digit'
             });
-            timeText += ' - ' + timeEnd;
-          }
 
-          document.getElementById('eventTime').textContent = timeText;
-          document.getElementById('eventTimeContainer').classList.remove('hidden');
-        } else {
-          document.getElementById('eventTimeContainer').classList.add('hidden');
-        }
+            let dateText = startDate;
 
-        document.getElementById('eventDescription').textContent = info.event.extendedProps.description;
-        
-        // Show modal with animation
-        const modal = document.getElementById('eventModal');
-        const modalContent = modal.querySelector('div');
-        
-        // Reset animations
-        const animatedElements = modal.querySelectorAll('.animate-slideIn');
-        animatedElements.forEach(el => {
-          el.style.opacity = '0';
-        });
-        
-        modalContent.classList.add('opacity-0');
-        modal.classList.remove('hidden');
-        
-        // Trigger animations
-        setTimeout(() => {
-          modalContent.classList.remove('opacity-0');
-          
-          // Animate content elements with delay
-          animatedElements.forEach((el, index) => {
+            if (info.event.end) {
+            const endDate = info.event.end.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            dateText += ' - ' + endDate;
+            }
+
+            document.getElementById('eventDate').textContent = dateText;
+
+            if (info.event.start.toTimeString().substring(0, 5) !== "00:00") {
+            const timeStart = info.event.start.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            let timeText = timeStart;
+
+            if (info.event.end && info.event.end.toTimeString().substring(0, 5) !== "00:00") {
+                const timeEnd = info.event.end.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+                });
+                timeText += ' - ' + timeEnd;
+            }
+
+            document.getElementById('eventTime').textContent = timeText;
+            document.getElementById('eventTimeContainer').classList.remove('hidden');
+            } else {
+            document.getElementById('eventTimeContainer').classList.add('hidden');
+            }
+
+            document.getElementById('eventDescription').textContent = info.event.extendedProps.description;
+            
+            // Show modal with animation
+            const modal = document.getElementById('eventModal');
+            const modalContent = modal.querySelector('div');
+            
+            // Reset animations
+            const animatedElements = modal.querySelectorAll('.animate-slideIn');
+            animatedElements.forEach(el => {
+            el.style.opacity = '0';
+            });
+            
+            modalContent.classList.add('opacity-0');
+            modal.classList.remove('hidden');
+            
+            // Trigger animations
             setTimeout(() => {
-              el.style.opacity = '1';
-            }, 100 * (index + 1));
-          });
-        }, 10);
-      },
-      // Use emerald-400 and yellow colors for the calendar
-      eventColor: '#34d399', // emerald-400
-      eventBorderColor: '#10b981', // emerald-500
-      eventTextColor: 'white',
-      dayMaxEvents: true, // Show '+more' if there are too many events
-      // Rounded styling for calendar elements
-      dayCellClassNames: 'rounded-md mx-1 my-1 hover:bg-emerald-50 transition-colors duration-200',
-      eventClassNames: 'rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200',
-      // Add yellow accent for today
-      dayCellDidMount: function(info) {
-        if (info.isToday) {
-          info.el.style.backgroundColor = '#fef3c7'; // Light yellow background for today
-          info.el.style.borderRadius = '0.375rem'; // rounded-md
+            modalContent.classList.remove('opacity-0');
+            
+            // Animate content elements with delay
+            animatedElements.forEach((el, index) => {
+                setTimeout(() => {
+                el.style.opacity = '1';
+                }, 100 * (index + 1));
+            });
+            }, 10);
+        },
+        // Use emerald-400 and yellow colors for the calendar
+        eventColor: '#34d399', // emerald-400
+        eventBorderColor: '#10b981', // emerald-500
+        eventTextColor: 'white',
+        dayMaxEvents: true, // Show '+more' if there are too many events
+        // Rounded styling for calendar elements
+        dayCellClassNames: 'rounded-md mx-1 my-1 hover:bg-emerald-50 transition-colors duration-200',
+        eventClassNames: 'rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200',
+        // Add yellow accent for today
+        dayCellDidMount: function(info) {
+            if (info.isToday) {
+            info.el.style.backgroundColor = '#fef3c7'; // Light yellow background for today
+            info.el.style.borderRadius = '0.375rem'; // rounded-md
+            }
         }
-      }
-    });
+        });
 
-    calendar.render();
+        calendar.render();
 
-    // Add custom styling for buttons after render
-    const buttons = document.querySelectorAll('.fc-button');
-    buttons.forEach(button => {
-      button.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'text-white', 'border-emerald-600', 'rounded-md', 'transition-all', 'duration-200', 'transform', 'hover:scale-105');
-      button.classList.remove('fc-button-primary');
-    });
+        // Add custom styling for buttons after render
+        const buttons = document.querySelectorAll('.fc-button');
+        buttons.forEach(button => {
+        button.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'text-white', 'border-emerald-600', 'rounded-md', 'transition-all', 'duration-200', 'transform', 'hover:scale-105');
+        button.classList.remove('fc-button-primary');
+        });
 
-    // Animate calendar view changes
-    const viewChangeButtons = document.querySelectorAll('.fc-prev-button, .fc-next-button');
-    viewChangeButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        const viewContainer = document.querySelector('.fc-view-harness');
-        viewContainer.classList.add('animate-viewChange');
-        setTimeout(() => {
-          viewContainer.classList.remove('animate-viewChange');
-        }, 300);
-      });
-    });
+        // Animate calendar view changes
+        const viewChangeButtons = document.querySelectorAll('.fc-prev-button, .fc-next-button');
+        viewChangeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const viewContainer = document.querySelector('.fc-view-harness');
+            viewContainer.classList.add('animate-viewChange');
+            setTimeout(() => {
+            viewContainer.classList.remove('animate-viewChange');
+            }, 300);
+        });
+        });
 
-    // Close modal with animation
-    document.getElementById('closeModal').addEventListener('click', function() {
-      const modal = document.getElementById('eventModal');
-      const modalContent = modal.querySelector('div');
-      
-      modalContent.classList.add('opacity-0');
-      
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 300);
-    });
-
-    // Close modal when clicking outside the modal
-    window.addEventListener('click', function(event) {
-      if (event.target === document.getElementById('eventModal')) {
+        // Close modal with animation
+        document.getElementById('closeModal').addEventListener('click', function() {
         const modal = document.getElementById('eventModal');
         const modalContent = modal.querySelector('div');
         
         modalContent.classList.add('opacity-0');
         
         setTimeout(() => {
-          modal.classList.add('hidden');
+            modal.classList.add('hidden');
         }, 300);
-      }
-    });
+        });
 
-    // Resize handling for responsiveness
-    window.addEventListener('resize', function() {
-      calendar.setOption('height', getCalendarHeight());
-    });
-  });
-</script>
+        // Close modal when clicking outside the modal
+        window.addEventListener('click', function(event) {
+        if (event.target === document.getElementById('eventModal')) {
+            const modal = document.getElementById('eventModal');
+            const modalContent = modal.querySelector('div');
+            
+            modalContent.classList.add('opacity-0');
+            
+            setTimeout(() => {
+            modal.classList.add('hidden');
+            }, 300);
+        }
+        });
+
+        // Resize handling for responsiveness
+        window.addEventListener('resize', function() {
+        calendar.setOption('height', getCalendarHeight());
+        });
+    }
+
+  </script>
 
 <style>
   /* Animation keyframes */

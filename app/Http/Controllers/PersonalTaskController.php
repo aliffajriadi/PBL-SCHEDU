@@ -120,4 +120,46 @@ class PersonalTaskController extends Controller
             ]);
         }
     }
+
+    public function set_finish(Request $request, PersonalTask $task)
+    {
+        try{
+            $field = $request->validate([
+                'is_finished' => 'required'
+            ]);
+
+            $task->update($field);
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'tugasnya sudah selesai dikerjakan'
+            ]);
+            
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function reset_finish(PersonalTask $task)
+    {
+        try{
+            $task->update([
+                'is_finished' => false
+            ]);
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'ada yang belum selesi dikerjakan?'
+            ]);
+            
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }

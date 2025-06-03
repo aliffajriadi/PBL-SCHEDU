@@ -101,10 +101,14 @@
 <script>
     function set_list(datas)
     {
+        const schedules = datas.datas;
+
         const parent = document.getElementById('schedule-list');
         parent.innerHTML = '';
 
-        datas.datas.forEach((data, index) => {
+        set_calendar(schedules);
+
+        schedules.forEach((data, index) => {
             parent.innerHTML += `
             <div class="relative mb-3 border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-300 notelist">
                         <div class="block w-full">
@@ -215,15 +219,8 @@
         }
     });
 
-    function editNote(title) {
-        console.log('Editing note:', title);
-        // Tambahkan logika edit di sini
-    }
 
-    function deleteNote(title) {
-        console.log('Deleting note:', title);
-        // Tambahkan logika hapus di sini
-    }
+
 </script>
 
 <style>

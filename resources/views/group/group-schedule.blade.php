@@ -126,9 +126,6 @@
 
         search();
 
-   
-
-        console.log(path)
         function insert_data()
         {
             const form = document.getElementById('add-form');
@@ -140,12 +137,16 @@
             closeAddScheduleModal();
         }
 
-        function schedule_list(schedules)
+        function schedule_list(datas)
         {
+            const schedules = datas.datas;
+
+            set_calendar(schedules);
+
             const parent = document.getElementById('schedule-list');
             parent.innerHTML = '';
 
-            schedules.datas.forEach(schedule => {
+            schedules.forEach(schedule => {
                 parent.innerHTML += `
                 <div class="block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50 transition-all duration-300">
                         <div class="flex justify-between items-center">

@@ -307,7 +307,7 @@
                     <p class="text-xs text-gray-600">
                         ${data.content}
                     </p>
-                    <button
+                    <button onclick="set_finish(${data.id})"
                         class="bg-emerald-500 mt-3 text-white rounded-2xl text-xs py-1 px-4 hover:bg-emerald-600 transition-all">
                         Set to Progress
                     </button>
@@ -431,5 +431,24 @@
                 el.classList.add('hidden');
             });
         }
+
+        function set_finish(id)
+        {
+            const formData = new FormData();
+
+            formData.append('is_finished', 1)
+
+            api_update('/task/set_finished', formData, id).then(response => {
+                get_task();
+            });;
+        }
+
+        function reset_finish(id)
+        {
+            api_update('/task/reset_finished', null, id).then(response => {
+                get_task();
+            });;
+        }
+
     </script>
 </x-layout>

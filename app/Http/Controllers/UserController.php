@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PersonalSchedule;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -162,7 +163,8 @@ class UserController extends Controller
         $user_data = [$user->name, $user->email];
     
         return view('teachStudent.dashboard', [
-            'user' => $user_data
+            'user' => $user_data,
+            'schedules' => PersonalSchedule::where('user_uuid', $user->uuid)->get()
         ]);
     }
 
