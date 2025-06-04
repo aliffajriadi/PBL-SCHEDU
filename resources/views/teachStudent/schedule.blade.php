@@ -52,10 +52,10 @@
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Jadwal Baru</h3>
             <form id="add-form" action="/schedules/add" method="POST">
                 @csrf
-                <input type="text" name="title" placeholder="Judul Jadwal" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                <textarea name="content" placeholder="Deskripsi Jadwal" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
-                <input type="datetime-local" name="start_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                <input type="datetime-local" name="end_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                <input type="text" name="title" placeholder="Judul Jadwal" id="add-title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                <textarea name="content" placeholder="Deskripsi Jadwal" id="add-content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                <input type="datetime-local" name="start_datetime" id="add-start-datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                <input type="datetime-local" name="end_datetime" id="add-end-datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <div class="flex justify-end gap-4">
                     <button type="button" onclick="close_add_modal()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
@@ -159,16 +159,24 @@
         const form = document.getElementById('add-form');
         const formData = new FormData(form);
 
-        api_store('/schedule/api', formData);
+        api_store('/schedule/api', formData).then(response => {
+            search();
+
+            document.getElementById('add-content').value = '';
+            document.getElementById('add-title').value = '';
+            document.getElementById('add-start-datetime').value = '';
+            document.getElementById('add-end-datetime').value = '';
+
+        });
 
         close_add_modal();
-        search();
     }
 
     function delete_data(id)
     {
-        api_destroy('schedule/api', id);
-        search();
+        api_destroy('schedule/api', id).then(response => {
+            search();
+        });
     }
 
     function update_data(id)
@@ -176,8 +184,9 @@
         const form = document.getElementById('update-form');
         const formData = new FormData(form);
 
-        api_update('/schedule/api', formData, id);
-        search();
+        api_update('/schedule/api', formData, id).then(response => {
+            search();
+        });
     }
 
     function open_add_modal()
