@@ -20,8 +20,10 @@ class PersonalTaskController extends Controller
             ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        
+
         return response()->json([
             'status' => true,
             'datas' => PersonalTask::all()
