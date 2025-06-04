@@ -10,7 +10,7 @@
         </button>
         <input type="text" id="search" placeholder="Search Note list...."
             class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-            onkeyup="getSearch()">
+            oninput="debounce_search()">
     </div>
 
     <!-- Mobile-Only List (Visible only on screens < md) -->
@@ -222,6 +222,23 @@
     </style>
 
     <script>
+        const debounce_refresh = debounce(search, 500);
+        let note_picked = -1;
+        const path = window.location.pathname;
+
+        function debounce_search()
+        {
+            debounce_refresh();
+        }
+
+        function search()
+        {
+            const keyword = document.getElementById('search').value;
+            get_data(`${path}/api?keyword=${keyword}`, set_list);   
+        }
+
+        search();
+
         function open_modal(id, button = false)
         {
             if(button !== false){
@@ -248,12 +265,7 @@
             document.getElementById(id).classList.add('hidden');
         }
 
-        function get_task()
-        {
-            get_data('/task/api', set_list);
-        }
-
-        get_task();
+        search()
 
         function set_list(datas){
             console.log(datas);
@@ -345,19 +357,19 @@
         });
 
         // Search Functionality
-        function getSearch() {
-            let input = document.getElementById('search').value.toLowerCase();
-            let tasks = document.querySelectorAll('#task-section .bg-white');
+        // function getSearch() {
+        //     let input = document.getElementById('search').value.toLowerCase();
+        //     let tasks = document.querySelectorAll('#task-section .bg-white');
 
-            tasks.forEach(task => {
-                let text = task.textContent.toLowerCase();
-                if (text.includes(input)) {
-                    task.classList.remove('hidden');
-                } else {
-                    task.classList.add('hidden');
-                }
-            });
-        }
+        //     tasks.forEach(task => {
+        //         let text = task.textContent.toLowerCase();
+        //         if (text.includes(input)) {
+        //             task.classList.remove('hidden');
+        //         } else {
+        //             task.classList.add('hidden');
+        //         }
+        //     });
+        // }
 
         function open_dropdown(id)
         {
@@ -397,7 +409,7 @@
             const formData = new FormData(form);
 
             api_store('/task/api', formData).then(response => {
-                get_task();
+                search();
             });
 
             close_modal('add-task-modal');
@@ -410,7 +422,7 @@
 
             formData.append('_method', 'PATCH');
             api_update('/task/api', formData, id).then(response => {
-                get_task();
+                search();
             });
 
             close_all_modal();
@@ -419,7 +431,7 @@
         function delete_data(id)
         {
             api_destroy('/task/api', id).then(response => {
-                get_task();
+                search();
             });
         }
 
@@ -439,14 +451,14 @@
             formData.append('is_finished', 1)
 
             api_update('/task/set_finished', formData, id).then(response => {
-                get_task();
+                search();
             });;
         }
 
         function reset_finish(id)
         {
             api_update('/task/reset_finished', null, id).then(response => {
-                get_task();
+                search();
             });;
         }
 

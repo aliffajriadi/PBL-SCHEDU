@@ -124,7 +124,7 @@ class GroupNoteController extends Controller
     public function update(Request $request, Group $group, GroupNote $api)
     {
         try {
-            return ['request' => $request->file('files')];
+            // return ['request' => $request->file('files')];
 
 
             $field = $request->validate([

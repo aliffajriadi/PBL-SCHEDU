@@ -12,7 +12,7 @@
             id="search" 
             placeholder="Search Note list..." 
             class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-            onkeyup="getSearch()"
+            oninput="debounce_search()"
         >
     </div>
 
@@ -99,7 +99,24 @@
 
 <!-- JavaScript untuk Dropdown -->
 <script>
-    function set_list(datas)
+    const debounce_refresh = debounce(search, 500);
+    let note_picked = -1;
+    const path = window.location.pathname;
+
+    function debounce_search()
+    {
+        debounce_refresh();
+    }
+
+    function search()
+    {
+        const keyword = document.getElementById('search').value;
+        get_data(`${path}/api?keyword=${keyword}`, show_list);   
+    }
+
+    search();
+
+    function show_list(datas)
     {
         const schedules = datas.datas;
 
@@ -137,13 +154,6 @@
         });
     }
 
-    function get_schedule()
-    {
-        get_data('/schedule/api', set_list);
-    }
-
-    get_schedule();
-
     function insert_data()
     {
         const form = document.getElementById('add-form');
@@ -152,13 +162,13 @@
         api_store('/schedule/api', formData);
 
         close_add_modal();
-        get_schedule();
+        search();
     }
 
     function delete_data(id)
     {
         api_destroy('schedule/api', id);
-        get_schedule();
+        search();
     }
 
     function update_data(id)
@@ -167,7 +177,7 @@
         const formData = new FormData(form);
 
         api_update('/schedule/api', formData, id);
-        get_schedule();
+        search();
     }
 
     function open_add_modal()

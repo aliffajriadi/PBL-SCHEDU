@@ -22,11 +22,18 @@ class PersonalTaskController extends Controller
 
     public function index(Request $request)
     {
+        $schedules = PersonalTask::query()->where('user_uuid', Auth::user()->uuid)->orderByDesc('created_at');
         
+        $keyword = $request->query('keyword');
+
+        if($keyword){
+            $keyword = '%' . $keyword . '%';
+            $schedules->where('title', 'like', $keyword); 
+        }
 
         return response()->json([
-            'status' => true,
-            'datas' => PersonalTask::all()
+            'datas' => $schedules->get(),
+            'keyword' => $keyword
         ]);
     }
 

@@ -21,10 +21,19 @@ class PersonalScheduleController extends Controller
 
     public function index(Request $request)
     {
+        $schedules = PersonalSchedule::query()->where('user_uuid', Auth::user()->uuid)->orderByDesc('created_at');
+        
+        $keyword = $request->query('keyword');
+
+        if($keyword){
+            $keyword = '%' . $keyword . '%';
+            $schedules->where('title', 'like', $keyword); 
+        }
+
         return response()->json([
-            'status' => true,
-            'datas' => PersonalSchedule::all() 
+            'datas' => $schedules->get()
         ]);
+
     }
     
     public function store(Request $request)
