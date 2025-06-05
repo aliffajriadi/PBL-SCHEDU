@@ -42,7 +42,7 @@
                 <img src="{{ asset('assets/notifications.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Notification</p>
             </div>
-            <p class="text-xs text-emerald-50 bg-red-500 rounded-full px-2 py-1">3</p>
+            <p id="side-notif-badge" class="{{ session('notification_count') ? '' : 'hidden' }} text-xs text-emerald-50 bg-red-500 rounded-full px-2 py-1">{{ session('notification_count') }}</p>
 
         </a>
 

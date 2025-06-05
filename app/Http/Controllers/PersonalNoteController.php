@@ -24,7 +24,7 @@ class PersonalNoteController extends Controller
 
     public function index(Request $request)
     {
-        $notes = PersonalNote::query();
+        $notes = PersonalNote::query()->where('user_uuid', Auth::user()->uuid);
 
 
         try {

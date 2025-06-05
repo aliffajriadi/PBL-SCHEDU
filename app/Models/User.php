@@ -91,5 +91,8 @@ class User extends Authenticatable
         return $this->hasMany(GroupNote::class, 'user_uuid', 'uuid');
     }
 
-    
+    public function notification()
+    {
+        return $this->hasMany(NotificationStatus::class, 'user_uuid', 'uuid');
+    }
 }

@@ -76,6 +76,8 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         try {
+            
+
             $notifications = NotificationStatus::with('notification')->join('notifications', 'notification_statuses.notif_id', '=', 'notifications.id')->where('user_uuid', Auth::user()->uuid)->whereHas('notification', function ($model){
                 $model->where('visible_schedule', '<=', Carbon::now('Asia/Jakarta')->toDateTimeString());  
             });
@@ -135,13 +137,17 @@ class NotificationController extends Controller
             if($status->is_read !== true){
                 $status_query->update(['is_read' => true]);
                 // $status->save();
+                
             }
 
             $notif_data = Notification::where('id', $notification)->first();
 
+            session()->put('notification_count', Auth::user()->notification()->where('is_read', 'false')->count());
+
             return response()->json([
                 'status' => true,
-                'data' => $notif_data
+                'data' => $notif_data,
+                'notif_count' => session('notification_count')
             ]);
 
         }catch(\Exception $e) {

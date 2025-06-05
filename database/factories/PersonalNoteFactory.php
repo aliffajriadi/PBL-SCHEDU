@@ -12,7 +12,7 @@ class PersonalNoteFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed>ote
      */
     public function definition(): array
     {

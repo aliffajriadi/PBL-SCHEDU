@@ -1,7 +1,7 @@
 <x-layout title="Dashboard" role="teacher" :user="$user_data">
     <!-- Main container with responsive padding -->
 
-    {{-- @dd($user) --}}
+    {{-- @dd(session()->get('notification_count')) --}}
 
     <!-- Top section that stacks on mobile, side-by-side on larger screens -->
     <div class="flex flex-col lg:flex-row lg:space-x-3 space-y-3 lg:space-y-0 animate-fadeIn">

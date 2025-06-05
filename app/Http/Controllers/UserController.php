@@ -45,9 +45,15 @@ class UserController extends Controller
             }
 
             $user = Auth::user();
-            session(['role' => $user->is_teacher ? 'teacher' : 'student']);
+            session([
+                'role' => $user->is_teacher ? 'teacher' : 'student',
+                'notification_count' => $user->notification()->where('is_read', false)->count()
+            ]);
+
             // return redirect('/dashboard');
             $request->session()->regenerate();
+
+
 
             return redirect('/dashboard');
 

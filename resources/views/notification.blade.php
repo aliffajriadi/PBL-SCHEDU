@@ -105,12 +105,22 @@
             debounce_search();
         }
 
-        function set_content(notif)
+        function set_content(datas)
         {
-            notif = notif.data
+            notif = datas.data;
+            notif_count = datas.notif_count;
             document.getElementById('content-title').innerHTML = notif.title;
             document.getElementById('content-date').innerHTML = notif.created_at;
             document.getElementById('content-content').innerHTML = notif.content;
+
+            if(notif_count){
+                document.getElementById('notification-badge').innerHTML = notif_count;
+                document.getElementById('side-notif-badge').innerHTML = notif_count;
+            }else{
+                document.getElementById('notification-badge').classList.add('hidden');
+                document.getElementById('side-notif-badge').classList.add('hidden');
+            }
+
         }
 
         function open_content(id)
