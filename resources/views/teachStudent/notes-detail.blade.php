@@ -98,6 +98,8 @@
         </div>
     </div>
 
+    <x-success></x-success>
+
     <script>
         const debounce_search = debounce(refresh_list, 500);
 
@@ -122,7 +124,10 @@
             const formData = new FormData(form);
 
 
-            api_store('/note/api', formData);
+            api_store('/note/api', formData).then(response => {
+                if(response.status) open_success('Berhasil menambahkan catatan baru');
+                else{open_fail(response.message)}
+            });
             closeAddModal();
 
             const add_title = document.getElementById('add_title');
@@ -144,6 +149,8 @@
             api_update('/note/api', formData, id.value);
             refresh_list();
         
+            open_success();
+
             closeModal();
         }
 
@@ -158,7 +165,7 @@
         function show_list(datas) {
             const parent = document.getElementById('note-list');
             parent.innerHTML = '';
-            // 
+            
             datas.datas.forEach((data) => {
                 parent.innerHTML += ` <div onclick="openContent(${data.id})"
                         class="block w-full border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 cursor-pointer transition-all duration-300 notelist">
