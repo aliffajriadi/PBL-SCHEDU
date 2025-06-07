@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Group;
-use App\Models\Notification;
-use App\Models\NotificationStatus;
-use Illuminate\Http\Request;
-use App\Models\Staff;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Group;
+use App\Models\Staff;
+use App\Models\Notification;
+use Illuminate\Http\Request;
+use App\Models\NotificationStatus;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -54,9 +55,17 @@ class StaffController extends Controller
 
     public function view_group()
     {
-        $user = Auth::guard('staff')->user();
-        $groupList = Group::where('instance_uuid')->limit(10)->latest();
 
+        $user = Auth::guard('staff')->user();
+
+        $groupList = Group::with(['user'])
+            ->where('instance_uuid', $user->uuid)
+            ->latest()
+            ->limit(5)
+            ->select('id', 'created_at', 'group_code', 'name', 'created_by', 'instance_uuid')
+            ->paginate(10);
+
+        
         return view('staff.group', compact('user', 'groupList'));
     }
     public function view_profile()
@@ -85,7 +94,7 @@ class StaffController extends Controller
                 ->limit(5)
                 ->select('id', 'created_at', 'name', 'created_by')
                 ->get();
-                
+
             return view('staff.dashboard', compact('user', 'dataCount', 'notifications', 'groups'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Error Get Data');
@@ -294,6 +303,24 @@ class StaffController extends Controller
             return redirect()->back()->with('success', 'Delete Success');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Delete Failed');
+        }
+    }
+    public function destroy_group(Group $group){
+        try {
+            
+
+            Gate::allows('is_member', [$group]);
+            Gate::allows('modify_permission', [$group]);
+
+            Storage::disk('public')->deleteDirectory($group->instance->folder_name . '/groups/' . $group->group_code);
+
+            $group->delete();
+
+            return redirect()->back()->with('success', 'Delete Success');
+            
+        }catch(\Exception $e) {
+            return redirect()->back()->with('error', 'Error for Delete Group');
+
         }
     }
 }
