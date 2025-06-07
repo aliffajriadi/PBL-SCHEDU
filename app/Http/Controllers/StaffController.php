@@ -83,10 +83,9 @@ class StaffController extends Controller
                 ->where('instance_uuid', $user->uuid)
                 ->latest()
                 ->limit(5)
-                ->select('id', 'created_at', 'name')
+                ->select('id', 'created_at', 'name', 'created_by')
                 ->get();
-
-
+                
             return view('staff.dashboard', compact('user', 'dataCount', 'notifications', 'groups'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Error Get Data');
