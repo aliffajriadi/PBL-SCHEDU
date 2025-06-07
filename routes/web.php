@@ -194,6 +194,7 @@ Route::prefix('/staff')->middleware('staff')->group(function () {
         Route::post('/logout', 'logout');
         Route::put('/user/{uuid}', 'update_user');
         Route::put('/userpassword', 'update_password_user');
+        Route::delete('/group/destroy/{group}', 'destroy_group');
         
     });
     Route::post('/create-user', [UserController::class, 'store']);
