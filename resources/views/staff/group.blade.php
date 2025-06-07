@@ -23,15 +23,16 @@
                 </tr>
             </thead>
             <tbody class="text-gray-600 divide-y">
-                @foreach ($groupList as $group)
+                @forelse ($groupList as $group)
                     <tr class="hover:bg-gray-50">
                         <td class="py-3 px-4 border-b">{{ $loop->iteration }}</td>
-                        <td class="py-3 px-4 border-b">{{$group->name}}</td>
-                        <td class="py-3 px-4 border-b">{{$group->user->name}}</td>
-                        <td class="py-3 px-4 border-b">{{$group->group_code}}</td>
+                        <td class="py-3 px-4 border-b">{{ $group->name }}</td>
+                        <td class="py-3 px-4 border-b">{{ $group->user->name }}</td>
+                        <td class="py-3 px-4 border-b">{{ $group->group_code }}</td>
                         <td class="py-3 px-4 border-b">{{ $group->created_at->diffForHumans() }}</td>
                         <td class="py-3 px-4 border-b flex gap-2">
-                            <button type="submit" onclick="openDeleteModal('{{$group->id}}', '{{$group->name}}')" class="text-red-500 hover:text-red-600">
+                            <button type="submit" onclick="openDeleteModal('{{ $group->id }}', '{{ $group->name }}')"
+                                class="text-red-500 hover:text-red-600">
                                 <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18L18 6M6 6l12 12" />
@@ -39,7 +40,14 @@
                             </button>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="py-4 px-4 text-center text-gray-500">
+                            Group no have created.
+                        </td>
+                    </tr>
+                @endforelse
+
 
 
             </tbody>
@@ -83,5 +91,5 @@
             document.body.style.overflow = 'auto';
         }
     </script>
-    <x-modal.toast/>
+    <x-modal.toast />
 </x-layout>
