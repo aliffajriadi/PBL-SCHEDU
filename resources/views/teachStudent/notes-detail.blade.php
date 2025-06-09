@@ -126,7 +126,7 @@
 
             api_store('/note/api', formData).then(response => {
                 if(response.status) open_success('Berhasil menambahkan catatan baru');
-                else{open_fail(response.message)}
+                else open_fail(response.message);
             });
             closeAddModal();
 
