@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        PersonalNote::factory(10)->create();
+        // PersonalNote::factory(10)->create();
 
-        // $this->call([
-        //     AdminSeeder::class,
-        //     StaffSeeder::class
-        // ]);
+        $this->call([
+            AdminSeeder::class,
+            StaffSeeder::class
+        ]);
     }
 }

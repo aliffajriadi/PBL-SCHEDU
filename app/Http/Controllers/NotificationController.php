@@ -159,19 +159,22 @@ class NotificationController extends Controller
         }
     }
 
-    public function destroy(Group $group, Notification $notif)
+    public function destroy(Group $group, int $api)
     {
         try {
-            Gate::allows('own', $notif);
-            
-            $notif_stat = NotificationStatus::where('user_uuid', Auth::user()->uuid)->where('notif_id', $notif->id)->first();
+            // Gate::allows('own', $notif);
+
+            // return response()->json(['a' => $api]);
+
+            $notif_stat = NotificationStatus::where('user_uuid', Auth::user()->uuid)->where('notif_id', $api);
 
             $notif_stat->delete();
 
             $message = 'notifikasi berhasil dihapus';
 
-            if(NotificationStatus::where('notification_id', $notif_stat->id)->exists()){
-                Notification::where('id', $notif_stat->id)->first()->delete();
+            if(NotificationStatus::where('notif_id', $api)->exists()){
+
+                Notification::where('id', $api)->first()->delete();
             
                 $message .= ' bersamaan dengan data template notifikasi';
             }

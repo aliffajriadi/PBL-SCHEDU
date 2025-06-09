@@ -21,7 +21,7 @@ use App\Http\Controllers\GroupScheduleController;
 use App\Http\Controllers\GroupTaskUnitController;
 use App\Http\Controllers\PersonalScheduleController;
 use App\Http\Controllers\GroupTaskSubmissionController;
-
+use App\Http\Controllers\StaffNotificationController;
 
 Route::get('user-check', [UserController::class, 'user_check']);
 
@@ -199,6 +199,11 @@ Route::prefix('/staff')->middleware('staff')->group(function () {
     Route::post('/create-user', [UserController::class, 'store']);
     Route::post('/account/insert-file', [UserController::class, 'insert_file']);
     Route::resource('/user', UserController::class);
+
+    Route::get('/notification', [StaffNotificationController::class, 'home']);
+
+    Route::apiResource('/notifications', StaffNotificationController::class);
+
 });
 
 

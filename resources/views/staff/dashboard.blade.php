@@ -148,6 +148,7 @@
                                 <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-900">{{ $group->created_at }}</td>
                             </tr>
                         @endforeach
+                        
                     </tbody>
                 </table>
                 @if (count($groups) == 0)

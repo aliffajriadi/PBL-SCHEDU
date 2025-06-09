@@ -22,29 +22,35 @@
         <div class="bg-white p-4 w-full md:w-5/12 shadow-md rounded-2xl animate-fade-in-left">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Notification List</h2>
             <!-- Filter Buttons -->
-            <div class="flex gap-2 mb-4">
-                <button 
-                    id="filter-all" 
-                    onclick="filterNotifications('all')"
-                    class="bg-emerald-500 text-white px-4 py-1.5 rounded-lg hover:bg-emerald-600 transition-all duration-300 active-filter text-sm"
-                >
-                    All
-                </button>
-                <button 
-                    id="filter-personal" 
-                    onclick="filterNotifications('personal')"
-                    class="bg-gray-200 text-gray-800 px-4 py-1.5 rounded-lg hover:bg-gray-300 transition-all duration-300 text-sm"
-                >
-                    Personal
-                </button>
-                <button 
-                    id="filter-group" 
-                    onclick="filterNotifications('group')"
-                    class="bg-gray-200 text-gray-800 px-4 py-1.5 rounded-lg hover:bg-gray-300 transition-all duration-300 text-sm"
-                >
-                    Group
-                </button>
-            </div>
+
+            @if($role !== 'staff')
+
+                <div class="flex gap-2 mb-4">
+                    <button 
+                        id="filter-all" 
+                        onclick="filterNotifications('all')"
+                        class="bg-emerald-500 text-white px-4 py-1.5 rounded-lg hover:bg-emerald-600 transition-all duration-300 active-filter text-sm"
+                    >
+                        All
+                    </button>
+                    <button 
+                        id="filter-personal" 
+                        onclick="filterNotifications('personal')"
+                        class="bg-gray-200 text-gray-800 px-4 py-1.5 rounded-lg hover:bg-gray-300 transition-all duration-300 text-sm"
+                    >
+                        Personal
+                    </button>
+                    <button 
+                        id="filter-group" 
+                        onclick="filterNotifications('group')"
+                        class="bg-gray-200 text-gray-800 px-4 py-1.5 rounded-lg hover:bg-gray-300 transition-all duration-300 text-sm"
+                    >
+                        Group
+                    </button>
+                </div>
+
+            @endif
+
             <!-- Notification List -->
             <div id="notif-list" class="space-y-3">
 
@@ -60,13 +66,13 @@
                     <p id="content-date" class="text-xs text-gray-100">Created at 27 November 2024</p>
                 </div>
                 <div class="flex flex-col md:flex-row gap-2">
-                    <button onclick="openEditModal(${note.id})"
+                    <button
                         class="text-sm flex py-1 items-center gap-1 cursor-pointer bg-amber-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
                         <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
                         <p class="text-xs md:text-md">Close</p>
                     </button>
 
-                    <button id="content-delete" onclick="delete_data(${note.id})"
+                    <button id="content-delete" 
                         class="text-sm py-1 flex items-center gap-1 cursor-pointer bg-red-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
                         <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
                         <p class="text-xs md:text-md">Delete</p>
@@ -75,7 +81,7 @@
             </div>
             <div class="bg-emerald-50 p-3 mt-3 rounded-2xl h-72 overflow-auto">
                 <p id="content-content" class="text-sm"></p>
-            </div>`
+            </div>
         </div>
 
         <div id="content-close" class="bg-white flex-col justify-center items-center md:flex p-6 shadow-md rounded-2xl w-7/12 h-96 animate-fade-in-right">
@@ -87,7 +93,6 @@
                 <p class="text-lg font-semibold text-gray-800">Select a Notification</p>
                 <p class="text-sm text-gray-600 mt-2">Click a notification on the left to view details.</p>
             </div>
-
         </div>
     </div>
 
@@ -105,22 +110,36 @@
             debounce_search();
         }
 
-        function set_content(datas)
+        function getSearch() {
+            const input = document.getElementById("search").value.toLowerCase();
+            const items = document.querySelectorAll(".notification-item");
+
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                const isVisible = text.includes(input);
+                item.style.display = isVisible ? "block" : "none";
+            });
+        }
+
+        search()
+
+        @if($role !== 'staff')
+
+        function delete_data(id)
         {
-            notif = datas.data;
-            notif_count = datas.notif_count;
+            api_destroy('/notification/api', id).then(response => {
+                document.getElementById('content-open').classList.add('hidden');
+                document.getElementById('content-close').style.display = 'block';
+                search()
+            });
+        }
+
+        function set_content(notif)
+        {
+            notif = notif.data
             document.getElementById('content-title').innerHTML = notif.title;
             document.getElementById('content-date').innerHTML = notif.created_at;
             document.getElementById('content-content').innerHTML = notif.content;
-
-            if(notif_count){
-                document.getElementById('notification-badge').innerHTML = notif_count;
-                document.getElementById('side-notif-badge').innerHTML = notif_count;
-            }else{
-                document.getElementById('notification-badge').classList.add('hidden');
-                document.getElementById('side-notif-badge').classList.add('hidden');
-            }
-
         }
 
         function open_content(id)
@@ -131,9 +150,12 @@
                 dot.remove();
             }
 
-            get_data(`notification/api`, set_content, id);  
+            get_data(`/notification/api`, set_content, id);  
             document.getElementById('content-open').classList.remove('hidden');
             document.getElementById('content-close').style.display = 'none';
+            document.getElementById('content-delete').onclick = () => {
+                delete_data(id)
+            }
         }
 
         function show_list(notifications)
@@ -193,17 +215,6 @@
         
         call_data();
 
-        function getSearch() {
-            const input = document.getElementById("search").value.toLowerCase();
-            const items = document.querySelectorAll(".notification-item");
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                const isVisible = text.includes(input);
-                item.style.display = isVisible ? "block" : "none";
-            });
-        }
-
         function filterNotifications(type) {
             const items = document.querySelectorAll(".notification-item");
             const allButton = document.getElementById("filter-all");
@@ -246,6 +257,94 @@
             // Reapply search filter if search input is active
             getSearch();
         }
+        @else
+            function show_list(notifications)
+            {
+                const parent = document.getElementById('notif-list');
+                parent.innerHTML = '';
+                let notif;
+                let is_read;
+
+                let datas = notifications.datas;
+
+                datas.forEach((notification) => {
+
+                    is_read = notification.is_read
+                    parent.innerHTML += `
+                        <a 
+                            onclick="open_content(${notification.id})"
+                            class="block bg-white p-3 rounded-lg shadow-sm hover:bg-emerald-50 hover:shadow-md transition-all duration-300 active:scale-95 notification-item"
+                        >
+                            <div class="flex items-start gap-3">
+                                <!-- Icon -->
+                                <div class="p-2 bg-emerald-100 rounded-full flex-shrink-0">
+                                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        ${svg_img_group}
+                                    </svg>
+                                </div>
+                                <!-- Content -->
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="text-md font-semibold ${ notification.is_readed === true ? 'text-gray-600' : 'text-gray-1000 font-bold' }">
+                                                ${notification.title}
+                                            </h3>
+                                            ${ !notification.is_readed ? '<span id="dot' + notification.id + '" class="w-2 h-2 bg-red-500 rounded-full"></span>' : '' }
+                                        </div>
+                                        <span class="text-xs font-semibold text-white bg-emerald-500 rounded-full px-2 py-1">!</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1 ${ notification.is_readed === 0 ? 'opacity-75' : '' }">${ notification.description }</p>
+                                    <p class="text-xs text-gray-500 mt-1">Received ${ notification.created_at }</p>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                });
+            }
+
+            function call_data()
+            {
+                const query = `keyword=${document.getElementById('search').value}&type=${search_type}`; 
+                get_data(`/staff/notifications?${query}`, show_list);
+            }
+
+            function set_content(notif)
+            {
+                console.log(notif);
+                notif = notif.data
+                document.getElementById('content-title').innerHTML = notif.title;
+                document.getElementById('content-date').innerHTML = notif.created_at;
+                document.getElementById('content-content').innerHTML = notif.description;
+            }
+
+            function open_content(id)
+            {
+                const dot = document.getElementById(`dot${id}`);
+
+                if(dot){
+                    dot.remove();
+                }
+
+                get_data(`/staff/notifications`, set_content, id);  
+                document.getElementById('content-open').classList.remove('hidden');
+                document.getElementById('content-close').style.display = 'none';
+                document.getElementById('content-delete').onclick = () => {
+                    delete_data(id)
+                }
+            }
+
+            function delete_data(id)
+            {
+                api_destroy('/staff/notifications', id).then(response => {
+                    document.getElementById('content-open').classList.add('hidden');
+                    document.getElementById('content-close').style.display = 'block';
+                    search();
+                });
+            }
+
+
+        @endif
+
     </script>
 
     <!-- Custom Animation -->

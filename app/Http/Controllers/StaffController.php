@@ -79,11 +79,11 @@ class StaffController extends Controller
                 ->latest()
                 ->limit(4)
                 ->get();
-            $groups = Group::with('user')
+            $groups = Group::with('user:uuid,name')
                 ->where('instance_uuid', $user->uuid)
                 ->latest()
                 ->limit(5)
-                ->select('id', 'created_at', 'name')
+                // ->select('id', 'created_at', 'name', '')
                 ->get();
 
 
@@ -119,6 +119,9 @@ class StaffController extends Controller
             if (!Auth::guard('staff')->attempt($credentials)) {
                 return redirect()->back()->with('error', 'Wrong email or password');
             };
+        
+            session(['role' => 'staff']);
+            $request->session()->regenerate();
 
             return redirect('/staff/dashboard')->with('success', 'Login Success');
         } catch (\Throwable $e) {
