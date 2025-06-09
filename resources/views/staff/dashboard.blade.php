@@ -144,7 +144,7 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-900">{{ $loop->iteration }}</td>
                                 <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-900">{{ $group->name }}</td>
-                                <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-900">{{ $group->user->name }}</td>
+                                <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-900">{{ $group->user?->name }}</td>
                                 <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-900">{{ $group->created_at }}</td>
                             </tr>
                         @endforeach
