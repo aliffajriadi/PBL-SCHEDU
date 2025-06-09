@@ -44,4 +44,9 @@ class Staff extends Authenticatable
     {
         return $this->hasMany(Group::class, 'instance_uuid', 'uuid');
     }
+
+    public function notification()
+    {
+        return $this->hasMany(StaffNotification::class, 'staff_uuid', 'uuid');
+    }
 }

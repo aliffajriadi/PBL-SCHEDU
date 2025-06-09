@@ -152,6 +152,12 @@ class GroupController extends Controller
                 'created_by' => Auth::user()->uuid
             ]);
             
+            StaffNotificationController::store(
+                'Grup dibuat', 
+                "Sebuah grup dengan nama {$field['name']} baru saja dibuat oleh {$user->name}", 
+                $user->instance_uuid
+            );
+
             MemberOf::create([
                 'user_uuid' => $user->uuid,
                 'group_id' => $group->id,
@@ -204,6 +210,8 @@ class GroupController extends Controller
     {
         try {
 
+            $user = Auth::user();
+
             Gate::allows('is_member', [$group]);
             Gate::allows('modify_permission', [$group]);
 
@@ -211,7 +219,11 @@ class GroupController extends Controller
 
             $group->delete();
 
-
+            StaffNotificationController::store(
+                'Grup dibuat', 
+                "Sebuah grup dengan nama {$group->name} baru saja dibuat oleh {$user->name}", 
+                $user->instance_uuid
+            );
 
             return response()->json([
                 'status' => true,

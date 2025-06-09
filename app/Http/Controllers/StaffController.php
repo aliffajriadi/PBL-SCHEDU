@@ -45,6 +45,9 @@ class StaffController extends Controller
                 ]);
             }
 
+            session(['role' => 'staff']);
+            $request->session()->regenerate();
+
             return redirect('/staff/dashboard');
 
             return response()->json([

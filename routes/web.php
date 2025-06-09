@@ -19,8 +19,10 @@ use App\Http\Controllers\GroupTaskSubmissionController;
 use App\Http\Controllers\GroupTaskUnitController;
 use App\Http\Controllers\PersonalScheduleController;
 use App\Http\Controllers\PersonalTaskController;
+use App\Http\Controllers\StaffNotificationController;
 use App\Models\GroupTaskSubmission;
 use App\Models\PersonalTask;
+use App\Policies\StaffPolicy;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -181,7 +183,6 @@ Route::post('/staff/login', [StaffController::class, 'login']);
 // //STAFF ROUTE DUMMY
 Route::middleware('auth:staff')->prefix('/staff')->group(function () {
     // Route::apiResource('/api', StaffController::class);
-
     Route::apiResource('/user', UserController::class);
 
 
@@ -215,6 +216,7 @@ Route::middleware('auth:staff')->prefix('/staff')->group(function () {
         ]);
     });
 
+    Route::get('/notification', [StaffNotificationController::class, 'home']);
 
-
+    Route::apiResource('/notifications', StaffNotificationController::class);
 });
