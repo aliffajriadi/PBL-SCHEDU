@@ -34,7 +34,7 @@
         <!-- Task Column -->
         <div id="tasks"
             class="bg-emerald-500 p-4 h-fit rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-            <h3 class="text-md text-white font-semibold mb-4">Task</h3>
+            <h3 class="text-md text-white font-semibold mb-4">All Tasks</h3>
             <!-- Task Item -->
             <div id="all-tasks">
 
@@ -52,6 +52,10 @@
             class="bg-emerald-500 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 h-fit">
             <h3 class="text-md text-white font-semibold mb-4">On Progress</h3>
             <!-- Progress Item -->
+
+            <div id="progress-task">
+
+            </div>
             <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                     <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
@@ -106,6 +110,8 @@
             class="bg-emerald-500 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 h-fit">
             <h3 class="text-md text-white font-semibold mb-4">Complete Task</h3>
             <!-- Complete Item -->
+            <div id="complete-task"></div>
+
             <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                     <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
@@ -270,10 +276,14 @@
         function set_list(datas){
             console.log(datas);
             const all_list = document.getElementById('all-tasks');
+            const progress_task = document.getElementById('progress-task');
+            const complete_task = document.getElementById('complete-task');
             // const unfinished_list = document.getElementById('unfinished-tasks');
             // const finished_list = document.getElementById('finished-tasks');
 
             all_list.innerHTML = '';
+            progress_task.innerHTML = '';
+            complete_task.innerHTML = '';
 
             datas.datas.forEach(data => {
 
@@ -290,16 +300,6 @@
                                 Options
                             </button>
 
-                            <!--
-                                Dropdown menu, show/hide based on menu state.
-
-                                Entering: "transition ease-out duration-100"
-                                From: "transform opacity-0 scale-95"
-                                To: "transform opacity-100 scale-100"
-                                Leaving: "transition ease-in duration-75"
-                                From: "transform opacity-100 scale-100"
-                                To: "transform opacity-0 scale-95"
-                            -->
                             <div
                                 id="all-task-${data.id}"
 
@@ -325,6 +325,9 @@
                     </button>
 
                 </div>`;
+
+                if(data)
+
             });
         }
 
