@@ -70,10 +70,9 @@
       <div
         class="bg-green-600 w-9/12 h-screen bg-[url('/public/image/image1.png')] bg-cover flex-col text-center justify-center items-center gap-y-10 hidden md:flex"
       >
-        <h2 class="text-slate-50 font-semibold text-3xl">Good Morning sir</h2>
+        <h2 class="text-slate-50 font-semibold text-3xl">Lorem ipsum dolor sit amet</h2>
         <p class="text-slate-50 px-24">
-          Alangkah baiknya jangan MOKEL disaat bulan puasa ini, banyak sekali
-          yang anda rugikan
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi ut tempore ipsam inventore hic vitae praesentium, officiis!
         </p>
         <a href="/"
           class="border-2 border-slate-50 text-white rounded-3xl px-2 py-1 hover:bg-yellow-400 hover:text-green-600"
