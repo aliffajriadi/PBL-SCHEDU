@@ -66,6 +66,7 @@ Route::middleware('auth:web')->prefix('/')->group(function () {
 
         Route::apiResource('/api', PersonalTaskController::class);
 
+        Route::post('/done/{task}', [PersonalTaskController::class, 'set_done']);
     });
 
 

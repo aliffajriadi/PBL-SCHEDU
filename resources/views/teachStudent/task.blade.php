@@ -56,53 +56,7 @@
             <div id="progress-task">
 
             </div>
-            <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
-                    <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
-                    <div class="relative">
-                        <button
-                            class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
-                            onclick="toggleDropdown(this)">
-                            Options
-                        </button>
-                        <ul class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
-                            <li>
-                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                        onclick="editTask(1)">
-                                    Edit
-                                </button>
-                            </li>
-                            <li>
-                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                        onclick="deleteTask(1)">
-                                    Delete
-                                </button>
-                            </li>
-                            <li>
-                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                        onclick="setToDone(1)">
-                                    Set to Done
-                                </button>
-                            </li>
-                            <li>
-                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                        onclick="setToInitial(1)">
-                                    Set to Initial
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <p class="text-sm text-emerald-500 opacity-70 mb-3">Monday, 23 January 2024</p>
-                <p class="text-xs text-gray-600">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa quia deleniti unde laudantium?
-                    Corporis cupiditate officia...
-                </p>
-                <button
-                    class="bg-emerald-500 mt-3 text-white rounded-2xl text-xs py-1 px-4 hover:bg-emerald-600 transition-all">
-                    Set to Done
-                </button>
-            </div>
+            
         </div>
 
         <!-- Complete Task Column -->
@@ -112,47 +66,7 @@
             <!-- Complete Item -->
             <div id="complete-task"></div>
 
-            <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
-                    <h3 class="text-md font-semibold text-gray-800">Tugas MTK</h3>
-                    <div class="relative">
-                        <button
-                            class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
-                            onclick="toggleDropdown(this)">
-                            Options
-                        </button>
-                        <ul class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
-                            <li>
-                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                        onclick="editTask(1)">
-                                    Edit
-                                </button>
-                            </li>
-                            <li>
-                                <button class="w-full text-left px-4 py-2 text-sm text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                        onclick="deleteTask(1)">
-                                    Delete
-                                </button>
-                            </li>
-                            <li>
-                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 transition-all"
-                                        onclick="setToInitial(1)">
-                                    Set to Initial
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <p class="text-sm text-emerald-500 opacity-70 mb-3">Monday, 23 January 2024</p>
-                <p class="text-xs text-gray-600">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa quia deleniti unde laudantium?
-                    Corporis cupiditate officia...
-                </p>
-                <button
-                    class="bg-emerald-500 mt-3 text-white rounded-2xl text-xs py-1 px-4 hover:bg-emerald-600 transition-all">
-                    Delete Task
-                </button>
-            </div>
+
         </div>
     </section>
 
@@ -321,12 +235,69 @@
                     </p>
                     <button onclick="set_finish(${data.id})"
                         class="bg-emerald-500 mt-3 text-white rounded-2xl text-xs py-1 px-4 hover:bg-emerald-600 transition-all">
-                        Set to Progress
+                        Set to finish
                     </button>
 
                 </div>`;
 
-                if(data)
+                if(data.is_finished === 0){
+                    progress_task.innerHTML += `<div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
+                    <h3 class="text-md font-semibold text-gray-800">${data.title}</h3>
+                                            <div class="relative">
+                            <div class="relative inline-block text-left">
+                            <button
+                                class="dropdown-toggle bg-emerald-400 rounded-xl text-xs py-1 px-3 text-white hover:bg-emerald-500 transition-all"
+                                onclick="open_dropdown('p-task-${data.id}')">
+                                Options
+                            </button>
+
+                            <div
+                                id="p-task-${data.id}"
+
+                                class="all-modal hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                <div class="py-1" role="none">
+                                <!-- Active: "bg-gray-100 text-gray-900 outline-hidden", Not Active: "text-gray-700" -->
+                                <button data-detail='${JSON.stringify(data).replace(/'/g, "&apos;")}' onclick="open_modal('update-task-modal', this)" type="button" class="block w-full px-4 py-2 text-left text-sm hover:bg-gray-200" role="menuitem" tabindex="-1" id="menu-item-3">Detail</button>
+                                <button type="submit" onclick="delete_data(${data.id})" class="block w-full px-4 py-2 text-left text-sm text-red-700 hover:bg-gray-200" role="menuitem" tabindex="-1" id="menu-item-3">Delete</button>
+                                </div>
+                            </div>
+                            </div>
+
+
+                        </div>
+
+                </div>
+                <p class="text-sm text-emerald-500 opacity-70 mb-3">${data.deadline}</p>
+                <p class="text-xs text-gray-600">
+                    ${data.content}
+                </p>
+                <button
+                    onclick="set_finish(${data.id})"
+                    class="bg-emerald-500 mt-3 text-white rounded-2xl text-xs py-1 px-4 hover:bg-emerald-600 transition-all">
+                    Set to Done
+                </button>
+            </div>`
+                }else{
+                    complete_task.innerHTML += 
+                    `
+                    <div class="bg-white mb-4 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
+                            <h3 class="text-md font-semibold text-gray-800">${data.title}</h3>
+                            
+                            
+                        </div>
+                        <p class="text-sm text-emerald-500 opacity-70 mb-3">${data.deadline}</p>
+                        <p class="text-xs text-gray-600">
+                            ${data.title}
+                        </p>
+                        <button 
+                            onclick="delete_data(${data.id})"
+                            class="bg-emerald-500 mt-3 text-white rounded-2xl text-xs py-1 px-4 hover:bg-emerald-600 transition-all">
+                            Delete Task
+                        </button>
+                    </div>`;
+                }
 
             });
         }
@@ -376,6 +347,8 @@
 
         function open_dropdown(id)
         {
+            // console.log('berhasil')
+
             close_all_modal();
             document.getElementById(id).classList.toggle('hidden');
         }
@@ -397,8 +370,9 @@
         }
 
         function setToDone(taskId) {
-            console.log(`Setting task ${taskId} to Done`);
-            // Add your set to done logic here
+            api_update('/task/done/', taskId).then(response => {
+                search();
+            });
         }
 
         function setToInitial(taskId) {
@@ -424,6 +398,7 @@
             const formData = new FormData(form);
 
             formData.append('_method', 'PATCH');
+
             api_update('/task/api', formData, id).then(response => {
                 search();
             });
@@ -449,12 +424,15 @@
 
         function set_finish(id)
         {
+            console.log(id);
+
             const formData = new FormData();
 
             formData.append('is_finished', 1)
 
             api_update('/task/set_finished', formData, id).then(response => {
                 search();
+                console.log('berhasil');
             });;
         }
 
