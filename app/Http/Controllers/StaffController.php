@@ -92,11 +92,9 @@ class StaffController extends Controller
                 ->where('instance_uuid', $user->uuid)
                 ->latest()
                 ->limit(5)
-<<<<<<< HEAD
-                // ->select('id', 'created_at', 'name', '')
-=======
+
                 ->select('id', 'created_at', 'name', 'created_by')
->>>>>>> refs/remotes/origin/gabungan
+
                 ->get();
 
             return view('staff.dashboard', compact('user', 'dataCount', 'notifications', 'groups'));
