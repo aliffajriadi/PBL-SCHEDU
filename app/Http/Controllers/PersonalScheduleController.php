@@ -130,7 +130,7 @@ class PersonalScheduleController extends Controller
             
             return response()->json([
                 'status' => true,
-                'message' => 'Schedule Updated Successfully',
+                'message' => 'Schedule Deleted Successfully',
             ]);
 
         }catch(\Exception $e) {

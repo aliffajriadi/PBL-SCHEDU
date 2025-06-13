@@ -95,6 +95,8 @@
         </div>
     </div>
 
+    <x-success></x-success>
+
 </x-layout>
 
 <!-- JavaScript untuk Dropdown -->
@@ -167,6 +169,9 @@
             document.getElementById('add-start-datetime').value = '';
             document.getElementById('add-end-datetime').value = '';
 
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
+
         });
 
         close_add_modal();
@@ -176,6 +181,8 @@
     {
         api_destroy('schedule/api', id).then(response => {
             search();
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
         });
     }
 
@@ -186,6 +193,8 @@
 
         api_update('/schedule/api', formData, id).then(response => {
             search();
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
         });
     }
 

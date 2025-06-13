@@ -119,8 +119,8 @@
                 </form>
             </div>
         </div>
-
         
+        <x-success></x-success>
 
     <style>
         /* Dropdown Animation */
@@ -387,9 +387,11 @@
 
             api_store('/task/api', formData).then(response => {
                 search();
+                close_modal('add-task-modal');
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
             });
 
-            close_modal('add-task-modal');
         }
 
         function update_data(id)
@@ -401,6 +403,8 @@
 
             api_update('/task/api', formData, id).then(response => {
                 search();
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
             });
 
             close_all_modal();
@@ -410,6 +414,8 @@
         {
             api_destroy('/task/api', id).then(response => {
                 search();
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
             });
         }
 

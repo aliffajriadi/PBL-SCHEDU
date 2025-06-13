@@ -175,6 +175,8 @@
         </div>
     @endif
 
+    <x-success></x-success>
+
     <!-- JavaScript untuk Pratinjau File, Modal Tambah, dan Modal Delete -->
     <script>
 
@@ -280,6 +282,9 @@
                 empty.classList.remove("hidden");
                 search();
 
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
+
             });
 
             closeAddNoteModal();
@@ -290,6 +295,8 @@
             api_destroy(`${path}/api`, note_picked).then(response => {
                 search();
 
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
             });
             closeDeleteModal();
 
@@ -314,6 +321,9 @@
             api_update(`${path}/api`, formData, note_picked).then(response => {
                 search();
                 show_data(note_picked);
+
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
             });
         }
 
@@ -321,6 +331,9 @@
         {
             api_destroy(`${path}/file`, stored_name).then(response => {
                 show_data(id);
+
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
             });
         }
 

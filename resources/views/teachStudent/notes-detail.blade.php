@@ -125,7 +125,7 @@
 
 
             api_store('/note/api', formData).then(response => {
-                if(response.status) open_success('Berhasil menambahkan catatan baru');
+                if(response.status) open_success(response.message);
                 else open_fail(response.message);
             });
             closeAddModal();
@@ -146,17 +146,23 @@
             
             const formData = new FormData(form);
 
-            api_update('/note/api', formData, id.value);
-            refresh_list();
+            api_update('/note/api', formData, id.value).then(response => {
+                closeModal();
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
+                refresh_list();
+            });
         
-            open_success();
+            // open_success();
 
-            closeModal();
         }
 
         function delete_data(id)
         {
             api_destroy('/note/api', id).then(response => {
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
+                
                 closeContent()
                 refresh_list();
             });

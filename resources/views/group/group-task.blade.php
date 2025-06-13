@@ -264,6 +264,8 @@
         </div>
     @endif
 
+    <x-success></x-success>
+
     <!-- JavaScript untuk Pratinjau File, Modal Tambah, Modal Unit, dan Modal Delete -->
     <script>
 
@@ -429,7 +431,11 @@
         }
 
         api_store(`${path}/s/${id}`, formData, true).then((response) => {
-            show_data(id)
+            show_data(id);
+
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
+
         });
     }
 
@@ -452,7 +458,9 @@
     function delete_submission(id, task_id)
     {
         api_destroy(`${path}/s`, id).then((response) => {
-            show_data(task_id)
+            show_data(task_id);
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
         });
 
     }
@@ -579,6 +587,8 @@
     {
         api_destroy(`${path}/file`, stored_name).then(response => {
             show_data(id);
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
         });
     }
 
@@ -587,10 +597,13 @@
         const form = document.getElementById('add-form');
         const formData = new FormData(form);
 
-        api_store(`${path}/api`, formData);
-
-        closeAddTaskModal();
-        reset_list();
+        api_store(`${path}/api`, formData).then(response => {
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
+            reset_list();
+            closeAddTaskModal();
+        });
+        
         
     }
 
@@ -599,16 +612,22 @@
         const form = document.getElementById('update-task');
         const formData =  new FormData(form);
 
-        api_update(`${path}/api`, formData, task_selected);
-        reset_list();
+        api_update(`${path}/api`, formData, task_selected).then(response => {
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
+            reset_list();
+        });
     }
 
     function delete_data()
     {
-        api_destroy(`${path}/api`, task_selected);
+        api_destroy(`${path}/api`, task_selected).then(response => {
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
+            closeDeleteModal();
+            reset_list();
+        });
 
-        closeDeleteModal();
-        reset_list();
     }
 
     function show_data(id)
@@ -631,7 +650,10 @@
         const form = button.closest('form');
         const formData = new FormData(form);
 
-        api_update(`${path}/s`, formData, formData.get('submission_id'));
+        api_update(`${path}/s`, formData, formData.get('submission_id')).then(response => {
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
+        });
     }
 
     </script>
