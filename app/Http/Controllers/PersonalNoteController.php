@@ -44,7 +44,7 @@ class PersonalNoteController extends Controller
             
             return response()->json([
                 'status' => true,
-                'datas' => $notes->get()
+                'datas' => $notes->paginate(1)
             ]);
             
         }catch(\Exception $e) {

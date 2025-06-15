@@ -106,6 +106,8 @@
         </div>
     @endif
 
+    <x-success></x-success>
+
     <!-- JavaScript untuk Modal -->
     <script>
 
@@ -132,6 +134,9 @@
             const formData = new FormData(form);
             api_store(`${path}/api`, formData).then(response => {
                 search();
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
+                
             });
         
             closeAddScheduleModal();
@@ -183,6 +188,9 @@
 
             api_update(`${path}/api`, formData, schedule_selected).then(response => {
                 search();
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
+                
             });
         
             closeEditScheduleModal();
@@ -192,6 +200,9 @@
         {
             api_destroy(`${path}/api`, schedule_selected).then(resposne => {
                 search();
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
+                
             });
             closeDeleteModal();
         }
@@ -246,5 +257,11 @@
                 modal.classList.add('hidden');
             };
         });
+
+        async function load_more_data()
+        {
+            if ()
+        }
+
     </script>
 </x-layout>
