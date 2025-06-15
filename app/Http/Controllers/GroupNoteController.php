@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class GroupNoteController extends Controller
 {
+    public function __construct()
+    {
+        NotificationController::refresh_notification();
+    }
+    
     public function home()
     {
         $role = session('role');
@@ -38,7 +43,7 @@ class GroupNoteController extends Controller
             }
 
             return response()->json([
-                'datas' => $notes->get()
+                'datas' => $notes->paginate(5)
             ]);
         }catch(\Exception $e){
             return response()->json([

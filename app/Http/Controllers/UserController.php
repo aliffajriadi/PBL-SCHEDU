@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
+use App\Models\GroupTask;
+use App\Models\GroupTaskSubmission;
+use App\Models\MemberOf;
+use App\Models\NotificationStatus;
 use App\Models\PersonalSchedule;
+use App\Models\PersonalTask;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -14,6 +20,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        NotificationController::refresh_notification();
+    }
+
     public function user_check(Request $request)
     {
         return response()->json([
@@ -21,73 +32,6 @@ class UserController extends Controller
             'staff' => Auth::guard('staff')->user(),
             'admin' => Auth::guard('admin')->user(),
         ]);
-    }
-
-    public function login_page()
-    {
-        if(Auth::user() !== null) redirect('/dashboard');
-
-        return view('login');
-    }
-
-    public function login(Request $request)
-    {
-        try {
-            if(Auth::user() !== null) redirect('/dashboard');
-
-            $credentials = $request->validate([
-                'email' => 'required',
-                'password' => 'required'
-            ]);
-
-            if (!Auth::attempt($credentials)) {
-                return redirect('/login');
-            }
-
-            $user = Auth::user();
-            session([
-                'role' => $user->is_teacher ? 'teacher' : 'student',
-                'notification_count' => $user->notification()->where('is_read', false)->count()
-            ]);
-
-            // return redirect('/dashboard');
-            $request->session()->regenerate();
-
-
-
-            return redirect('/dashboard');
-
-            // return response()->json([
-            //     'status' => true,
-            //     'message' => 'Login Successfully',
-            //     'data' => Auth::user(),
-            //     'role' => session('role')
-            // ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function logout(Request $request)
-    {
-        try {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Logout Successfully'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
     }
 
     public function insert_file(Request $request)
@@ -168,11 +112,34 @@ class UserController extends Controller
         $user = Auth::user();
         $user_data = [$user->name, $user->email];
     
-        return view('teachStudent.dashboard', [
-            'user' => $user, 
-            'user_data' => $user_data,
-            'schedules' => PersonalSchedule::where('user_uuid', $user->uuid)->get()
-        ]);
+        $notif = NotificationStatus::with('notification')->where('user_uuid', $user->uuid)->where('is_read', false);
+        $personal_task = PersonalTask::where('user_uuid', $user->uuid);
+
+        if($user->is_teacher === 0){
+            $total_group_task = GroupTask::whereIn('group_id', MemberOf::where('user_uuid', $user->uuid)->pluck('group_id'))->count();
+            $finished_group_task = GroupTaskSubmission::where('user_uuid', $user->uuid)->count();
+    
+            $data = [
+                'user' => $user, 
+                'user_data' => $user_data,
+                'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
+                'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count() + $total_group_task - $finished_group_task,
+                'f_task_count' => (clone $personal_task)->where('is_finished', true)->count() + $finished_group_task,
+                'notifications' => $notif->limit(3)->get(),
+                
+            ];
+        }else {
+            $data = [
+                'user' => $user, 
+                'user_data' => $user_data,
+                'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
+                'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count(),
+                'f_task_count' => (clone $personal_task)->where('is_finished', true)->count(),
+                'notifications' => $notif->limit(3)->get(),
+            ];
+        }
+
+        return view('teachStudent.dashboard',  $data);
     }
 
     public function profile()

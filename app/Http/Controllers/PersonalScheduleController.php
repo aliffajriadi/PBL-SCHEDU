@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class PersonalScheduleController extends Controller
 {
+    public function __construct()
+    {
+        NotificationController::refresh_notification();
+    }
+    
     public function home()
     {
         $user = Auth::user();
@@ -31,7 +36,8 @@ class PersonalScheduleController extends Controller
         }
 
         return response()->json([
-            'datas' => $schedules->get()
+        'datas' => $schedules->paginate(5),
+            'calendar' => $schedules->get()
         ]);
 
     }

@@ -69,6 +69,8 @@
         </div>
     </div>
 
+    <x-pagination></x-pagination>
+
     <!-- Modal untuk Join Group (Student) -->
     <div id="joinGroupModal" class="fixed inset-0 bg-gray-800/50 backdrop-blur-sm flex justify-center items-center z-50 hidden">
         <div class="p-6 bg-white rounded-2xl shadow-md w-full max-w-md">
@@ -134,8 +136,10 @@
         let schedule_count;
         let member_count;
 
+        max_page = groups.datas.last_page;
+
         parent.innerHTML = '';
-        groups.datas.forEach((group) => {
+        groups.datas.data.forEach((group) => {
             
             console.log(`{{asset('storage/app/public/${folder_name}/groups/${group.group_code}/${group.pic}')}}`);
             
@@ -192,7 +196,7 @@
     {
         const keyword = document.getElementById('search').value;
 
-        get_data(`/group/api?keyword=${keyword}`, show_data);
+        get_data(`/group/api?keyword=${keyword}&page=${current_page}`, show_data);
     }
 
     const userRole = "{{ $role }}"; // Menyematkan nilai $role ke variabel JavaScript

@@ -20,7 +20,7 @@
     <div class="flex flex-col md:flex-row gap-3 mt-3 pb-7 animate-fadeIn w-full">
         <!-- Note List Section -->
         <div class="bg-white p-3 w-full md:w-5/12 shadow-md rounded-2xl">
-            <h2 class="text-lg mb-4 font-semibold text-gray-800">Note List</h2>
+            <h2 class="text-lg mb-4 font-semibold text-gray-800">Scheudle List</h2>
             <div id="schedule-list" class="p-3 rounded-2xl h-96 overflow-auto">
                 @php
                     $notes = [
@@ -39,6 +39,7 @@
 
 
             </div>
+            <x-pagination></x-pagination>
         </div>
 
         <!-- Calendar Section -->
@@ -107,25 +108,28 @@
 
     function debounce_search()
     {
+        current_page = 1;
         debounce_refresh();
     }
 
     function search()
     {
         const keyword = document.getElementById('search').value;
-        get_data(`${path}/api?keyword=${keyword}`, show_list);   
+        get_data(`${path}/api?keyword=${keyword}&page=${current_page}`, show_list);   
     }
 
     search();
 
     function show_list(datas)
     {
-        const schedules = datas.datas;
+        const schedules = datas.datas.data;
 
         const parent = document.getElementById('schedule-list');
         parent.innerHTML = '';
 
-        set_calendar(schedules);
+        max_page = datas.datas.last_page;
+
+        set_calendar(datas.calendar);
 
         schedules.forEach((data, index) => {
             parent.innerHTML += `

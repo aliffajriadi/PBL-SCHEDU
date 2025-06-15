@@ -18,6 +18,7 @@
             <div id="note-list" class="flex flex-col gap-3 max-h-96 overflow-auto">
           
             </div>
+            <x-pagination></x-pagination>
         </div>
 
         <!-- Bagian Kanan: Detail Catatan -->
@@ -186,13 +187,14 @@
 
         function debounce_search()
         {
+            current_page = 1;
             debounce_refresh();
         }
 
         function search()
         {
             const keyword = document.getElementById('search').value;
-            get_data(`${path}/api?keyword=${keyword}`, show_list);   
+            get_data(`${path}/api?keyword=${keyword}&page=${current_page}`, show_list);   
         }
 
         search();
@@ -247,7 +249,9 @@
             const parent = document.getElementById('note-list');
             parent.innerHTML = '';
 
-            notes.datas.forEach((note) => {
+            max_page = notes.datas.last_page;
+
+            notes.datas.data.forEach((note) => {
                 parent.innerHTML += `
                     <div onclick="show_data(${note.id})"
                         class="block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50 transition-all duration-300">

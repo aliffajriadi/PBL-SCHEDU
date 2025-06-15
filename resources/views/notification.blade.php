@@ -6,7 +6,7 @@
             id="search" 
             placeholder="Search notifications..." 
             class="w-full sm:w-1/3 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all duration-300"
-            oninput="search()"
+            oninput="debounce_search()"
         />
         <button 
             onclick="location.href='/dashboard'"
@@ -56,6 +56,9 @@
 
                     
             </div>
+
+
+            <x-pagination></x-pagination>
         </div>
 
         <!-- Right Column: Preview -->
@@ -100,15 +103,17 @@
     <script>
 
         let search_type = '';
-        const debounce_search = debounce(call_data, 500);
+        const debounce_search = debounce(search, 500);
         const svg_img_personal = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>`;
         const svg_img_group = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>`;
 
 
-        function search()
+        function debounce_refresh()
         {
+            current_page = 1;
             debounce_search();
         }
+
 
         function getSearch() {
             const input = document.getElementById("search").value.toLowerCase();
@@ -121,8 +126,6 @@
             });
         }
 
-        search()
-
         @if($role !== 'staff')
 
         function delete_data(id)
@@ -134,9 +137,21 @@
             });
         }
 
-        function set_content(notif)
+        function set_content(notification)
         {
-            notif = notif.data
+            notif = notification.data.notification;
+
+            // console.log(notification.status)
+
+            notif_count = notification.notif_count;
+            if(notif_count === 0){
+                document.getElementById('notification-badge').classList.add('hidden');
+                document.getElementById('side-notif-badge').classList.add('hidden');
+            }else{
+                document.getElementById('notification-badge').innerHTML = notif_count;
+                document.getElementById('side-notif-badge').innerHTML = notif_count;
+            }
+
             document.getElementById('content-title').innerHTML = notif.title;
             document.getElementById('content-date').innerHTML = notif.created_at;
             document.getElementById('content-content').innerHTML = notif.content;
@@ -167,8 +182,9 @@
             let is_read;
 
             let datas = notifications.datas;
+            max_page = datas.last_page;
 
-            datas.forEach((notification, index) => {
+            datas.data.forEach((notification, index) => {
 
                 notif = notification.notification;
                 type = notif.group_id ? 'group' : 'personal';
@@ -207,13 +223,13 @@
             });
         }
 
-        function call_data()
+        function search()
         {   
             const query = `keyword=${document.getElementById('search').value}&type=${search_type}`; 
-            get_data(`/notification/api?${query}`, show_list);
+            get_data(`/notification/api?${query}&page=${current_page}`, show_list);
         }
         
-        call_data();
+        search();
 
         function filterNotifications(type) {
             const items = document.querySelectorAll(".notification-item");
@@ -302,7 +318,7 @@
                 });
             }
 
-            function call_data()
+            function search()
             {
                 const query = `keyword=${document.getElementById('search').value}&type=${search_type}`; 
                 get_data(`/staff/notifications?${query}`, show_list);

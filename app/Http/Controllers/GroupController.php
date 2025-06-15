@@ -98,12 +98,11 @@ class GroupController extends Controller
                             ELSE 3
                         END",
                         ["$keyword%", "%$keyword%"]);
-
             }
 
             return response()->json([
                 'status' => true,
-                'datas' => $groups->get(),
+                'datas' => $groups->paginate(6),
             ]);
         }catch(\Exception $e){
             return response()->json([

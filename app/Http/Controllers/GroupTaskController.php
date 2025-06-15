@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Gate;
 
 class GroupTaskController extends Controller
 {
+    public function __construct()
+    {
+        NotificationController::refresh_notification();
+    }
+    
     public function index(Request $request, Group $group)
     {
         try {
@@ -35,7 +40,7 @@ class GroupTaskController extends Controller
 
             return response()->json([
                 'status' => true,
-                'datas' => $unit->get(),
+                'datas' => $unit->paginate(3),
                 'keyword' => $keyword
             ]);
         } catch (\Exception $e) {

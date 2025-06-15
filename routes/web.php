@@ -21,20 +21,19 @@ use App\Http\Controllers\GroupScheduleController;
 use App\Http\Controllers\GroupTaskUnitController;
 use App\Http\Controllers\PersonalScheduleController;
 use App\Http\Controllers\GroupTaskSubmissionController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\StaffNotificationController;
 
 Route::get('user-check', [UserController::class, 'user_check']);
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [PublicController::class, 'index']);
+Route::get('/login', [PublicController::class, 'login_page']);
 
-Route::get('/login', [UserController::class, 'login_page']);
+Route::get('/login', [PublicController::class, 'login_page']);
 
-Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::post('/login', [PublicController::class, 'login'])->name('login');
 
 // User Routes
-Route::post('/submit-task/{group_task}', [GroupTaskSubmissionController::class, 'create']);
 
 Route::middleware('auth:web')->prefix('/')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);

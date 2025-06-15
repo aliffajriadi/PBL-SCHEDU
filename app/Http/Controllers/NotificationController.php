@@ -13,6 +13,21 @@ use Illuminate\Support\Facades\Gate;
 
 class NotificationController extends Controller
 {
+    public function __construct()
+    {
+        self::refresh_notification();
+    }
+
+    public static function refresh_notification()
+    {
+        session()->put('notification_count', Auth::user()->notification()->where('is_read', 'false')->whereHas('notification', 
+        function ($model)
+            {
+                $model->where('visible_schedule', '<=', Carbon::now('Asia/Jakarta')->toDateTimeString());  
+            })->count()
+        ); 
+    }
+
     public static function store($title, $content, $type, $item_id, $is_reminder, $visible_schedule, $group_id = null)
     {
         try{
@@ -78,9 +93,13 @@ class NotificationController extends Controller
         try {
             
 
-            $notifications = NotificationStatus::with('notification')->join('notifications', 'notification_statuses.notif_id', '=', 'notifications.id')->where('user_uuid', Auth::user()->uuid)->whereHas('notification', function ($model){
-                $model->where('visible_schedule', '<=', Carbon::now('Asia/Jakarta')->toDateTimeString());  
-            });
+            $notifications = NotificationStatus::with('notification')->
+                join('notifications', 'notification_statuses.notif_id', '=', 'notifications.id')->
+                where('user_uuid', Auth::user()->uuid)->
+                whereHas('notification', function ($model){
+                    $model->where('visible_schedule', '<=', Carbon::now('Asia/Jakarta')->toDateTimeString());  
+                }
+            );
 
             $keyword = $request->query('keyword') ?? false;
             $type = $request->query('type') ?? false;
@@ -112,7 +131,7 @@ class NotificationController extends Controller
             }
             return response()->json([
                 'status' => true,
-                'datas' => $notifications->get(),
+                'datas' => $notifications->paginate(5),
                 'keyword' => $keyword,
                 'carbon_now' => Carbon::now()->toDateTimeString()
             ]);
@@ -136,17 +155,19 @@ class NotificationController extends Controller
 
             if($status->is_read !== true){
                 $status_query->update(['is_read' => true]);
-                // $status->save();
                 
             }
 
-            $notif_data = Notification::where('id', $notification)->first();
-
-            session()->put('notification_count', Auth::user()->notification()->where('is_read', 'false')->count());
+            session()->put('notification_count', Auth::user()->notification()->where('is_read', 'false')->whereHas('notification', 
+            function ($model)
+                {
+                    $model->where('visible_schedule', '<=', Carbon::now('Asia/Jakarta')->toDateTimeString());  
+                })->count()
+            ); 
 
             return response()->json([
                 'status' => true,
-                'data' => $notif_data,
+                'data' => $status_query->with('notification')->first(),
                 'notif_count' => session('notification_count')
             ]);
 

@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PersonalNote;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 
 class PersonalNoteController extends Controller
 {
+    public function __construct()
+    {
+        NotificationController::refresh_notification();
+    }
+
     public function home()
     {
         $user = Auth::user();
@@ -35,16 +39,16 @@ class PersonalNoteController extends Controller
                 $notes = $notes->where('title', 'like', "%$keyword%")->orderByRaw(
                     "CASE
                             WHEN title LIKE ? THEN 1
-                            WHEN title LIKE ? THEN 3
+                            WHEN title LIKE ? THEN 2
                             ELSE 3
-                        END;",
+                        END",
                         ["$keyword%", "%$keyword%"]
                 );
             }
             
             return response()->json([
                 'status' => true,
-                'datas' => $notes->paginate(1)
+                'datas' => $notes->paginate(5)
             ]);
             
         }catch(\Exception $e) {

@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class PersonalTaskController extends Controller
 {
+    public function __construct()
+    {
+        NotificationController::refresh_notification();
+    }
+    
     public function home()
     {
          $user = Auth::user();

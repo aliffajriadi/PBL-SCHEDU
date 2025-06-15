@@ -11,7 +11,7 @@
             <div class="bg-white rounded-xl p-3 shadow-md hover:shadow-lg transition-all duration-300">
                 <div class="flex justify-between mb-3 items-center">
                     <h2 class="text-lg md:text-xl">My Account</h2>
-                    <a href=""><img src="assets/Vector 6.svg"
+                    <a href="/profile"><img src="assets/Vector 6.svg"
                             class="w-3 h-auto hover:w-4 transition-all duration-300 active:w-4" alt="accountpage"></a>
                 </div>
 
@@ -21,7 +21,7 @@
                         alt="profile">
                     <div class="ps-2 text-center sm:text-left mt-2 sm:mt-0">
                         <h4 class="text-lg md:text-xl"> {{ $user->name }} </h4>
-                        <p class="text-xs md:text-sm">Student SMP Negeri 7 Batam</p>
+                        <p class="text-xs md:text-sm">{{ $user->instance->instance_name }}</p>
                     </div>
                 </div>
 
@@ -30,17 +30,17 @@
                     <div
                         class="flex py-1 px-3 md:px-4 rounded-full border text-sm transition-all duration-300 border-emerald-600 hover:bg-emerald-300 active:bg-emerald-300">
                         <img src="assets/bx-task 2.svg" alt="task" class="w-3 md:w-4 h-auto">
-                        <a href="#" class="text-emerald-600 ml-1">Notes</a>
+                        <a href="/note" class="text-emerald-600 ml-1">Notes</a>
                     </div>
                     <div
                         class="flex py-1 px-3 md:px-4 rounded-full border text-sm transition-all duration-300 border-emerald-600 hover:bg-emerald-300 active:bg-emerald-300">
                         <img src="assets/bx-task 2.svg" alt="task" class="w-3 md:w-4 h-auto">
-                        <a href="#" class="text-emerald-600 ml-1">Task</a>
+                        <a href="/task" class="text-emerald-600 ml-1">Task</a>
                     </div>
                     <div
                         class="flex py-1 px-3 md:px-4 rounded-full items-center border text-sm transition-all duration-300 border-emerald-600 focus:bg-emerald-300 active:bg-emerald-300 hover:bg-emerald-300">
                         <img src="assets/bx-task 2.svg" alt="task" class="w-3 md:w-4 h-auto">
-                        <a href="#" class="text-emerald-600 ml-1">Schedule</a>
+                        <a href="/schedule" class="text-emerald-600 ml-1">Schedule</a>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
             <div class="bg-emerald-500 p-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                 <div class="flex justify-between mb-3 items-center text-white">
                     <h2 class="text-lg md:text-xl">My Task Progress</h2>
-                    <a href=""><img src="assets/Vector 6.svg"
+                    <a href="/task"><img src="assets/Vector 6.svg"
                             class="w-3 h-auto hover:w-4 transition-all duration-300 active:w-4" alt="accountpage"></a>
                 </div>
 
@@ -77,25 +77,18 @@
                 <h2 class="text-lg md:text-xl">Notification</h2>
             </div>
 
+
             <div class="space-y-2 md:space-y-3">
                 <!-- Notifikasi -->
-                <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
-                    <p class="text-gray-500 text-xs md:text-sm">Selasa 16 Agustus 2025</p>
-                    <p class="text-emerald-800 text-sm font-medium">[Group - A] Batas Waktu Pengumpulan</p>
-                </div>
+                @foreach ($notifications as $notif)
+                    <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
+                        <p class="text-gray-500 text-xs md:text-sm">{{ $notif->created_at }}</p>
+                        <p class="text-emerald-800 text-sm font-medium"> {{ $notif->notification->group_id === null ? '[Personal]' : '[Group]'}} {{ Str::limit($notif->notification->title, 30) }}</p>
+                    </div>  
+                @endforeach
 
-                <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
-                    <p class="text-gray-500 text-xs md:text-sm">Selasa 16 Agustus 2025</p>
-                    <p class="text-emerald-800 text-sm font-medium">[Personal]
-                        {{ Str::limit('Jadwal "Boker" Akan dimulai 1 hari lagi', 30) }}</p>
-                </div>
-
-                <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
-                    <p class="text-gray-500 text-xs md:text-sm">Selasa 16 Agustus 2025</p>
-                    <p class="text-emerald-800 text-sm font-medium">[Personal] Berhasil Mengedit Profil</p>
-                </div>
             </div>
-            <p class="text-xs md:text-sm mt-2 md:mt-3 text-white">You Have 16 Notification</p>
+            <p class="text-xs md:text-sm mt-2 md:mt-3 text-white">You Have {{ session('notification_count') }} Notification not readed</p>
         </div>
     </div>
 
@@ -103,7 +96,7 @@
     <div class="bg-white rounded-xl p-3 mt-3 mb-3 shadow-md hover:shadow-lg transition-all duration-300">
         <div class="flex justify-between mb-3 items-center">
             <h2 class="text-lg md:text-xl">My Schedule</h2>
-            <a href=""><img src="assets/Vector 6.svg"
+            <a href="/schedule"><img src="assets/Vector 6.svg"
                     class="w-3 h-auto hover:w-4 transition-all duration-300 active:w-4" alt="accountpage"></a>
         </div>
        
@@ -146,7 +139,7 @@
 
         // Panggil fungsi saat halaman selesai dimuat
         window.onload = function() {
-            updateProgress(5, 6); // Ubah disini untuk data nya nanti
+            updateProgress({{ $f_task_count }}, {{ $uf_task_count + $f_task_count }}); // Ubah disini untuk data nya nanti
         };
     </script>
 </x-layout>

@@ -12,6 +12,11 @@ use Carbon\Carbon;
 
 class GroupScheduleController extends Controller
 {
+    public function __construct()
+    {
+        NotificationController::refresh_notification();
+    }
+    
     public function home()
     {
         $role = session('role');
@@ -45,8 +50,9 @@ class GroupScheduleController extends Controller
             }
 
             return response()->json([
+                'calendar' => $schedules->get(),
+                'datas' => $schedules->paginate(1),
                 'status' => true,
-                'datas' => $schedules->get(),
             ]);
             
         }catch(\Exception $e){

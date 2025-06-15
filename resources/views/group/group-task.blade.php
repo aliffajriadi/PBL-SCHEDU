@@ -22,7 +22,7 @@
             </div>
 
             <div id="task-list" class="flex flex-col gap-3 max-h-96 overflow-auto"></div>
-
+            <x-pagination></x-pagination>
         </div>
 
         <!-- Kolom Kanan: Detail Tugas -->
@@ -277,13 +277,14 @@
 
         function debounce_search()
         {
+            current_page = 1;
             debounce_refresh();
         }
 
         function search()
         {
             const keyword = document.getElementById('search').value;
-            get_data(`${path}/api?keyword=${keyword}`, show_task_list);   
+            get_data(`${path}/api?keyword=${keyword}&page=${current_page}`, show_task_list);   
         }
 
     
@@ -372,8 +373,10 @@
     function show_task_list(units) {
         const parent = document.getElementById('task-list');
         parent.innerHTML = '';
+        max_page = units.datas.last_page;
 
-        units.datas.forEach(unit => {
+
+        units.datas.data.forEach(unit => {
             const wrapper = document.createElement('div');
             wrapper.className = 'bg-white border border-gray-200 rounded-md p-3';
 
