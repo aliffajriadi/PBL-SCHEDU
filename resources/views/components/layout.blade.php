@@ -28,7 +28,7 @@
 
     <!-- MOBILE NAVBAR -->
     <nav
-        class="flex justify-between px-6 bg-white fixed top-0 w-full left-0 py-2 shadow-md md:hidden items-center z-40">
+        class="flex justify-between px-6 bg-white/50 backdrop-blur-sm fixed top-0 w-full left-0 py-2 shadow-md md:hidden items-center z-40">
         <div>
             <button class="focus:outline-none" id="menuToggle" onclick="toggleMenu()">
                 <div class="flex flex-col justify-between h-6 w-8 transform transition-all duration-500">

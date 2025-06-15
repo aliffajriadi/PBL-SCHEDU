@@ -17,7 +17,8 @@
 
                 <div
                     class="bg-emerald-500 rounded-2xl py-4 md:rounded-full md:p-2 flex flex-col sm:flex-row items-center text-white">
-                    <img src="{{  $data['user']->profile_pic !== null ? asset('storage/' . $data['user']->instance->folder_name . '/' . $data['user']->profile_pic) : 'image/Ryan-Gosling.jpg'}}" class="w-20 h-20 md:w-14 md:h-14 border-yellow-300 border-2 rounded-full object-cover"
+                    <img src="{{  $data['user']->profile_pic !== null ? asset('storage/' . $data['user']->instance->folder_name . '/' . $data['user']->profile_pic) : 'image/Ryan-Gosling.jpg'}}"
+                        class="w-20 h-20 md:w-14 md:h-14 border-yellow-300 border-2 rounded-full object-cover"
                         alt="profile">
                     <div class="ps-2 text-center sm:text-left mt-2 sm:mt-0">
                         <h4 class="text-lg md:text-xl"> {{ $data['user']->name }} </h4>
@@ -65,8 +66,7 @@
         </div>
 
         <!-- Right section - full width on mobile, 5/12 on desktop -->
-        <div
-            class="w-full lg:w-5/12 bg-emerald-500 p-3 md:p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+        <div class="w-full lg:w-5/12 bg-emerald-500 p-3 md:p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
             <div class="flex items-center text-white mb-3">
                 <svg class="w-5 h-5 md:w-6 md:h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2"
                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -76,20 +76,43 @@
                 </svg>
                 <h2 class="text-lg md:text-xl">Notification</h2>
             </div>
-
-
+        
             <div class="space-y-2 md:space-y-3">
                 <!-- Notifikasi -->
-                @foreach ($data['notifications'] as $notif)
+                @forelse ($data['notifications'] as $notif)
                     <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
                         <p class="text-gray-500 text-xs md:text-sm">{{ $notif->created_at }}</p>
-                        <p class="text-emerald-800 text-sm font-medium"> {{ $notif->notification->group_id === null ? '[Personal]' : '[Group]'}} {{ Str::limit($notif->notification->title, 30) }}</p>
-                    </div>  
-                @endforeach
-
+                        <div class="flex items-center mb-1">
+                            @if($notif->notification->group_id === null)
+                                <!-- Personal Icon -->
+                                <svg class="w-4 h-4 mr-2 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            @else
+                                <!-- Group Icon -->
+                                <svg class="w-4 h-4 mr-2 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            @endif
+                            <span class="text-emerald-800 text-sm font-medium ml-1">
+                                {{ Str::limit($notif->notification->title, 30) }}
+                            </span>
+                        </div>
+                        <p class="text-gray-700 text-sm">{{ Str::limit($notif->notification->content, 50) }}
+                        </p>
+                    </div>
+                @empty
+                    <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
+                        <p class="text-gray-500 text-xs md:text-sm">No unread notifications</p>
+                    </div>
+                @endforelse
             </div>
-            <p class="text-xs md:text-sm mt-2 md:mt-3 text-white">You Have {{ session('notification_count') }} Notification not readed</p>
+        
+            <p class="text-xs justify-end items-end flex md:text-sm mt-2 md:mt-3 text-white">
+                You have {{ $data['count_notif'] }} unread notification{{ $data['count_notif'] == 1 ? '' : 's' }}.
+            </p>
         </div>
+
     </div>
 
     <!-- Schedule section - full width -->
@@ -99,12 +122,12 @@
             <a href="/schedule"><img src="assets/Vector 6.svg"
                     class="w-3 h-auto hover:w-4 transition-all duration-300 active:w-4" alt="accountpage"></a>
         </div>
-       
+
         <x-calender></x-calender>
     </div>
 
     <div class="bg-white rounded-xl p-3 mb-3 shadow-md hover:shadow-lg transition-all duration-300">
-        
+
     </div>
 
 
@@ -112,7 +135,7 @@
 
 
         document.addEventListener('DOMContentLoaded', function () {
-            set_calendar(@json($data['schedules']) )
+            set_calendar(@json($data['schedules']))
         });
 
         function updateProgress(doneTasks, totalTasks) {
@@ -138,7 +161,7 @@
         }
 
         // Panggil fungsi saat halaman selesai dimuat
-        window.onload = function() {
+        window.onload = function () {
             updateProgress({{ $data['f_task_count'] }}, {{ $data['uf_task_count'] + $data['f_task_count'] }}); // Ubah disini untuk data nya nanti
         };
     </script>

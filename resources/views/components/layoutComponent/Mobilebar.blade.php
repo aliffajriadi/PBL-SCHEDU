@@ -1,7 +1,7 @@
 @props(['role'])
 
 <aside id="menuMobile"
-    class="w-4/5 max-w-xs bg-emerald-500 text-white flex-col p-5 fixed z-50 md:hidden overflow-y-auto">
+    class="w-4/5 max-w-xs bg-emerald-500/80 backdrop-blur-sm text-white flex-col p-5 fixed z-50 md:hidden overflow-y-auto">
     <div class="flex justify-between items-center mb-6 pt-3">
         <img src="{{ asset('image/logowhite.png') }}" alt="logo" class="w-28 h-auto" />
         <button class="text-white" onclick="toggleMenu()">
