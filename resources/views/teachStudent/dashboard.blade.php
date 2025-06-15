@@ -1,4 +1,4 @@
-<x-layout title="Dashboard" role="teacher" :user="$user_data">
+<x-layout title="Dashboard" :role="$data['role']" :user="$data['user_data']">
     <!-- Main container with responsive padding -->
 
     {{-- @dd(session()->get('notification_count')) --}}
@@ -17,11 +17,11 @@
 
                 <div
                     class="bg-emerald-500 rounded-2xl py-4 md:rounded-full md:p-2 flex flex-col sm:flex-row items-center text-white">
-                    <img src="{{  $user->profile_pic !== null ? asset('storage/' . $user->instance->folder_name . '/' . $user->profile_pic) : 'image/Ryan-Gosling.jpg'}}" class="w-20 h-20 md:w-14 md:h-14 border-yellow-300 border-2 rounded-full object-cover"
+                    <img src="{{  $data['user']->profile_pic !== null ? asset('storage/' . $data['user']->instance->folder_name . '/' . $data['user']->profile_pic) : 'image/Ryan-Gosling.jpg'}}" class="w-20 h-20 md:w-14 md:h-14 border-yellow-300 border-2 rounded-full object-cover"
                         alt="profile">
                     <div class="ps-2 text-center sm:text-left mt-2 sm:mt-0">
-                        <h4 class="text-lg md:text-xl"> {{ $user->name }} </h4>
-                        <p class="text-xs md:text-sm">{{ $user->instance->instance_name }}</p>
+                        <h4 class="text-lg md:text-xl"> {{ $data['user']->name }} </h4>
+                        <p class="text-xs md:text-sm">{{ $data['user']->instance->instance_name }}</p>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
 
             <div class="space-y-2 md:space-y-3">
                 <!-- Notifikasi -->
-                @foreach ($notifications as $notif)
+                @foreach ($data['notifications'] as $notif)
                     <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
                         <p class="text-gray-500 text-xs md:text-sm">{{ $notif->created_at }}</p>
                         <p class="text-emerald-800 text-sm font-medium"> {{ $notif->notification->group_id === null ? '[Personal]' : '[Group]'}} {{ Str::limit($notif->notification->title, 30) }}</p>
@@ -112,7 +112,7 @@
 
 
         document.addEventListener('DOMContentLoaded', function () {
-            set_calendar(@json($schedules) )
+            set_calendar(@json($data['schedules']) )
         });
 
         function updateProgress(doneTasks, totalTasks) {
@@ -139,7 +139,7 @@
 
         // Panggil fungsi saat halaman selesai dimuat
         window.onload = function() {
-            updateProgress({{ $f_task_count }}, {{ $uf_task_count + $f_task_count }}); // Ubah disini untuk data nya nanti
+            updateProgress({{ $data['f_task_count'] }}, {{ $data['uf_task_count'] + $data['f_task_count'] }}); // Ubah disini untuk data nya nanti
         };
     </script>
 </x-layout>

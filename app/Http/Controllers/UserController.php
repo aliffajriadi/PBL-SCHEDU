@@ -121,25 +121,29 @@ class UserController extends Controller
     
             $data = [
                 'user' => $user, 
+                'role' => 'student',
                 'user_data' => $user_data,
                 'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
                 'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count() + $total_group_task - $finished_group_task,
                 'f_task_count' => (clone $personal_task)->where('is_finished', true)->count() + $finished_group_task,
                 'notifications' => $notif->limit(3)->get(),
+                'count_notif' =>$notif->count()
                 
             ];
         }else {
             $data = [
                 'user' => $user, 
+                'role' => 'teacher',
                 'user_data' => $user_data,
                 'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
                 'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count(),
                 'f_task_count' => (clone $personal_task)->where('is_finished', true)->count(),
                 'notifications' => $notif->limit(3)->get(),
+                'count_notif' =>$notif->count()
             ];
         }
 
-        return view('teachStudent.dashboard',  $data);
+        return view('teachStudent.dashboard',  compact('data'));
     }
 
     public function profile()
