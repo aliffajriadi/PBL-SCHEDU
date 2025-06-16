@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\GroupTask;
+use App\Models\GroupTaskSubmission;
 use App\Models\GroupTaskUnit;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -60,10 +61,13 @@ class GroupTaskController extends Controller
             $user->name, $user->email
         ];
     
+        $submissions = GroupTaskSubmission::where('user_uuid', $user->uuid)->orderByDesc('updated_at')->limit(3)->get();
+
         return view('group.group-task', [
             'role' => $role, 
             'user' => $user_data,
-            'unit_datas' => GroupTaskUnit::where('group_id', $group->id)->orderBy('created_at')->get()
+            'unit_datas' => GroupTaskUnit::where('group_id', $group->id)->orderBy('created_at')->get(),
+            'submissions' => $submissions
         ]);
     }
 

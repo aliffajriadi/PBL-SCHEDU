@@ -1,6 +1,7 @@
 <x-layout title="Group Dashboard" role="{{ $role }}" :user="$user">
     <x-nav-group type="name" page="dashboard" group_name="{{ $group->name }}"></x-nav-group>
 
+    {{-- @dd($schedules) --}}
 
     <section class="flex flex-col md:flex-row gap-2 mt-3">
         <div class="w-full md:w-7/12 flex flex-col gap-y-2">
@@ -74,7 +75,10 @@
                                 <p class="text-xs text-gray-500">Tenggat: {{ $task->deadline }}</p>
                             </div>
                         </div>
+
+                        @if($role === 'student')
                         <span class="text-xs bg-emerald-400 text-white px-2 py-1 rounded-full">Belum Selesai</span>
+                        @endif
                     </div>
                         
                     @endforeach
@@ -111,3 +115,7 @@
         <x-calender></x-calender>
     </div>
 </x-layout>
+
+<script>
+    set_calendar(@json($schedules))
+</script>

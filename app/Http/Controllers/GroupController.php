@@ -49,7 +49,16 @@ class GroupController extends Controller
     
         $note = GroupNote::where('group_id', $id);
         $schedule = GroupSchedule::where('group_id', $id);
+        
         $task = GroupTask::where('group_id', $id);
+        
+        if($role === 'student'){
+            $task->whereDoesntHave('submission', function ($query) use ($user) {
+                $query->where('user_uuid', $user->uuid);
+            });
+        }
+
+
 
         $members = MemberOf::with(['user:uuid,name'])->where('group_id', $id)->limit(5)->get();
 
@@ -63,7 +72,7 @@ class GroupController extends Controller
             'schedule_total' => $schedule->count(),
             'notes' => $note->orderBy('updated_at', 'DESC')->limit(3)->get(),
             'tasks' => $task->orderBy('updated_at', 'DESC')->limit(3)->get(),
-            'schedules' => $schedule->orderBy('updated_at', 'DESC')->limit(3)->get()
+            'schedules' => $schedule->get()
         ]);
     }
 

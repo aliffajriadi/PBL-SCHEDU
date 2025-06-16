@@ -30,7 +30,7 @@
                     @method('PUT') --}}
                     <input id="title" type="text" name="title" value="aaaa" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <textarea id="content" name="content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="6" required></textarea>
-                    <input id="update-file" type="file" name="files[]" multiple class="mb-2 p-2 border border-gray-200 rounded-lg w-full">
+                    <input id="update-file" type="file" name="file" class="mb-2 p-2 border border-gray-200 rounded-lg w-full">
                     <div class="mt-2">
                         <p class="text-sm font-medium text-gray-700">File:</p>
                         <ul id="content-files" class="list-disc pl-5 text-sm text-gray-600">
@@ -49,14 +49,14 @@
                 <!-- Tampilan untuk Murid (Hanya Baca) -->
                 <div id="note-content" class="hidden">
                     <h3 id="title" class="text-xl font-bold text-gray-800 mb-2">a</h3>
-                    <p  class="text-sm text-gray-500 mb-4">Created at: a</p>
+                    <p class="text-sm text-gray-500 mb-4">Created at: a</p>
                     <div class="mt-2">
                         <p class="text-sm font-medium text-gray-700">File:</p>
                         <ul id="content-files" class="list-disc pl-5 text-sm text-gray-600">
  
                         </ul>
                     </div>
-                    <p id="content" class="text-gray-700 mb-6">x</p>
+                    <p id="content" class="text-gray-700 mb-6"></p>
                 </div>
             @endif
             {{-- @if(!empty($note['attachments']))
@@ -83,35 +83,16 @@
     <!-- Bagian Riwayat Catatan -->
     <section class="bg-white rounded-2xl shadow-md p-4 w-full mt-3">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Note History</h3>
-        @php
-            $history = [
-                [
-                    'title' => 'Nasi Padang',
-                    'action' => 'Created',
-                    'timestamp' => '2025-04-14 10:00',
-                    'details' => 'Catatan tentang resep Nasi Padang dibuat.',
-                ],
-                [
-                    'title' => 'Nasi Goreng',
-                    'action' => 'Created',
-                    'timestamp' => '2025-04-14 08:00',
-                    'details' => 'Catatan tentang nasi goreng dibuat.',
-                ],
-                [
-                    'title' => 'Sate Ayam',
-                    'action' => 'Updated',
-                    'timestamp' => '2025-04-13 15:30',
-                    'details' => 'Menambahkan tips baru untuk sate ayam.',
-                ],
-            ];
-        @endphp
-        @if(!empty($history))
+
+
+
+        @if(!empty($latest_notes))
             <div class="flex flex-col gap-3 max-h-96 overflow-auto">
-                @foreach($history as $entry)
+                @foreach($latest_notes as $note)
                     <div class="bg-white border border-gray-200 rounded-md p-3">
-                        <p class="text-gray-800 font-medium">{{ $entry['title'] }} - {{ $entry['action'] }}</p>
-                        <p class="text-sm text-gray-500">Timestamp: {{ $entry['timestamp'] }}</p>
-                        <p class="text-sm text-gray-600 mt-1">{{ $entry['details'] }}</p>
+                        <p class="text-gray-800 font-medium">{{ $note['title'] }} - {{ strcmp($note['created_at'], $note['updated_at']) === 0 ? 'Created' : 'Updated'}}</p>
+                        <p class="text-sm text-gray-500">Timestamp: {{ $note['created_at'] }}</p>
+                        <p class="text-sm text-gray-600 mt-1">{{ $note['content'] }}</p>
                     </div>
                 @endforeach
             </div>
@@ -150,10 +131,8 @@
                 </form>
             </div>
         </div>
-    @endif
 
     <!-- Modal Konfirmasi Delete (Hanya untuk Guru) -->
-    @if($role === 'teacher')
         <div id="delete-modal" class="hidden fixed inset-0 bg-slate-50/50 shadow-md backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus Catatan</h3>
@@ -208,14 +187,21 @@
                 const note = data.data;
                 const files = data.files;
 
+                console.log(note.id);
+
                 document.getElementById('note-null').classList.add('hidden');
                 document.getElementById('note-content').classList.remove('hidden');
-                document.getElementById('update-file').value = '';
-                document.getElementById('delete-button').onclick = () => {
-                    openDeleteModal(data.id, data.title)
-                };
 
                 if('{{$role}}' === 'teacher'){
+                    const update_file = document.getElementById('update-file');
+                    update_file.value = '';
+                    update_file.onchange = () => {
+                        new_file(note.id);
+                    }
+
+                    document.getElementById('delete-button').onclick = () => {
+                        openDeleteModal(note.id, note.title)
+                    };
                     title.value = note.title;
                     content.value = note.content;
                 }else{
@@ -266,6 +252,34 @@
 
         }
 
+        function new_file(id)
+        {
+            const formData = new FormData();
+            const file_input = document.getElementById('update-file');
+            
+            if(file_input.files.length > 0){
+                formData.append('file', file_input.files[0]);
+            }
+            
+            api_update(`${path}/file`, formData, id).then(response => {
+                if(response.status === true){
+                    open_success(response.message);
+                    document.getElementById('content-files').innerHTML += `
+                        <li>
+                                        <a href="${path}/file/${response.stored_name}" target="_blank" class="text-emerald-400 hover:underline">
+                                            ${response.original_name}
+                                        </a>
+                                        <button type="button" onclick="delete_file('${response.stored_name}', ${response.id})"> <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg></button>
+                                    </li>
+                    `
+                }
+            });
+        
+            file_input.value = '';
+        }
+
         function insert_data()
         {
             const form = document.getElementById('add-note-form');
@@ -279,7 +293,7 @@
                 console.log(`${key}: ${value}`);
             }
 
-            api_store(path + '/api', formData, file = true).then((response) =>{
+            api_store(path + '/api', formData).then((response) =>{
                 document.getElementById("gallery").innerHTML = '';
                 document.getElementById("hidden-input").value = '';
                 FILES = {};

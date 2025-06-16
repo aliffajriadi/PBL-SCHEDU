@@ -45,7 +45,7 @@
 
     <!-- using two similar templates for simplicity in js code -->
     <template id="file-template">
-      <li class="block p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/8 h-24">
+      <li class="block p-1 w-1/2 sm:w-1/3 h-24">
         <article tabindex="0" class="group w-full h-full rounded-md focus:outline-none focus:shadow-outline elative bg-gray-100 cursor-pointer relative shadow-sm">
           <img alt="upload preview" class="img-preview hidden w-full h-full sticky object-cover rounded-md bg-fixed" />
 

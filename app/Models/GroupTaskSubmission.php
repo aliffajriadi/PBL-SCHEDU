@@ -19,4 +19,9 @@ class GroupTaskSubmission extends Model
     {
         return $this->morphMany(TaskFileSubmission::class, 'fileable');
     }
+
+    public function task()
+    {
+        return $this->belongsTo(GroupTask::class, 'group_task_id', 'id');
+    }
 }

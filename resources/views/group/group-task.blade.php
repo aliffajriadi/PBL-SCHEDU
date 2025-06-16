@@ -1,6 +1,10 @@
 <x-layout title="Group Task" role="{{ $role }}" :user="$user">
     <x-nav-group type="search" page="tasks"></x-nav-group>
 
+    @php
+        $url = request()->url();
+    @endphp
+
     <!-- Konten Utama -->
     <section class="flex flex-col lg:flex-row mt-3 gap-4">
         <!-- Kolom Kiri: Daftar Tugas -->
@@ -93,7 +97,7 @@
     <section class="bg-white rounded-2xl shadow-md p-4 w-full mt-3">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">History Task</h3>
         @php
-            $submissions = [
+            $submissions2 = [
                 [
                     'task_id' => 1,
                     'student_name' => 'Andi Pratama',
@@ -133,12 +137,7 @@
         @endphp
 
         @if($role === 'teacher')
-            @php
-                $taskId = request()->query('task');
-                $filteredSubmissions = array_filter($submissions, function($submission) use ($taskId) {
-                    return $submission['task_id'] == $taskId;
-                });
-            @endphp
+            
                 <span id="history-title"></span>
 
                 <div id="submission-list" class="flex flex-col gap-3 max-h-96 overflow-auto">
@@ -152,15 +151,15 @@
             <div class="flex flex-col gap-3 max-h-96 overflow-auto">
                 @foreach($submissions as $submission)
                     <div class="bg-white border border-gray-200 rounded-md p-3">
-                        <p class="text-gray-800 font-medium">{{ $submission['title'] }}</p>
-                        <p class="text-sm text-gray-500">Dikumpulkan: {{ $submission['submitted_at'] }}</p>
+                        <p class="text-gray-800 font-medium">{{ $submission->task->title }}</p>
+                        <p class="text-sm text-gray-500">Dikumpulkan: {{ $submission['updated_at'] }}</p>
                         <div class="mt-2">
                             <p class="text-sm font-medium text-gray-700">File:</p>
                             <ul class="list-disc pl-5 text-sm text-gray-600">
-                                @foreach($submission['files'] as $file)
+                                @foreach($submission->file as $file)
                                     <li>
-                                        <a href="{{ asset('storage/' . $file['path']) }}" target="_blank" class="text-emerald-400 hover:underline">
-                                            {{ $file['name'] }}
+                                        <a href="{{ $url }}/file/{{ $file->stored_name }}" target="_blank" class="text-emerald-400 hover:underline">
+                                            {{ $file['original_name'] }}
                                         </a>
                                     </li>
                                 @endforeach
@@ -215,10 +214,8 @@
                 </form>
             </div>
         </div>
-    @endif
 
     <!-- Modal Tambah Unit (Hanya untuk Guru) -->
-    @if($role === 'teacher')
         <div id="add-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Unit Baru</h3>
@@ -238,10 +235,8 @@
                 </form>
             </div>
         </div>
-    @endif
 
     <!-- Modal Konfirmasi Delete (Hanya untuk Guru) -->
-    @if($role === 'teacher')
         <div id="delete-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus Tugas</h3>

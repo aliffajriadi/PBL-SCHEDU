@@ -16,7 +16,7 @@ class GroupNoteController extends Controller
         NotificationController::refresh_notification();
     }
     
-    public function home()
+    public function home(Request $request, Group $group)
     {
         $role = session('role');
         $user = Auth::user();
@@ -24,9 +24,12 @@ class GroupNoteController extends Controller
             $user->name, $user->email
         ];
 
+        $latest_notes = GroupNote::where('group_id', $group->id)->orderByDesc('created_at')->limit(3)->get();
+
         return view('group.group-notes', [
             'role' => $role, 
-            'user' => $user_data
+            'user' => $user_data,
+            'latest_notes' => $latest_notes
         ]);
     }
 
@@ -231,6 +234,43 @@ class GroupNoteController extends Controller
                 'status'=> true, 
                 'message' => 'File deleted successfully'
             ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function upload_file(Request $request, string $group, GroupNote $note)
+    {
+        try{
+            $request->validate([
+                'file' => 'required|file' 
+            ]);
+    
+            $folder_name = Auth::user()->instance->folder_name;
+            $file = $request->file('file');
+    
+            $task_file = TaskFileSubmission::create([
+                'original_name' => $file->getClientOriginalName(),
+                'fileable_type' => GroupNote::class,
+                'fileable_id' => $note->id
+            ]);
+    
+            $task_file->stored_name = $task_file->id . '.' . $file->getClientOriginalExtension();
+            $task_file->save();
+    
+            $file->storeAs("{$folder_name}/groups/{$group}" , $task_file->stored_name, 'public');
+
+            return response()->json([
+                'status' => true,
+                'stored_name' =>$task_file->stored_name,
+                'original_name' => $task_file->original_name,
+                'id' => $task_file->id, 
+                'message' => 'New File Added Successfully'
+            ]);
+
         }catch(\Exception $e){
             return response()->json([
                 'status' => false,
