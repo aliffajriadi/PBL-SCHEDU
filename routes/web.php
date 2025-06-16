@@ -36,7 +36,7 @@ Route::post('/login', [PublicController::class, 'login'])->name('login');
 // User Routes
 
 Route::middleware('auth:web')->prefix('/')->group(function () {
-    Route::post('/logout', [UserController::class, 'logout']);
+    Route::post('/logout', [PublicController::class, 'logout']);
 
     Route::get('/dashboard', [UserController::class, 'home']);
 
