@@ -82,6 +82,8 @@
                 @forelse ($data['notifications'] as $notif)
                     <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
                         <p class="text-gray-500 text-xs md:text-sm">{{ $notif->created_at }}</p>
+                        {{-- <p class="text-emerald-800 text-sm font-medium"> {{ $notif->notification->group_id === null ? '[Personal]' : '[Group]'}} {{ Str::limit($notif->notification->title, 30) }}</p> --}}
+
                         <div class="flex items-center mb-1">
                             @if($notif->notification->group_id === null)
                                 <!-- Personal Icon -->
