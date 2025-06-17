@@ -1,7 +1,7 @@
 <div id="calendar" class="rounded-lg overflow-hidden bg-white w-full animate-fadeIn"></div>
 
 <!-- Event Modal -->
-<div id="eventModal" class="hidden fixed inset-0 bg-gray-500/50 backdrop-blur-sm flex items-center justify-center z-50">
+<div id="eventModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
   <div class="bg-white rounded-xl p-4 sm:p-6 max-w-md w-full mx-4 shadow-xl animate-modalIn opacity-0">
     <div class="flex justify-between items-center mb-4">
       <h2 id="eventTitle" class="text-lg sm:text-xl font-bold text-emerald-600"></h2>

@@ -22,10 +22,18 @@
         }
 
         .navbar-white {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.5);
+            /* putih transparan */
+            backdrop-filter: blur(4px);
+            /* efek blur */
+            -webkit-backdrop-filter: blur(4px);
+            /* dukungan Safari */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s ease;
+            /* bayangan */
+            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.5s ease;
         }
+
 
         /* Animation Keyframes */
         @keyframes fadeInRight {
@@ -33,6 +41,7 @@
                 opacity: 0;
                 transform: translateX(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -44,6 +53,7 @@
                 opacity: 1;
                 transform: translateX(0);
             }
+
             to {
                 opacity: 0;
                 transform: translateX(50px);
@@ -55,6 +65,7 @@
                 opacity: 0;
                 transform: translateX(-50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -66,6 +77,7 @@
                 opacity: 1;
                 transform: translateX(0);
             }
+
             to {
                 opacity: 0;
                 transform: translateX(-50px);
@@ -77,6 +89,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -88,6 +101,7 @@
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -99,6 +113,7 @@
                 transform: scale(0.8);
                 opacity: 0;
             }
+
             to {
                 transform: scale(1);
                 opacity: 1;
@@ -160,10 +175,12 @@
                 transform: translateY(0) translateX(0);
                 opacity: 0.3;
             }
+
             50% {
                 transform: translateY(-100px) translateX(50px);
                 opacity: 0.6;
             }
+
             100% {
                 transform: translateY(0) translateX(0);
                 opacity: 0.3;
@@ -219,6 +236,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -302,7 +320,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 128, 0, 0.95); /* Green background matching theme */
+            background: rgba(0, 128, 0, 0.95);
+            /* Green background matching theme */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -323,10 +342,13 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
                 opacity: 0.8;
             }
+
             50% {
                 transform: scale(1.2);
                 opacity: 1;
@@ -370,10 +392,12 @@
                 transform: translateY(0) translateX(0);
                 opacity: 0.4;
             }
+
             50% {
                 transform: translateY(-50px) translateX(30px);
                 opacity: 0.8;
             }
+
             100% {
                 transform: translateY(0) translateX(0);
                 opacity: 0.4;
@@ -705,7 +729,7 @@
         // Smooth Scroll for Nav Links
         document.querySelectorAll("nav a").forEach((anchor) => {
             anchor.addEventListener("click", function (e) {
-               // e.preventDefault();
+                // e.preventDefault();
                 const targetId = this.getAttribute("href").substring(1);
                 document.getElementById(targetId).scrollIntoView({
                     behavior: "smooth",
@@ -785,7 +809,7 @@
                     loader.classList.add("hidden");
                     body.classList.remove("loading");
                 }, 0);
-                
+
             });
         });
     </script>
