@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff', function (Blueprint $table) {
+        Schema::create('instances', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
             $table->string('email')->unique();
             $table->char('folder_name', 6)->unique();

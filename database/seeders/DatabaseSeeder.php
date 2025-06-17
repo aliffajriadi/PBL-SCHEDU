@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Instance;
 use App\Models\PersonalNote;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,7 +19,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             AdminSeeder::class,
-            StaffSeeder::class
+            InstanceSeeder::class
         ]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Group;
-use App\Models\Staff;
+use App\Models\Instance;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,14 +19,14 @@ class AdminController extends Controller
     public function index()
     {
         $user = Auth::guard('admin')->user();
-        $getStaff = Staff::latest()->limit(10)->get();
+        $getInstance = Instance::latest()->limit(10)->get();
         $dataCount = [
             'student' => User::where('is_teacher', 0)->count(),
             'teacher' => User::where('is_teacher', 1)->count(),
-            'instantiate' => Staff::count(),
+            'instantiate' => Instance::count(),
             'group' => Group::count(),
         ];
-        return view('admin.dashboard', compact('user', 'getStaff', 'dataCount'));
+        return view('admin.dashboard', compact('user', 'getInstance', 'dataCount'));
     }
     public function login(Request $request)
     {
@@ -63,7 +63,7 @@ class AdminController extends Controller
         try {
             $user = Auth::guard('admin')->user();
             $search = request('search');
-            $institutions = Staff::latest()
+            $institutions = Instance::latest()
                 ->when($search, function ($query, $search) {
                     return $query->where('instance_name', 'like', "%{$search}%");
                 })

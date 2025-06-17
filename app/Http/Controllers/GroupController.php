@@ -9,7 +9,7 @@ use App\Models\GroupSchedule;
 use App\Models\GroupTask;
 use App\Models\MemberOf;
 use App\Models\GroupTaskUnit;
-
+use App\Models\InstanceNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
@@ -160,7 +160,7 @@ class GroupController extends Controller
                 'created_by' => Auth::user()->uuid
             ]);
 
-            StaffNotificationController::store(
+            InstanceNotificationController::store(
                 'Grup dibuat', 
                 "Sebuah grup dengan nama {$field['name']} telah dibuat oleh {$user->name}", 
                 $user->instance_uuid
@@ -227,7 +227,7 @@ class GroupController extends Controller
 
             $group->delete();
 
-            StaffNotificationController::store(
+            InstanceNotificationController::store(
                 'Grup dihapus', 
                 "Sebuah grup dengan nama {$group->name} telah dihapus oleh {$user->name}", 
                 $user->instance_uuid

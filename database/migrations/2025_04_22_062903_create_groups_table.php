@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->char('group_code', 6)->unique();
             $table->uuid('instance_uuid');
-            $table->foreign('instance_uuid')->references('uuid')->on('staff')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('instance_uuid')->references('uuid')->on('instances')->onDelete('cascade')->onUpdate('cascade');
             $table->text('pic')->nullable();
             $table->uuid('created_by');
             $table->foreign('created_by')->references('uuid')->on('users');

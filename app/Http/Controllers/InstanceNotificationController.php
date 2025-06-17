@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StaffNotification;
+use App\Models\InstanceNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class StaffNotificationController extends Controller
+class InstanceNotificationController extends Controller
 {
     public static function store(string $title, string $description, string $instance_uuid)
     {
-        StaffNotification::create([
-            'staff_uuid' => $instance_uuid,
+        InstanceNotification::create([
+            'instance_uuid' => $instance_uuid,
             'title' => $title,
             'description' => $description
         ]);
@@ -31,7 +31,7 @@ class StaffNotificationController extends Controller
         try {
             $user = Auth::guard('staff')->user();
 
-            $notifications = StaffNotification::where('staff_uuid', $user->uuid);
+            $notifications = InstanceNotification::where('staff_uuid', $user->uuid);
 
             $keyword = $request->query('keyword') ?? false;
             
@@ -63,7 +63,7 @@ class StaffNotificationController extends Controller
     
     }
 
-    public function destroy(StaffNotification $notification)
+    public function destroy(InstanceNotification $notification)
     {
         try{
             $notification->delete();
@@ -80,7 +80,7 @@ class StaffNotificationController extends Controller
         }
     }
 
-    public function show(StaffNotification $notification)
+    public function show(InstanceNotification $notification)
     {
         try{
 

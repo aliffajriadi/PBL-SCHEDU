@@ -7,18 +7,18 @@ use Illuminate\Database\Seeder;
 
 use Illuminate\Support\Str;
 
-use App\Models\Staff;
+use App\Models\Instance;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class StaffSeeder extends Seeder
+class InstanceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $staff = Staff::create([
+        $staff = Instance::create([
             'email' => 'sma2@gmail.com',
             'password' => Hash::make('password'),
             'instance_name' => 'SMA 2 NEGERI BATAM',

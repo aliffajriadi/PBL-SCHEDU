@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StaffNotification extends Model
+class InstanceNotification extends Model
 {
     protected $fillable = [
         'staff_uuid', 'title', 'description', 'is_readed'
@@ -12,7 +12,7 @@ class StaffNotification extends Model
 
     public function staff()
     {
-        return $this->belongsTo(Staff::class, 'staff_uuid', 'uuid');
+        return $this->belongsTo(Instance::class, 'staff_uuid', 'uuid');
     }
 
 }

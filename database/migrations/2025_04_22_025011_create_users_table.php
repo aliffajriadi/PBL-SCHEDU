@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('birth_date');
             $table->boolean('is_teacher');
             $table->uuid('instance_uuid');
-            $table->foreign('instance_uuid')->references('uuid')->on('staff')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('instance_uuid')->references('uuid')->on('instances')->onDelete('cascade')->onUpdate('cascade');
             $table->string('profile_pic')->nullable();
 
             // $table->foreignId('instance_id')->constrained(

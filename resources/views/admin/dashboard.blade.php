@@ -80,12 +80,12 @@
                     </tr>
                 </thead>
                 <tbody class="text-sm text-gray-600">
-                    @foreach ($getStaff as $staff)
+                    @foreach ($getInstance as $instance)
                     <tr class="hover:bg-emerald-50 transition-colors">
                         <td class="p-3 border-b border-gray-100">{{ $loop->iteration }}</td>
-                        <td class="p-3 border-b border-gray-100">{{ $staff->instance_name }}</td>
-                        <td class="p-3 border-b border-gray-100">{{ $staff->email }}</td>
-                        <td class="p-3 border-b border-gray-100">{{ $staff->phone_no }}</td>
+                        <td class="p-3 border-b border-gray-100">{{ $instance->instance_name }}</td>
+                        <td class="p-3 border-b border-gray-100">{{ $instance->email }}</td>
+                        <td class="p-3 border-b border-gray-100">{{ $instance->phone_no }}</td>
                         
                     </tr>
                     @endforeach

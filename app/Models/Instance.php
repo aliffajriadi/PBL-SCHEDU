@@ -12,14 +12,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 
-class Staff extends Authenticatable
+class Instance extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\StaffFactory> */
+    /** @use HasFactory<\Database\Factories\InstanceFactory> */
     use HasFactory;
 
     protected $primaryKey = 'uuid';
     public $incrementing = false;
     protected $keyType = 'string';
+
+    protected $table = 'instances';
 
     protected static function boot()
     {
@@ -43,5 +45,10 @@ class Staff extends Authenticatable
     public function group()
     {
         return $this->hasMany(Group::class, 'instance_uuid', 'uuid');
+    }
+
+    public function notification()
+    {
+        return $this->hasMany(InstanceNotification::class, 'staff_uuid', 'uuid');
     }
 }

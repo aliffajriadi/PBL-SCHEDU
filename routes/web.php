@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\StaffController;
+use App\Http\Controllers\InstanceController;
 use App\Http\Controllers\MemberOfController;
 
 use App\Http\Controllers\GroupNoteController;
@@ -22,7 +22,7 @@ use App\Http\Controllers\GroupTaskUnitController;
 use App\Http\Controllers\PersonalScheduleController;
 use App\Http\Controllers\GroupTaskSubmissionController;
 use App\Http\Controllers\PublicController;
-use App\Http\Controllers\StaffNotificationController;
+use App\Http\Controllers\InstanceNotificationController;
 
 Route::get('user-check', [UserController::class, 'user_check']);
 
@@ -164,9 +164,10 @@ Route::prefix('/admin')->middleware('admin')->controller(AdminController::class)
     Route::get('/instatiate', 'instatiate')->name('instantiate_manage');
 });
 
-Route::prefix('/admin')->middleware('admin')->controller(StaffController::class)->group(function(){
+Route::prefix('/admin')->middleware('admin')->controller(InstanceController::class)->group(function(){
     Route::post('/instantiate-store', 'store')->name('store-instantiate');
     Route::delete('/staffs/{staff}', 'destroy');
+    Route::patch('/staffs/{instance}', 'admin_update');
 });
 
 
@@ -180,12 +181,12 @@ Route::prefix('/admin')->middleware('admin')->controller(StaffController::class)
 
 
 //STAFF NON MIDDLEWARE / FOR PUBLIC GUEST
-Route::get('/staff/login', [StaffController::class, 'view_login']);
-Route::post('/staff/login', [StaffController::class, 'login']);
+Route::get('/staff/login', [InstanceController::class, 'view_login']);
+Route::post('/staff/login', [InstanceController::class, 'login']);
 
 //ROUTE FOR WITH MIDDLEWARE STAFF
 Route::prefix('/staff')->middleware('staff')->group(function () {
-    Route::controller(StaffController::class)->group(function(){
+    Route::controller(InstanceController::class)->group(function(){
         Route::get('/dashboard', 'dashboard');
         Route::get('/group', 'view_group');
         Route::get('/account', 'view_account');
@@ -202,9 +203,9 @@ Route::prefix('/staff')->middleware('staff')->group(function () {
     Route::post('/account/insert-file', [UserController::class, 'insert_file']);
     Route::resource('/user', UserController::class);
 
-    Route::get('/notification', [StaffNotificationController::class, 'home']);
+    Route::get('/notification', [InstanceNotificationController::class, 'home']);
 
-    Route::apiResource('/notifications', StaffNotificationController::class);
+    Route::apiResource('/notifications', InstanceNotificationController::class);
 
 });
 

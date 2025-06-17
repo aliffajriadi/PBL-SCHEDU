@@ -176,7 +176,7 @@
     <div id="editInstitutionModal" class="fixed inset-0 bg-gray-900/50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md animate-slide-down">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Edit Institution</h3>
-            <form action="" method="POST">
+            <form id="edit_form" action="" method="POST">
                 @csrf
                 @method('PATCH')
                 <input type="hidden" id="edit_institution_id" name="institution_id" />
@@ -192,7 +192,7 @@
                 <div class="mb-4">
                     <label for="edit_instance_name" class="block text-sm font-medium text-gray-700">Institution
                         Name</label>
-                    party <input type="text" id="edit_instance_name" name="instance_name" required
+                    <input type="text" id="edit_instance_name" name="instance_name" required
                         class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300"
                         placeholder="Enter institution name" />
                     @error('instance_name')
@@ -271,7 +271,10 @@
             document.getElementById('edit_email').value = email;
             document.getElementById('edit_address').value = address;
             document.getElementById('edit_phone_no').value = phone_no;
+            document.getElementById('edit_form').action = `/admin/staffs/${id}`;
             document.getElementById('editInstitutionModal').classList.remove('hidden');
+
+
         }
 
         function showDeleteModal(id, name) {

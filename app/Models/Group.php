@@ -12,7 +12,7 @@ class Group extends Model
 
     public function instance()
     {
-        return $this->belongsTo(Staff::class, 'instance_uuid', 'uuid');
+        return $this->belongsTo(Instance::class, 'instance_uuid', 'uuid');
     }
 
     // public function user(){
