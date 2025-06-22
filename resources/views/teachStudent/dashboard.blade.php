@@ -79,6 +79,11 @@
         
             <div class="space-y-2 md:space-y-3">
                 <!-- Notifikasi -->
+
+
+
+                {{-- @dd($data['notifications']) --}}
+
                 @forelse ($data['notifications'] as $notif)
                     <div class="bg-white p-2 md:p-3 rounded-lg shadow-md">
                         <p class="text-gray-500 text-xs md:text-sm">{{ $notif->created_at }}</p>
@@ -133,9 +138,9 @@
     </div>
 
 
+    <x-success></x-success>
+
     <script>
-
-
         document.addEventListener('DOMContentLoaded', function () {
             set_calendar(@json($data['schedules']))
         });
@@ -166,5 +171,12 @@
         window.onload = function () {
             updateProgress({{ $data['f_task_count'] }}, {{ $data['uf_task_count'] + $data['f_task_count'] }}); // Ubah disini untuk data nya nanti
         };
+
+        @if(session('success'))
+            open_success("{{ session('success') }}");
+        @elseif(session('error'))
+            open_fail("{{ session('error') }}");
+        @endif
+
     </script>
 </x-layout>

@@ -235,6 +235,9 @@
             const parent = document.getElementById('note-list');
             parent.innerHTML = '';
 
+            if(notes.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+            else document.getElementById('pagination').classList.remove('hidden');  
+
             max_page = notes.datas.last_page;
 
             notes.datas.data.forEach((note) => {

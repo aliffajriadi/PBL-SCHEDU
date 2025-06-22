@@ -84,5 +84,17 @@
       </div>
     </section>
   </body>
+
+      <x-success></x-success>
+
+  <script>
+
+
+    @if(session('error'))
+      open_fail("{{session('error')}}");
+    @endif
+
+  </script>
+
 </html>
 

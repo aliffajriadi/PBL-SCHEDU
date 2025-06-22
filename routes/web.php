@@ -37,6 +37,9 @@ Route::post('/login', [PublicController::class, 'login'])->name('login');
 
 Route::middleware('auth:web')->prefix('/')->group(function () {
     Route::post('/logout', [PublicController::class, 'logout']);
+    
+    Route::get('/join_group/{group_code:group_code}', [MemberOfController::class, 'join_link']);
+    
 
     Route::get('/dashboard', [UserController::class, 'home']);
 
@@ -94,10 +97,13 @@ Route::middleware('auth:web')->prefix('/group')->group(function () {
     
     Route::apiResource('/api', GroupController::class);
 
+
     Route::get('/', [GroupController::class, 'group_list']);
 
     Route::prefix('/{group:group_code}')->group(function() {
         Route::get('/', [GroupController::class, 'dashboard']);
+
+        Route::patch('/update', [GroupController::class, 'update']);
 
         Route::prefix('/note')->group(function () {
             Route::get('/', [GroupNoteController::class, 'home']);

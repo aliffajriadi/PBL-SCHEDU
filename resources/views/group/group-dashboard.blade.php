@@ -8,7 +8,7 @@
             <div class="bg-white shadow-md p-3 rounded-2xl">
                 <h2 class="text-lg font-semibold">Group</h2>
                 <div class="mt-3 bg-emerald-400 rounded-2xl w-full shadow-2xs p-3 flex">
-                    <img src="{{ asset('storage/' . $group->instance->folder_name . '/groups/' . $group->group_code . '/' . $group->pic) }}" alt="pictgroup" class="w-32 h-auto rounded-2xl me-3 border border-amber-300">
+                    <img src="{{ $group->pic === null ? asset('image/image2.jpg') : asset('storage/' . $group->instance->folder_name . '/groups/' . $group->group_code . '/' . $group->pic) }}" alt="pictgroup" class="w-32 h-auto rounded-2xl me-3 border border-amber-300">
                     <div class="text-white">
                         <p class="text-lg font-semibold">{{ $group->name }}</p>
                         <p class="text-md">{{ $group->instance->instance_name }}</p>
@@ -46,7 +46,7 @@
                         <div class="flex items-center gap-3 bg-emerald-50 rounded-2xl p-1">
                             <img src="{{ asset('image/Ryan-Gosling.jpg') }}" alt="Anggota 1" class="w-12 h-12 rounded-full border border-emerald-400">
                             <div>
-                                <p class="text-sm font-medium">{{ $member->user->name }}</p>
+                                <p class="text-sm text-gray-500 font-medium">{{ $member->user->name }}</p>
                                 <p class="text-xs text-gray-500">Siswa</p>
                             </div>
                         </div>

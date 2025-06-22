@@ -10,6 +10,7 @@ use App\Models\NotificationStatus;
 use App\Models\PersonalSchedule;
 use App\Models\PersonalTask;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -126,7 +127,7 @@ class UserController extends Controller
                 'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
                 'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count() + $total_group_task - $finished_group_task,
                 'f_task_count' => (clone $personal_task)->where('is_finished', true)->count() + $finished_group_task,
-                'notifications' => $notif->notification->limit(3)->get(),
+                'notifications' => $notif->limit(3)->get(),
                 'count_notif' =>$notif->count()
                 
             ];
@@ -142,7 +143,7 @@ class UserController extends Controller
                 'count_notif' =>$notif->count()
             ];
         }
-        // dd($data['notifications']->toArray()); 
+        // dd(Carbon::now()); 
 
 
         return view('teachStudent.dashboard',  compact('data'));

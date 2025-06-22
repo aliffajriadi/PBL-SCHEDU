@@ -20,7 +20,7 @@
     <div class="flex flex-col md:flex-row gap-3 mt-3 pb-7 animate-fadeIn w-full">
         <!-- Note List Section -->
         <div class="bg-white p-3 w-full md:w-5/12 shadow-md rounded-2xl">
-            <h2 class="text-lg mb-4 font-semibold text-gray-800">Scheudle List</h2>
+            <h2 class="text-lg mb-4 font-semibold text-gray-800">Schedule List</h2>
             <div id="schedule-list" class="p-3 rounded-2xl h-96 overflow-auto">
                 @php
                     $notes = [
@@ -36,8 +36,6 @@
                         ['title' => 'Gado-Gado', 'created_at' => '5 days ago'],
                     ];
                 @endphp
-
-
             </div>
             <x-pagination></x-pagination>
         </div>
@@ -126,6 +124,9 @@
 
         const parent = document.getElementById('schedule-list');
         parent.innerHTML = '';
+
+        if(datas.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+        else document.getElementById('pagination').classList.remove('hidden');  
 
         max_page = datas.datas.last_page;
 

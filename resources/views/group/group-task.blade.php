@@ -96,53 +96,14 @@
     <!-- Section History Task -->
     <section class="bg-white rounded-2xl shadow-md p-4 w-full mt-3">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">History Task</h3>
-        @php
-            $submissions2 = [
-                [
-                    'task_id' => 1,
-                    'student_name' => 'Andi Pratama',
-                    'title' => 'Tugas Matematika',
-                    'submitted_at' => '2025-04-14',
-                    'files' => [
-                        ['name' => 'jawaban_aljabar.pdf', 'path' => 'submissions/jawaban_aljabar.pdf'],
-                        ['name' => 'catatan_aljabar.docx', 'path' => 'submissions/catatan_aljabar.docx']
-                    ],
-                    'grade' => 85,
-                    'graded_at' => '2025-04-16'
-                ],
-                [
-                    'task_id' => 2,
-                    'student_name' => 'Budi Santoso',
-                    'title' => 'Tugas Bahasa',
-                    'submitted_at' => '2025-04-16',
-                    'files' => [
-                        ['name' => 'esai_lingkungan.pdf', 'path' => 'submissions/esai_lingkungan.pdf']
-                    ],
-                    'grade' => null,
-                    'graded_at' => null
-                ],
-                [
-                    'task_id' => 3,
-                    'student_name' => 'Cindy Amelia',
-                    'title' => 'Tugas IPA',
-                    'submitted_at' => '2025-04-19',
-                    'files' => [
-                        ['name' => 'laporan_fotosintesis.pdf', 'path' => 'submissions/laporan_fotosintesis.pdf'],
-                        ['name' => 'data_eksperimen.docx', 'path' => 'submissions/data_eksperimen.docx']
-                    ],
-                    'grade' => 90,
-                    'graded_at' => '2025-04-21'
-                ]
-            ];
-        @endphp
 
         @if($role === 'teacher')
             
-                <span id="history-title"></span>
+            <span id="history-title"></span>
 
-                <div id="submission-list" class="flex flex-col gap-3 max-h-96 overflow-auto">
-                    
-                </div>
+            <div id="submission-list" class="flex flex-col gap-3 max-h-96 overflow-auto">
+                
+            </div>
             
                 {{-- <div class="text-gray-500 text-center">
                     <p>Belum ada pengumpulan untuk tugas ini.</p>
@@ -219,11 +180,11 @@
         <div id="add-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Unit Baru</h3>
-                <form action="task/unit" method="POST">
+                <form id="form-unit" action="/task/unit" method="POST">
                     @csrf
                     <input type="text" name="name" placeholder="Nama Unit (contoh: Unit 3)" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <div class="flex justify-end gap-4">
-                        <button type="button" onclick="closeAddUnitModal()"
+                        <button type="button" onclick="close_unit_modal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
@@ -235,6 +196,7 @@
                 </form>
             </div>
         </div>
+
 
     <!-- Modal Konfirmasi Delete (Hanya untuk Guru) -->
         <div id="delete-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
@@ -336,13 +298,23 @@
             // Fungsi Modal Tambah Unit
             window.openAddUnitModal = function() {
                 const modal = document.getElementById('add-unit-modal');
+                const form = document.getElementById('form-unit');
+                form.action = '/task/unit'; 
                 modal.classList.remove('hidden');
             };
 
-            window.closeAddUnitModal = function() {
+            window.close_unit_modal = function() {
                 const modal = document.getElementById('add-unit-modal');
                 modal.classList.add('hidden');
             };
+
+            window.open_update_modal = function ()
+            {
+                const modal = document.getElementById('add-unit-modal');
+                const form = document.getElementById('form-unit');
+                form.action = '/task/unit/'; 
+                modal.classList.remove('hidden');
+            }
 
             // Fungsi Modal Delete
             window.openDeleteModal = function() {
@@ -370,6 +342,8 @@
         parent.innerHTML = '';
         max_page = units.datas.last_page;
 
+        if(units.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+        else document.getElementById('pagination').classList.remove('hidden');  
 
         units.datas.data.forEach(unit => {
             const wrapper = document.createElement('div');

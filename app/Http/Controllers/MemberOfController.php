@@ -33,7 +33,8 @@ class MemberOfController extends Controller
             'user' => $user_data,
             'members' => $members,
             'pending_requests' => $pending_requests,
-            'group_name' => $group->name
+            'group_name' => $group->name,
+            'group' => $group
         ]);
     }
 
@@ -61,6 +62,50 @@ class MemberOfController extends Controller
             ]);
 
             return redirect()->back();         
+
+        }catch(\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function join_link(Request $request, string $group_code)
+    {
+        try {
+
+            if(!Auth::check()) return redirect('/login')->with('error', 'Harus login sebelum join');
+
+            $user = Auth::user();
+
+            if($user->is_teacher === 1){
+                return redirect('/group')->with('error', 'Guru tidak bisa bergabung ke grup');
+                throw new \Exception('Guru tidak bisa bergabung ke grup');
+            }          
+
+            $group = Group::where('group_code', $group_code)->first();
+            
+            if($group === null){
+
+                return redirect('/group')->with('error', 'Group ini tidak ada di instansi anda');
+                throw new \Exception('This group not exists in your instance');
+            }
+
+            $member = MemberOf::where('group_id', $group->first()->id)->where('user_uuid', Auth::user()->uuid);
+
+            if($member->exists()){
+                return redirect('/group')->with('error', 'Kamu sudah join masuk ke dalam group ini');
+                throw new \Exception('You have already joined this Group');
+            }
+
+            MemberOf::create([
+                'user_uuid' => Auth::user()->uuid,
+                'group_id' => $group->id,
+                'verified' => false
+            ]);
+
+            return redirect('group')->with('success', 'Berhasil mengajukan permintaan bergabung ke dalam grup');         
 
         }catch(\Exception $e) {
             return response()->json([

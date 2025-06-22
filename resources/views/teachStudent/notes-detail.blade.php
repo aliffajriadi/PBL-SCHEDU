@@ -22,7 +22,7 @@
 
         </div>
 
-        <button onclick="closeContent()">a</button>
+        {{-- <button onclick="closeContent()">a</button> --}}
 
         {{-- BAGIAN KANAN --}}
         <div id="card-parent"
@@ -176,6 +176,9 @@
         
             max_page = datas.datas.last_page;
 
+            if(datas.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+            else document.getElementById('pagination').classList.remove('hidden');  
+
             datas.datas.data.forEach((data) => {
                 parent.innerHTML += ` <div onclick="openContent(${data.id})"
                         class="block w-full border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 cursor-pointer transition-all duration-300 notelist">
@@ -201,8 +204,7 @@
                     <p class="text-xs text-gray-100">Created at 27 November 2024</p>
                 </div>
                 <div class="flex flex-col md:flex-row gap-2">
-                    <but
-                    n onclick="openEditModal(${note.id})"
+                    <button onclick="openEditModal(${note.id})"
                         class="text-sm flex py-1 items-center gap-1 cursor-pointer bg-amber-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
                         <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
                         <p class="text-xs md:text-md">Edit</p>

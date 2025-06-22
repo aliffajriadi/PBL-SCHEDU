@@ -19,7 +19,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
         </button>
-        <a href="" class="bg-emerald-200 p-2 rounded-md">
+        <a href="{{ $path .'/schedule' }}" class="bg-emerald-200 p-2 rounded-md">
             <img src="{{asset('assets/calender-white.svg')}}" alt="Calendar" class="w-6 h-6">
         </a>
     </div>

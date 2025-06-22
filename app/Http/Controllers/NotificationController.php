@@ -43,6 +43,8 @@ class NotificationController extends Controller
 
             $notif_id = $notif->id;
 
+            $now = Carbon::now();
+
             if($group_id != null){
                 $member_ids = MemberOf::where('group_id', $group_id)->pluck('user_uuid');
 
@@ -51,7 +53,9 @@ class NotificationController extends Controller
                 foreach($member_ids as $id){
                     $notif_stats[] = [
                         'user_uuid' => $id,
-                        'notif_id' => $notif_id
+                        'notif_id' => $notif_id,
+                        'created_at' => $now,
+                        'updated_at' => $now
                 ];}
 
                 NotificationStatus::insert($notif_stats);

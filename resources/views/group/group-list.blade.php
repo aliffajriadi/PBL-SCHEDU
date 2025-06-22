@@ -1,5 +1,6 @@
 <x-layout title="Group" role={{$role}} :user="$user">
     <!-- Header Section -->
+
     <div class="bg-white p-4 mb-4 flex flex-col sm:flex-row justify-between items-center shadow-md rounded-2xl">
         @if ($role == 'student')
          <button id="joinGroupBtn" class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">
@@ -82,28 +83,13 @@
                         type="text" 
                         id="groupSearch"
                         name="group_code" 
-                        placeholder="Filter Search groups..." 
+                        placeholder="Enter Group Code..." 
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
                         onkeyup="filterGroups()"
                     >
                 </div>
                 <!-- Input Pencarian Grup -->
                 
-                <!-- Dropdown Grup -->
-                <div class="mb-4">
-                    <label for="groupSelect" class="block text-sm font-medium text-gray-700 mb-2">Select Group</label>
-                    <select 
-                        id="groupSelect" 
-                        name="groupSelect" 
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-                        {{-- required --}}
-                    >
-                        {{-- <option value="" disabled selected>Select a group...</option>
-                        @foreach ($groups as $group)
-                            <option value="{{ $loop->index + 1 }}">{{ $group['name'] }} - {{ $group['teacher'] }}</option>
-                        @endforeach --}}
-                    </select>
-                </div>
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeJoinModal()" class="bg-gray-300 text-gray-700 hover:bg-gray-400 px-4 py-2 rounded-lg text-sm transition-all duration-300">Cancel</button>
                     <button type="submit" class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">Join</button>
@@ -112,7 +98,10 @@
         </div>
     </div>
 
+    <x-success></x-success>
+
 </x-layout>
+
 
 <script>
 
@@ -135,6 +124,10 @@
         let task_count;
         let schedule_count;
         let member_count;
+        let group_pic;
+
+        if(groups.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+        else document.getElementById('pagination').classList.remove('hidden');  
 
         max_page = groups.datas.last_page;
 
@@ -147,13 +140,17 @@
             task_count = group.task_count;
             schedule_count = group.schedule_count;
             member_count = group.member_count;
+            
+            console.log(group.pic)
+
+            group_pic = group.pic === null ? `{{ asset('image/image2.jpg') }}` : `{{ asset('storage/${folder_name}/groups/${group.group_code}/${group.pic}') }}`;
 
             parent.innerHTML += `
             <a href="/group/${group.group_code}">
 
                         <div class="bg-white fade-in-left cursor-pointer shadow-md rounded-2xl overflow-hidden group transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                 <div class="h-40 bg-gray-100 overflow-hidden">
-                    <img src="{{ asset('storage/${folder_name}/groups/${group.group_code}/${group.pic}') }}" alt="${group.name} image" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                    <img src="${group_pic}" alt="${group.name} image" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                 </div>
                 <div class="p-4 bg-emerald-400 infogrub transition-colors duration-300 group-hover:bg-emerald-500">
                     <h3 class="text-lg font-semibold text-gray-800 transition-colors duration-300 group-hover:text-white">${group.name}</h3>
@@ -304,5 +301,11 @@
         }
         api_store('/group/api', formData, true);
     }
+
+    @if(session('success'))
+        open_success("{{ session('success') }}");
+    @elseif(session('error'))
+        open_fail("{{ session('error') }}");
+    @endif
 
 </script>

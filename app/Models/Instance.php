@@ -49,6 +49,6 @@ class Instance extends Authenticatable
 
     public function notification()
     {
-        return $this->hasMany(InstanceNotification::class, 'staff_uuid', 'uuid');
+        return $this->hasMany(InstanceNotification::class, 'instance_uuid', 'uuid');
     }
 }

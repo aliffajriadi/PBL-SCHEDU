@@ -181,6 +181,9 @@
             let type;
             let is_read;
 
+            if(notifications.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+            else document.getElementById('pagination').classList.remove('hidden');  
+
             let datas = notifications.datas;
             max_page = datas.last_page;
 
@@ -227,6 +230,7 @@
         {   
             const query = `keyword=${document.getElementById('search').value}&type=${search_type}`; 
             get_data(`/notification/api?${query}&page=${current_page}`, show_list);
+            
         }
         
         search();
@@ -280,6 +284,9 @@
                 parent.innerHTML = '';
                 let notif;
                 let is_read;
+
+                if(notifications.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+                else document.getElementById('pagination').classList.remove('hidden');  
 
                 let datas = notifications.datas;
 

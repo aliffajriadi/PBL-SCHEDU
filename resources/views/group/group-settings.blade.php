@@ -1,6 +1,9 @@
 @php
     $current_url = url()->current();
+
+    $readonly = $role === 'student' ? 'readonly' : '';
 @endphp
+
 
 <x-layout role="{{ $role }}" title="Group Settings" :user="$user">
     <x-nav-group type="name" page="settings" group_name="{{ $group_name }}"></x-nav-group>
@@ -120,6 +123,99 @@
                     </div>
                 @endforeach
             </div>
+        </div>
+
+        <div class="bg-white shadow-md rounded-2xl p-4">
+
+        <form method="POST" enctype="multipart/form-data" action="/group/{{ $group->group_code }}/update">
+            @csrf
+            @method('PATCH')
+
+            <div class="space-y-12">
+
+                <div class="border-b border-gray-900/10 pb-12">
+                <h2 class="text-base/7 font-semibold text-gray-900">Group Information</h2>
+
+                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                    <div class="sm:col-span-2 ">
+                    <label for="name" class="block text-sm/6 font-medium text-gray-900">Group Name</label>
+                    <div class="mt-2">
+                        <input type="text" name="name" id="name" value="{{ $group->name }}" autocomplete="address-level2" {{ $readonly }} class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                    </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                    <label for="instance_name" class="block text-sm/6 font-medium text-gray-900">Intance Name</label>
+                    <div class="mt-2">
+                        <input type="text" id="instance_name" value="{{ $group->instance->instance_name }}" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                    </div>
+                    </div>
+                    <br>
+
+                    @if($role === 'teacher')
+
+                    <div class="sm:col-span-2">
+                    <label for="pic" class="block text-sm/6 font-medium text-gray-900"> Group Pic</label>
+                    <div class="mt-2">
+                        <input type="file" id="pic" name="pic" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                    </div>
+                    </div>
+
+                    @endif
+                    
+
+                    <!-- component -->
+
+                <div class="sm:col-span-2">
+                    <label for="group_code" class="block text-sm/6 font-medium text-gray-900">Group Code</label>
+                    <div class="mt-2 relative flex items-center">
+                        <input type="text" id="group_code" value="{{ $group->group_code }}" readonly
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+
+                        <!-- Tombol copy -->
+                        <div class="relative">
+                            <button type="button" onclick="copyGroupCode()"
+                                class="ml-2 text-gray-500 hover:text-indigo-600 focus:outline-none">
+                                <!-- SVG Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 16h8a2 2 0 002-2V8m-4 12H6a2 2 0 01-2-2V8a2 2 0 012-2h6m2-2h6m-6 0v6" />
+                                </svg>
+                            </button>
+
+                            <!-- Popover -->
+                            <div id="copyPopover"
+                                class="absolute -top-8 right-0 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 transition-opacity duration-300 pointer-events-none">
+                                Copied!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                </div>
+                </div>
+
+              
+            </div>
+
+            <div class="mt-6 flex items-center gap-x-6">
+
+                <div class="relative inline-block">
+                    <button type="button" onclick="create_link_join()" class="rounded-md bg-emerald-400 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400">Create Join Link</button>
+                    <div id="create_popover"
+                        class="absolute -top-8 right-0 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 transition-opacity duration-300 pointer-events-none">Copied!</div>
+                </div>
+
+                @if($role === 'teacher')
+                    <button type="submit" class="rounded-md bg-emerald-400 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400">Update</button>
+                @endif
+
+            </div>
+            </form>
         </div>
 
         @if($role === 'teacher')
@@ -317,5 +413,60 @@
                 modal.classList.add('hidden');
             };
         });
+
+        function copyGroupCode() {
+        
+            const input = document.getElementById('group_code');
+            const popover = document.getElementById('copyPopover');
+
+            const hostname = window.location.hostname;
+            const port = window.location.port;
+
+            navigator.clipboard.writeText(input.value)
+                .then(() => {
+                    // Tampilkan popover
+                    popover.classList.remove('opacity-0');
+                    popover.classList.add('opacity-100');
+
+                    // Sembunyikan popover setelah 2 detik
+                    setTimeout(() => {
+                        popover.classList.remove('opacity-100');
+                        popover.classList.add('opacity-0');
+                    }, 2000);
+                })
+                .catch(() => {
+                    alert('Gagal menyalin');
+                });
+        }
+
+        function create_link_join() {
+            console.log('a');
+
+        
+            const input = document.getElementById('group_code');
+            const popover = document.getElementById('create_popover');
+
+            const hostname = window.location.hostname;
+            const port = window.location.port;
+
+            navigator.clipboard.writeText(input.value)
+                .then(() => {
+                    // Tampilkan popover
+                    popover.classList.remove('opacity-0');
+                    popover.classList.add('opacity-100');
+
+                    // Sembunyikan popover setelah 2 detik
+                    setTimeout(() => {
+                        popover.classList.remove('opacity-100');
+                        popover.classList.add('opacity-0');
+                    }, 2000);
+                })
+                .catch(() => {
+                    alert('Gagal menyalin');
+                });
+
+            console.log('a');
+
+        }
     </script>
 </x-layout>

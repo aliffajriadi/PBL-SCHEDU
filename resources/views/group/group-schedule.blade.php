@@ -150,6 +150,9 @@
             max_page = datas.datas.last_page;
             set_calendar(datas.calendar);
 
+            if(datas.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+            else document.getElementById('pagination').classList.remove('hidden');  
+
             const parent = document.getElementById('schedule-list');
             parent.innerHTML = '';
 

@@ -36,24 +36,24 @@
             class="bg-emerald-500 p-4 h-fit rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
             <h3 class="text-md text-white font-semibold mb-4">All Tasks</h3>
             <!-- Task Item -->
-            <div id="all-tasks">
+            <div id="all-tasks" class="overflow-y-scroll max-h-125">
 
             </div>
             
             <button
             onclick="open_modal('add-task-modal')"
-                class="w-full bg-white text-emerald-500 rounded-lg py-2 hover:bg-emerald-300 hover:text-white transition-all duration-500">
+                class="w-full bg-white text-emerald-500 rounded-lg py-2 hover:bg-emerald-300 hover:text-white mt-5 transition-all duration-500">
                 + Add New Task
             </button>
         </div>
 
         <!-- On Progress Column -->
         <div id="progress"
-            class="bg-emerald-500 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 h-fit">
+            class="bg-yellow-500 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 h-fit">
             <h3 class="text-md text-white font-semibold mb-4">On Progress</h3>
             <!-- Progress Item -->
 
-            <div id="progress-task">
+            <div id="progress-task" class="overflow-y-scroll max-h-150">
 
             </div>
             
@@ -61,10 +61,10 @@
 
         <!-- Complete Task Column -->
         <div id="complete"
-            class="bg-emerald-500 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 h-fit">
+            class="bg-blue-500 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 h-fit">
             <h3 class="text-md text-white font-semibold mb-4">Complete Task</h3>
             <!-- Complete Item -->
-            <div id="complete-task"></div>
+            <div id="complete-task" class="overflow-y-scroll max-h-150"></div>
 
 
         </div>

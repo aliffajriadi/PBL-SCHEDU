@@ -31,7 +31,7 @@ class InstanceNotificationController extends Controller
         try {
             $user = Auth::guard('staff')->user();
 
-            $notifications = InstanceNotification::where('staff_uuid', $user->uuid);
+            $notifications = InstanceNotification::where('instance_uuid', $user->uuid);
 
             $keyword = $request->query('keyword') ?? false;
             

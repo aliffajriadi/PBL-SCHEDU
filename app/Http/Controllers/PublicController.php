@@ -14,14 +14,14 @@ class PublicController extends Controller
 
     public function login_page()
     {
-        if(Auth::user() !== null) redirect('/dashboard');
+        if(Auth::check()) return redirect('/dashboard');
         return view('login');
     }
 
     public function login(Request $request)
     {
         try {
-            if(Auth::user() !== null) redirect('/dashboard');
+            // if(Auth::user() !== null) redirect('/dashboard');
 
             $credentials = $request->validate([
                 'email' => 'required',
@@ -29,7 +29,7 @@ class PublicController extends Controller
             ]);
 
             if (!Auth::attempt($credentials)) {
-                return redirect('/login');
+                throw new \Exception('Username atau Password yang anda berikan salah.'); 
             }
 
             $user = Auth::user();
@@ -41,9 +41,11 @@ class PublicController extends Controller
             // return redirect('/dashboard');
             $request->session()->regenerate();
 
+            if(session('url.intended')){
+                return redirect()->intended('/dashboard');
+            }
 
-
-            return redirect('/dashboard');
+            return redirect('/dashboard')->with('success', 'Berhasil login');
 
             // return response()->json([
             //     'status' => true,
@@ -52,6 +54,9 @@ class PublicController extends Controller
             //     'role' => session('role')
             // ]);
         } catch (\Exception $e) {
+
+            return redirect('/login')->with('error', $e->getMessage());
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

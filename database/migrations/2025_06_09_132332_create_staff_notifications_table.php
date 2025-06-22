@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('instance_notifications', function (Blueprint $table) {
             $table->id();
-            $table->uuid('staff_uuid');
+            $table->uuid('instance_uuid');
             $table->string('title');
             $table->text('description');
             $table->boolean('is_readed')->default(false);

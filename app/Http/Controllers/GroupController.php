@@ -85,7 +85,7 @@ class GroupController extends Controller
         ];
     
         return view('group.group-list', [
-            'role' => $role, 
+            'role' => $role,
             'user' => $user_data,
             'folder_name' => Auth::user()->instance->folder_name
         ]);
@@ -172,14 +172,11 @@ class GroupController extends Controller
                 'verified' => true
             ]);
 
-            return redirect('/group');
-
-            // return response()->json([
-            //     'status' => true,
-            //     'message' => 'Group Made Successfully'
-            // ]);
+            return redirect('/group')->with('success', 'berhasil menambahkan group');
             
         }catch(\Exception $e) {
+            return redirect('/group')->with('error', $e->getMessage());
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -191,26 +188,40 @@ class GroupController extends Controller
     public function update(Request $request, Group $group)
     {
         try {
-            Gate::allows('is_member', [$group]);
-            Gate::allows('modify_permission', [$group]);
+     
+            // Gate::allows('is_member', [$group]);
+            // Gate::allows('modify_permission', [$group]);
 
-            $field = $request->validate([
+            $request->validate([
                 'name' => 'required|max:255',
+                'pic' => 'image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
-            $group->update($field);
+            // dd($request->hasFile('pic'));
+
+            if($request->hasFile('pic')){
+                $folder_name = Auth::user()->instance->folder_name;
+                $group_code = $group->group_code;
+                $file = $request->file('pic');
+                $file_name = time() . '.' . $file->getClientOriginalExtension();
+
+                if(Storage::disk('public')->exists("$folder_name/groups/$group_code/{$group->pic}")){
+                    Storage::disk('public')->delete("$folder_name/groups/$group_code/{$group->pic}");
+                }
+
+                $group->pic = $file_name;
+
+                $file->storeAs("$folder_name/groups/$group_code", $file_name, 'public');
+            }
+
+
+            $group->name = $request->input('name');
             $group->save();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Group Updated Successfully'
-            ]);
+            return redirect("/group/{$group->group_code}/settings")->with('success', 'Berhasil melakukan update pada grup');
             
         }catch(\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            return redirect("/group/{$group->group_code}/settings")->with('error', $e->getMessage());
         }
     }
 
