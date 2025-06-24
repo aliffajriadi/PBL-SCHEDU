@@ -299,7 +299,7 @@
         for (let [key, value] of formData.entries()) {
            console.log(`${key}: ${value}`);
         }
-        api_store('/group/api', formData, true);
+        api_store('/group/api', formData);
     }
 
     @if(session('success'))

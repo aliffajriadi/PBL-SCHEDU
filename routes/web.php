@@ -24,61 +24,96 @@ use App\Http\Controllers\GroupTaskSubmissionController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\InstanceNotificationController;
 
+/* 
+    Route dengan method apiResource digunakan untuk mengakses fungsi fungsi seperti
+    index, show, store, update, dan destroy
+
+    - fungsi index digunakan untuk mengambil banyak data sekaligus, 
+      fungsi ini juga ditambahkan pagination
+    - fungsi show digunakan untuk mengambil 1 data spesifik dengan id tertentu
+    - fungsi store digunakan untuk membuat dan menyimpan data baru ke dalam database
+    - fungsi update digunakan untuk mengubah data tertentu di dalam database
+    - fungsi destroy digunakan untuk menghapus data tertentu dari database
+
+    pada controller kami juga terdapat fungsi dengan nama home di tiap controllernya
+    yang berfungsi untuk mengarahkan teacher dan student ke page untuk mengelola model
+    yang berkaitan dengan fungsi tersebut.
+
+*/
+
+
 Route::get('user-check', [UserController::class, 'user_check']);
 
 Route::get('/', [PublicController::class, 'index']);
 Route::get('/login', [PublicController::class, 'login_page']);
 
-Route::get('/login', [PublicController::class, 'login_page']);
 
+/* 
+    route '/login' dengan method get digunakan untuk mengakses halaman dari login
+    route '/login' dengan method post digunakan untuk melakukan proses login
+*/
+Route::get('/login', [PublicController::class, 'login_page']);
 Route::post('/login', [PublicController::class, 'login'])->name('login');
 
-// User Routes
 
+// User Routes
+/* 
+    Route ini digunakan untuk semua user dengan role teacher / student dengan guard default 'web'
+*/
 Route::middleware('auth:web')->prefix('/')->group(function () {
     Route::post('/logout', [PublicController::class, 'logout']);
     
     Route::get('/join_group/{group_code:group_code}', [MemberOfController::class, 'join_link']);
     
-
+    /*
+        daftar routing untuk masuk ke halaman halaman yang bisa diakses oleh teacher atau student 
+        dan juga routing berbagai fungsi aplikasi yang bisa digunakan teacher atau student. 
+    */
     Route::get('/dashboard', [UserController::class, 'home']);
-
     Route::get('/profile', [UserController::class, 'profile']);
 
     Route::patch('/profile/update', [UserController::class, 'update_profile']);
-
     Route::patch('/profile/change_password', [UserController::class, 'change_password']);
 
-    Route::prefix('/note')->group(function () {
 
+    /* 
+        Route ini digunakan untuk mengelola catatan personal pada masing masing teacher
+        ataupun student.
+    */
+    Route::prefix('/note')->group(function () {
         Route::get('/', [PersonalNoteController::class, 'home']);
-    
         Route::apiResource('/api', PersonalNoteController::class);
-    
     });
 
+
+    /* 
+        Route ini digunakan untuk mengelola tugas ataupun reminder personal pada masing
+        masing teacher ataupun student, 
+    */
     Route::prefix('/task')->group(function() {
         Route::get('/', [PersonalTaskController::class, 'home']);
-
-        Route::patch('/set_finished/{task}', [PersonalTaskController::class, 'set_finish']);
-
-        Route::patch('/reset_finished/{task}', [PersonalTaskController::class, 'reset_finish']);
-
-        Route::patch('/reset_finished/{task}');
-
         Route::apiResource('/api', PersonalTaskController::class);
 
-        Route::post('/done/{task}', [PersonalTaskController::class, 'set_done']);
+        /* 
+            Route ini digunakan untuk men-set task personal finish dan mereset kembali tidak finish
+        */
+        Route::patch('/set_finished/{task}', [PersonalTaskController::class, 'set_finish']);
+        Route::patch('/reset_finished/{task}', [PersonalTaskController::class, 'reset_finish']);
     });
 
 
-
+    /*
+        Route ini digunakan untuk mengelola jadwal personal dari teacher dan student
+    */
     Route::prefix('/schedule')->group(function(){
         Route::get('/', [PersonalScheduleController::class, 'home']);
-
         Route::apiResource('/api', PersonalScheduleController::class);
     });
     
+
+    /* 
+        Route ini digunakan untuk mengelola notifikasi milik pengguna
+    */
     Route::prefix('/notification')->group(function () {
     
         Route::get('/', [NotificationController::class, 'home']);
@@ -86,20 +121,20 @@ Route::middleware('auth:web')->prefix('/')->group(function () {
         Route::apiResource('/api', NotificationController::class);
     });
     
-    
 });
 
-Route::get('/test', function () {
-    return view('teachStudent.test');
-});
 
+// Route di bawah digunakan untuk mengelola halaman dan fitur fitur dari group
 Route::middleware('auth:web')->prefix('/group')->group(function () {
     
     Route::apiResource('/api', GroupController::class);
 
-
     Route::get('/', [GroupController::class, 'group_list']);
 
+    /* 
+        Route group akan mengambil kode unik grup yang terdapat pada database, kode unik ini
+        digunakan untuk model binding ke Model Group
+    */
     Route::prefix('/{group:group_code}')->group(function() {
         Route::get('/', [GroupController::class, 'dashboard']);
 
@@ -122,6 +157,8 @@ Route::middleware('auth:web')->prefix('/group')->group(function () {
         Route::prefix('/task')->group(function () {
             Route::get('/', [GroupTaskController::class, 'dashboard']);
             Route::post('/unit', [GroupTaskUnitController::class, 'store']);
+            Route::patch('/unit', [GroupTaskUnitController::class, 'update']);
+            Route::delete('/unit', [GroupTaskUnitController::class, 'destroy']);
             Route::post('/s/{group_task}', [GroupTaskSubmissionController::class, 'store']);
             Route::patch('/s/{submission}', [GroupTaskSubmissionController::class, 'update']);
             Route::delete('/s/{submission}', [GroupTaskSubmissionController::class, 'destroy']);

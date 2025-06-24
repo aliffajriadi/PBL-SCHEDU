@@ -197,6 +197,26 @@
             </div>
         </div>
 
+        <div id="update-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Update Unit</h3>
+                <form id="form-unit" action="/task/unit" method="POST">
+                    @csrf
+                    <input id="unit-name" type="text" name="name" placeholder="Nama Unit (contoh: Unit 3)" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <div class="flex justify-end gap-4">
+                        <button type="button" onclick="unit_update_toggle()"
+                            class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 
     <!-- Modal Konfirmasi Delete (Hanya untuk Guru) -->
         <div id="delete-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
@@ -212,6 +232,28 @@
                             Batal
                         </button>
                         <button type="button" onclick="delete_data()"
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                            Hapus
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Konfirmasi Delete (Hanya untuk Guru) -->
+        <div id="unit-delete-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus Unit</h3>
+                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus Unit ini beserta tugas-tugas dan jawabannya?"<span id="delete-task-title"></span>"? Tindakan ini tidak dapat dibatalkan.</p>
+                <form id="delete-unit-form" action="" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end gap-4">
+                        <button type="button" onclick="unit_delete_toggle()"
+                            class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                            Batal
+                        </button>
+                        <button type="submit"
                             class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
                             Hapus
                         </button>
@@ -337,6 +379,27 @@
         get_data(`${path}/api`, show_task_list);
     }
 
+    function unit_delete_toggle(id = false)
+    {
+        if(id !== false){
+            // document.getElementById('unit-name').value = title;
+
+            document.getElementById('delete-unit-form').action = `${path}/unit/${id}`;
+        }
+        document.getElementById('unit-delete-modal').classList.toggle('hidden');
+    }
+
+    function unit_update_toggle(id = false, title = false)
+    {
+        document.getElementById('update-unit-modal').classList.toggle('hidden');
+
+        if(title !== false && id !== false){
+            document.getElementById('unit-name').value = title;
+            document.getElementById('delete-unit-form').action = `${path}/unit/${id}`;
+        }
+
+    }
+
     function show_task_list(units) {
         const parent = document.getElementById('task-list');
         parent.innerHTML = '';
@@ -349,16 +412,45 @@
             const wrapper = document.createElement('div');
             wrapper.className = 'bg-white border border-gray-200 rounded-md p-3';
 
+            // Container untuk title dan button
+            const header = document.createElement('div');
+            header.className = 'flex justify-between items-center mb-2';
+
             const title = document.createElement('p');
-            title.className = 'text-gray-800 font-medium mb-2';
+            title.className = 'text-gray-800 font-medium';
             title.textContent = unit.name;
+
+            const buttonGroup = document.createElement('div');
+            buttonGroup.className = 'flex gap-2';
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'bg-blue-500 hover:bg-blue-600 text-white text-sm px-2 py-1 rounded';
+            editBtn.textContent = 'Edit';
+            // Tambahkan event listener jika perlu
+            editBtn.onclick = () => {
+                // console.log('Edit:', unit.name);
+                unit_update_toggle(unit.id, unit.name)
+            };
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'bg-red-500 hover:bg-red-600 text-white text-sm px-2 py-1 rounded';
+            deleteBtn.textContent = 'Delete';
+            // Tambahkan event listener jika perlu
+            deleteBtn.onclick = () => {
+                unit_delete_toggle();
+            };
+
+            buttonGroup.appendChild(editBtn);
+            buttonGroup.appendChild(deleteBtn);
+
+            header.appendChild(title);
+            header.appendChild(buttonGroup);
 
             const container = document.createElement('div');
             container.className = 'flex flex-col gap-2';
 
             unit.task.forEach(data => {
                 const a = document.createElement('a');
-                // a.href = data.id;
                 a.className = 'tasks block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50';
 
                 const p1 = document.createElement('p');
@@ -373,18 +465,16 @@
                 a.appendChild(p2);
                 container.appendChild(a);
 
-
                 a.onclick = () => {
-                    
-                    show_data(data.id)
+                    show_data(data.id);
                 };
             });
 
-            wrapper.appendChild(title);
+            wrapper.appendChild(header); // gunakan header (title + button)
             wrapper.appendChild(container);
             parent.appendChild(wrapper);
-
         });
+
     }
 
     function insert_data2(id) 
@@ -402,7 +492,7 @@
             console.log(`${key}: ${value}`);
         }
 
-        api_store(`${path}/s/${id}`, formData, true).then((response) => {
+        api_store(`${path}/s/${id}`, formData).then((response) => {
             show_data(id);
 
             if(response.status) open_success(response.message);

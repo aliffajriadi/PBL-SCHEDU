@@ -1,5 +1,13 @@
-// debounce function untuk live search
-function debounce(fn, delay)
+// template untuk melakukan komunikasi kepada database dengan api
+
+
+/* 
+    debounce function untuk live search
+
+    memberikan delay sebelum memanggil functionnya agar request api yang diberikan kepada database
+    tidak over, hanya memanggil ketika user sudah tidak mengetik karakter baru setelah sekian detik.
+*/
+ function debounce(fn, delay)
 {
     let timeout;
 
@@ -11,11 +19,16 @@ function debounce(fn, delay)
 
 // function nutuk api
 
-function testing()
-{
-    console.log('bisa');
-}
+/*
+    fungsi get_data digunakan untuk mengambil data dari database, dan data tersebut akan langsung dikelola
+    menggunakan fungsi callback yang diberikan para parameter callback. 
 
+    fungsi ini bisa digunakan untuk mencari sebuah data dengan id
+    - jika ingin mencari data tertentu / mengakses function show pada api 
+      tambahkan parameter id
+    -jika ingin mencari lebih dari 1 data, tidak perlu mengisi parameter id
+
+    */
 async function get_data(url, callback, id = -1)
 {
     if(id !== -1) url = `${url}/${id}`;
@@ -37,7 +50,12 @@ async function get_data(url, callback, id = -1)
     return response;
 }
 
-async function api_store(url, form, file = false)
+
+/* 
+    fungsi api_store digunakan untuk membuat dan menyimpan data baru ke dalam database 
+    dengan menerima input data dari form yang ditaruh ke dalam class FormData dengan js.
+*/
+async function api_store(url, form)
 {
     
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -46,8 +64,6 @@ async function api_store(url, form, file = false)
         'Accept' : 'application/json',
         'X-CSRF-TOKEN' : csrfToken
     };
-
-    // if(file) headers_data['Content-Type'] = 'multipart/form-data';
 
     const response = fetch(`${url}`, {
         method: 'POST',
@@ -62,6 +78,10 @@ async function api_store(url, form, file = false)
     return response;
 }
 
+/* 
+    fungsi api_update digunakan untuk mengubah data di dalam database dengan menerima input
+    data dari form yang ditaruh ke dalam class FormData dengan js.
+*/
 async function api_update(url, form, id)
 {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -73,7 +93,6 @@ async function api_update(url, form, id)
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            // 'Content-Type': 'application/json'
             'X-CSRF-TOKEN': csrfToken,
         },
         body: form
@@ -86,6 +105,10 @@ async function api_update(url, form, id)
     return response;
 }
 
+/* 
+    fungsi api_delete digunakan untuk menghapus data berdasatkan dari id yang diberikan pada
+    parameter id.
+*/
 async function api_destroy(url, id)
 {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
