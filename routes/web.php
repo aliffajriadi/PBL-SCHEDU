@@ -157,8 +157,8 @@ Route::middleware('auth:web')->prefix('/group')->group(function () {
         Route::prefix('/task')->group(function () {
             Route::get('/', [GroupTaskController::class, 'dashboard']);
             Route::post('/unit', [GroupTaskUnitController::class, 'store']);
-            Route::patch('/unit', [GroupTaskUnitController::class, 'update']);
-            Route::delete('/unit', [GroupTaskUnitController::class, 'destroy']);
+            Route::patch('/unit/{unit}', [GroupTaskUnitController::class, 'update']);
+            Route::delete('/unit/{unit}', [GroupTaskUnitController::class, 'destroy']);
             Route::post('/s/{group_task}', [GroupTaskSubmissionController::class, 'store']);
             Route::patch('/s/{submission}', [GroupTaskSubmissionController::class, 'update']);
             Route::delete('/s/{submission}', [GroupTaskSubmissionController::class, 'destroy']);

@@ -40,16 +40,14 @@ class GroupTaskUnitController extends Controller
         }
     }
 
-    public function update(Request $request, String $group, GroupTask $api)
+    public function update(Request $request, String $group, GroupTaskUnit $unit)
     {
         try{
             $field = $request->validate([
-                'title' => 'required|max:255',
-                'content' => 'required',
-                'deadline' => 'required|date'
+                'name' => 'required|max:255',
             ]);
 
-            $api->update($field);
+            $unit->update($field);
 
             return response()->json([
                 'status' => true, 
@@ -64,10 +62,10 @@ class GroupTaskUnitController extends Controller
         }
     }
 
-    public function destroy(String $group, GroupTask $api)
+    public function destroy(String $group, GroupTaskUnit $unit)
     {
         try{
-            $api->delete();
+            $unit->delete();
     
             return response()->json([
                 'status' => true, 

@@ -180,7 +180,7 @@
         <div id="add-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Unit Baru</h3>
-                <form id="form-unit" action="/task/unit" method="POST">
+                <form id="form-unit" action="{{ $url }}/unit" method="POST">
                     @csrf
                     <input type="text" name="name" placeholder="Nama Unit (contoh: Unit 3)" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <div class="flex justify-end gap-4">
@@ -200,7 +200,8 @@
         <div id="update-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Update Unit</h3>
-                <form id="form-unit" action="/task/unit" method="POST">
+                <form id="update-form-unit" action="/task/unit" method="POST">
+                    @method("PATCH")
                     @csrf
                     <input id="unit-name" type="text" name="name" placeholder="Nama Unit (contoh: Unit 3)" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <div class="flex justify-end gap-4">
@@ -341,7 +342,6 @@
             window.openAddUnitModal = function() {
                 const modal = document.getElementById('add-unit-modal');
                 const form = document.getElementById('form-unit');
-                form.action = '/task/unit'; 
                 modal.classList.remove('hidden');
             };
 
@@ -395,7 +395,7 @@
 
         if(title !== false && id !== false){
             document.getElementById('unit-name').value = title;
-            document.getElementById('delete-unit-form').action = `${path}/unit/${id}`;
+            document.getElementById('update-form-unit').action = `${path}/unit/${id}`;
         }
 
     }
@@ -437,7 +437,7 @@
             deleteBtn.textContent = 'Delete';
             // Tambahkan event listener jika perlu
             deleteBtn.onclick = () => {
-                unit_delete_toggle();
+                unit_delete_toggle(unit.id);
             };
 
             buttonGroup.appendChild(editBtn);
