@@ -1,13 +1,16 @@
 <x-layout title="Notes" role="teacher" :user="$user">
 
     <div class="bg-white mb-3 flex md:flex-row justify-between p-3 shadow-md rounded-2xl items-center">
-        {{-- <button class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">Back to list</button> --}}
+        {{-- <button
+            class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">Back
+            to list</button> --}}
         <button onclick="openAddModal()"
             class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">
             + Add Notes
         </button>
         <input type="text" id="search" placeholder="Search Note list...."
-            class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all" oninput="debounce_refresh()">
+            class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+            oninput="debounce_refresh()">
     </div>
 
     <div class="flex gap-3">
@@ -26,7 +29,7 @@
 
         {{-- BAGIAN KANAN --}}
         <div id="card-parent"
-         class="bg-white flex-col fade-in-right justify-center hidden md:flex items-center p-3 shadow-md rounded-2xl w-7/12 h-96">
+            class="bg-white flex-col fade-in-right justify-center hidden md:flex items-center p-3 shadow-md rounded-2xl w-7/12 h-96">
             <img src="/image/ilustr1.jpg" alt="ilustrator" class="w-40 h-auto">
             <p class="text-gray-600">Click Note list for Preview</p>
         </div>
@@ -39,7 +42,8 @@
         <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl transform transition-all duration-300 scale-95">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-semibold text-emerald-600">Add New Note</h2>
-                <button onclick="closeAddModal()" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
+                <button onclick="closeAddModal()"
+                    class="text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
             </div>
             <form action="/note/api" method="POST" id="addNote">
                 {{-- @csrf --}}
@@ -51,9 +55,21 @@
                 </div>
                 <div class="mb-4">
                     <label for="add_content" class="block text-sm font-medium text-gray-700">Content</label>
-                    <textarea id="add_content" name="content"
+                    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+                    <textarea
                         class="mt-1 w-full border-2 border-emerald-400 rounded-xl py-2 px-3 text-sm h-32 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-                        placeholder="Write your note here..."></textarea>
+                        placeholder="Write your note here..." name="content" id="add_content"></textarea>
+                    <script>
+                        ClassicEditor
+                            .create(document.querySelector('#add_content'))
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    </script>
+
+                    {{-- <textarea id="add_content" name="content"
+                        class="mt-1 w-full border-2 border-emerald-400 rounded-xl py-2 px-3 text-sm h-32 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                        placeholder="Write your note here..."></textarea> --}}
                 </div>
                 <div class="flex justify-end gap-3">
                     <button type="button" onclick="closeAddModal()"
@@ -75,28 +91,33 @@
                 <h3 class="text-lg font-semibold">Edit Note</h3>
                 <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
-            
+
             <form id="editModal">
                 <div class="mb-4">
                     <label for="editTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input type="text" name="title" id="editTitle" class="w-full border-2 border-emerald-400 rounded-xl p-2 focus:outline-none focus:border-emerald-600" value="Masakan Padang">
+                    <input type="text" name="title" id="editTitle"
+                        class="w-full border-2 border-emerald-400 rounded-xl p-2 focus:outline-none focus:border-emerald-600"
+                        value="Masakan Padang">
                 </div>
-                
+
                 <div class="mb-4">
                     <label for="editContent" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
-                    <textarea name="content" id="editContent" class="w-full border-2 border-emerald-400 rounded-xl p-2 h-32 focus:outline-none focus:border-emerald-600">Lorem ipsum dolor sit amet consectetur adipisicing elit...</textarea>
+                    <textarea name="content" id="editContent"
+                        class="w-full border-2 border-emerald-400 rounded-xl p-2 h-32 focus:outline-none focus:border-emerald-600">Lorem ipsum dolor sit amet consectetur adipisicing elit...</textarea>
                 </div>
-                
+
                 <input type="hidden" id="note_id">
 
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded-xl hover:opacity-75">Cancel</button>
-                    <button type="button" onclick="update_data()" 
-                    class="bg-emerald-400 text-white px-4 py-2 rounded-xl hover:opacity-75">Save Changes</button>
+                    <button type="button" onclick="closeModal()"
+                        class="bg-gray-500 text-white px-4 py-2 rounded-xl hover:opacity-75">Cancel</button>
+                    <button type="button" onclick="update_data()"
+                        class="bg-emerald-400 text-white px-4 py-2 rounded-xl hover:opacity-75">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -107,14 +128,12 @@
     <script>
         const debounce_search = debounce(search, 500);
 
-        function debounce_refresh()
-        {
+        function debounce_refresh() {
             current_page = 1;
             debounce_search();
         }
 
-        function search()
-        {
+        function search() {
             document.getElementById('page_count').textContent = current_page;
             const keyword = document.getElementById('search').value ? document.getElementById('search').value : '';
             get_data(`/note/api?keyword=${encodeURIComponent(keyword)}&page=${current_page}`, show_list);
@@ -122,14 +141,19 @@
 
         search();
 
-        function insert_data()
-        {
+        function insert_data() {
             const form = document.getElementById('addNote');
+            // Sinkronisasi manual isi editor ke textarea
+            for (const instance of ClassicEditor.instances ?? []) {
+                instance.updateSourceElement(); // optional backup
+            }
+            document.querySelector('#add_content').value = document.querySelector('.ck-editor__editable').innerHTML;
+
             const formData = new FormData(form);
 
 
             api_store('/note/api', formData).then(response => {
-                if(response.status) open_success(response.message);
+                if (response.status) open_success(response.message);
                 else open_fail(response.message);
             });
             closeAddModal();
@@ -140,68 +164,72 @@
             add_title.value = '';
             add_content.value = '';
             search();
-            
+
         }
 
-        function update_data()
-        {
+        function update_data() {
             const form = document.getElementById('editModal');
             const id = document.getElementById('note_id');
-            
+
             const formData = new FormData(form);
 
             api_update('/note/api', formData, id.value).then(response => {
                 closeModal();
-                if(response.status) open_success(response.message);
+                if (response.status) open_success(response.message);
                 else open_fail(response.message);
                 search();
             });
         }
 
-        function delete_data(id)
-        {
+        function delete_data(id) {
             api_destroy('/note/api', id).then(response => {
-                if(response.status) open_success(response.message);
+                if (response.status) open_success(response.message);
                 else open_fail(response.message);
-                
+
                 closeContent()
                 search();
             });
         }
 
-        function show_list(datas) 
-        {
+        function show_list(datas) {
             const parent = document.getElementById('note-list');
             parent.innerHTML = '';
-        
+
             max_page = datas.datas.last_page;
 
-            if(datas.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
-            else document.getElementById('pagination').classList.remove('hidden');  
+            if (datas.datas.from === null) document.getElementById('pagination').classList.add('hidden');
+            else document.getElementById('pagination').classList.remove('hidden');
 
             datas.datas.data.forEach((data) => {
-                parent.innerHTML += ` <div onclick="openContent(${data.id})"
-                        class="block w-full border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 cursor-pointer transition-all duration-300 notelist">
-                        <div class="flex justify-between items-center mt-3">
-                            <h3 class="text-lg">${data.title}</h3>
-                            <p>${data.content}</p>
-                        </div>
-                        <p class="text-xs opacity-60"></p>
-                    </div>`;
+                parent.innerHTML += `
+<div onclick="openContent(${data.id})"
+     class="block w-full border-l-4 border-emerald-400 bg-white p-4 mb-3 rounded-lg shadow-sm hover:shadow-md hover:border-emerald-600 cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5 notelist">
+     <div class="flex justify-between items-start">
+         <div class="flex-1 min-w-0 mr-3">
+             <h3 class="text-lg font-semibold text-gray-800 truncate">${data.title}</h3>
+             <p class="text-gray-600 mt-2 text-sm line-clamp-2">${strLimit(data.content, 100)}</p>
+         </div>
+         <div class="flex flex-col items-end">
+             <span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">
+                 ${formatTanggal(data.created_at)}
+             </span>
+         </div>
+     </div>
+</div>
+`;
             });
         }
 
-        function content(data)
-        {
+        function content(data) {
             note = data.data;
             const card_parent = document.getElementById('card-parent');
 
-            card_parent.className = "bg-emerald-400 p-3 w-full md:w-7/12 shadow-md rounded-2xl h-96" 
-            card_parent.innerHTML = 
-            `<div class="flex justify-between items-center text-white">
+            card_parent.className = "bg-emerald-400 p-3 w-full md:w-7/12 shadow-md rounded-2xl h-96"
+            card_parent.innerHTML =
+                `<div class="flex justify-between items-center text-white">
                 <div>
                     <h2 class="text-lg md:text-xl font-semibold text-white">${note.title}</h2>
-                    <p class="text-xs text-gray-100">Created at 27 November 2024</p>
+                    <p class="text-xs text-gray-100">Created at ${formatTanggal(note.created_at)}</p>
                 </div>
                 <div class="flex flex-col md:flex-row gap-2">
                     <button onclick="openEditModal(${note.id})"
@@ -218,28 +246,25 @@
                 </div>
             </div>
             <div class="bg-emerald-50 p-3 mt-3 rounded-2xl h-72 overflow-auto">
-                <p class="text-sm">${note.content}</p>
+                <p class="text-sm text-wrap">${note.content}</p>
             </div>`;
         }
 
-        async function openContent(id)
-        {
+        async function openContent(id) {
 
-            get_data(`/note/api`, content, id);    
+            get_data(`/note/api`, content, id);
         }
 
-        function closeContent()
-        {
+        function closeContent() {
             const card_parent = document.getElementById('card-parent');
 
-            card_parent.className = "transition-all duration-500 ease-out flex-col justify-center hidden md:flex items-center p-3 shadow-md rounded-2xl w-7/12 h-96 bg-white" 
+            card_parent.className = "transition-all duration-500 ease-out flex-col justify-center hidden md:flex items-center p-3 shadow-md rounded-2xl w-7/12 h-96 bg-white"
             card_parent.innerHTML = `
               <img src="/image/ilustr1.jpg" alt="ilustrator" class="w-40 h-auto">
             <p class="text-gray-600">Click Note list for Preview</p>`;
         }
 
-        function getSearch() 
-        {
+        function getSearch() {
             let input = document.getElementById("search").value.toLowerCase();
             let items = document.querySelectorAll(".notelist");
 
@@ -261,8 +286,7 @@
             document.getElementById("editModalParent").classList.remove("hidden");
         }
 
-        function set_edit_modal(data)
-        {
+        function set_edit_modal(data) {
             const note = data.data;
 
             const id = document.getElementById('note_id');

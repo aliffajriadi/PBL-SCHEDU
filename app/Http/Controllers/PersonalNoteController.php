@@ -82,6 +82,7 @@ class PersonalNoteController extends Controller
     public function store(Request $request)
     {
         try {
+            
            
             $field = $request->validate([
                 'title' => 'required|max:255',
