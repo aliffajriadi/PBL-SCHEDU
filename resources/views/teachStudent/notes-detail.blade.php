@@ -56,7 +56,7 @@
                 <div class="mb-4">
                     <label for="add_content" class="block text-sm font-medium text-gray-700">Content</label>
                     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
-                    <textarea
+                    {{-- <textarea
                         class="mt-1 w-full border-2 border-emerald-400 rounded-xl py-2 px-3 text-sm h-32 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
                         placeholder="Write your note here..." name="content" id="add_content"></textarea>
                     <script>
@@ -65,11 +65,11 @@
                             .catch(error => {
                                 console.error(error);
                             });
-                    </script>
+                    </script> --}}
 
-                    {{-- <textarea id="add_content" name="content"
+                    <textarea id="add_content" name="content"
                         class="mt-1 w-full border-2 border-emerald-400 rounded-xl py-2 px-3 text-sm h-32 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-                        placeholder="Write your note here..."></textarea> --}}
+                        placeholder="Write your note here..."></textarea>
                 </div>
                 <div class="flex justify-end gap-3">
                     <button type="button" onclick="closeAddModal()"
@@ -144,10 +144,10 @@
         function insert_data() {
             const form = document.getElementById('addNote');
             // Sinkronisasi manual isi editor ke textarea
-            for (const instance of ClassicEditor.instances ?? []) {
-                instance.updateSourceElement(); // optional backup
-            }
-            document.querySelector('#add_content').value = document.querySelector('.ck-editor__editable').innerHTML;
+            // for (const instance of ClassicEditor.instances ?? []) {
+            //     instance.updateSourceElement(); // optional backup
+            // }
+            // document.querySelector('#add_content').value = document.querySelector('.ck-editor__editable').innerHTML;
 
             const formData = new FormData(form);
 
@@ -197,7 +197,7 @@
 
             max_page = datas.datas.last_page;
 
-            if (datas.datas.from === null) document.getElementById('pagination').classList.add('hidden');
+            if (datas.datas.data.length > 5) document.getElementById('pagination').classList.remove('hidden');
             else document.getElementById('pagination').classList.remove('hidden');
 
             datas.datas.data.forEach((data) => {
@@ -211,7 +211,7 @@
          </div>
          <div class="flex flex-col items-end">
              <span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">
-                 ${formatTanggal(data.created_at)}
+                 ${formatTanggal1(data.created_at)}
              </span>
          </div>
      </div>
@@ -224,30 +224,31 @@
             note = data.data;
             const card_parent = document.getElementById('card-parent');
 
-            card_parent.className = "bg-emerald-400 p-3 w-full md:w-7/12 shadow-md rounded-2xl h-96"
-            card_parent.innerHTML =
-                `<div class="flex justify-between items-center text-white">
-                <div>
-                    <h2 class="text-lg md:text-xl font-semibold text-white">${note.title}</h2>
-                    <p class="text-xs text-gray-100">Created at ${formatTanggal(note.created_at)}</p>
-                </div>
-                <div class="flex flex-col md:flex-row gap-2">
-                    <button onclick="openEditModal(${note.id})"
-                        class="text-sm flex py-1 items-center gap-1 cursor-pointer bg-amber-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
-                        <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
-                        <p class="text-xs md:text-md">Edit</p>
-                    </button>
+            card_parent.className = "bg-emerald-400 p-3 w-full md:w-7/12 shadow-md rounded-2xl h-full max-h-[32rem] flex flex-col overflow-hidden";
 
-                    <button onclick="delete_data(${note.id})"
-                        class="text-sm py-1 flex items-center gap-1 cursor-pointer bg-red-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
-                        <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
-                        <p class="text-xs md:text-md">Delete</p>
-                    </button>
-                </div>
-            </div>
-            <div class="bg-emerald-50 p-3 mt-3 rounded-2xl h-72 overflow-auto">
-                <p class="text-sm text-wrap">${note.content}</p>
-            </div>`;
+            card_parent.innerHTML = `
+    <div class="flex flex-wrap break-words justify-between items-start text-white gap-3">
+        <div class="max-w-[65%]">
+            <h2 class="text-lg md:text-xl font-semibold text-white break-words">${note.title}</h2>
+            <p class="text-xs text-gray-100 break-words">Created at ${formatTanggal(note.created_at)}</p>
+        </div>
+        <div class="flex flex-col md:flex-row gap-2">
+            <button onclick="openEditModal(${note.id})"
+                class="text-sm flex py-1 items-center gap-1 cursor-pointer bg-amber-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
+                <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
+                <p class="text-xs md:text-md">Edit</p>
+            </button>
+            <button onclick="delete_data(${note.id})"
+                class="text-sm py-1 flex items-center gap-1 cursor-pointer bg-red-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
+                <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
+                <p class="text-xs md:text-md">Delete</p>
+            </button>
+        </div>
+    </div>
+    <div class="bg-emerald-50 p-3 mt-3 rounded-2xl overflow-auto grow">
+        <p class="text-sm break-words whitespace-pre-line text-gray-800">${note.content}</p>
+    </div>`;
+
         }
 
         async function openContent(id) {
