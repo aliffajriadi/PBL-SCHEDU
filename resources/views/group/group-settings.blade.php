@@ -205,7 +205,7 @@
             <div class="mt-6 flex items-center gap-x-6">
 
                 <div class="relative inline-block">
-                    <button type="button" onclick="create_link_join()" class="rounded-md bg-emerald-400 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400">Create Join Link</button>
+                    <button type="button" onclick="create_join_link()" class="rounded-md bg-emerald-400 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400">Create Join Link</button>
                     <div id="create_popover"
                         class="absolute -top-8 right-0 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 transition-opacity duration-300 pointer-events-none">Copied!</div>
                 </div>
@@ -321,6 +321,8 @@
     </div>
 
     @endif
+
+    <x-success></x-success>
 
     <!-- JavaScript untuk Modal -->
     <script>
@@ -439,17 +441,17 @@
                 });
         }
 
-        function create_link_join() {
+        function create_join_link() {
             console.log('a');
 
         
             const input = document.getElementById('group_code');
             const popover = document.getElementById('create_popover');
 
-            const hostname = window.location.hostname;
+            const hostname = window.location.host;
             const port = window.location.port;
 
-            navigator.clipboard.writeText(input.value)
+            navigator.clipboard.writeText(`${hostname}/join_group/${input.value}`)
                 .then(() => {
                     // Tampilkan popover
                     popover.classList.remove('opacity-0');

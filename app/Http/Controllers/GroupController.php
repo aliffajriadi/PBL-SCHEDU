@@ -244,16 +244,11 @@ class GroupController extends Controller
                 $user->instance_uuid
             );
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Group Deleted Successfully'
-            ]);
+            return redirect('/group')->with('success', 'Group Deleted Successfully');
+
             
         }catch(\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            return redirect('/group')->with('error', 'There is something wrong when deleting group: ' . $e->getMessage());
         }
     }
 }

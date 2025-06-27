@@ -9,10 +9,7 @@ use App\Models\GroupTask;
 
 class GroupTaskUnitController extends Controller
 {
-    public function index()
-    {
-        
-    }
+
 
     public function store(Request $request, Group $group)
     {
@@ -26,7 +23,7 @@ class GroupTaskUnitController extends Controller
 
             GroupTaskUnit::create($field);
 
-            return redirect()->back();
+            return redirect()->back()->with('success', 'Berhasil menambahkan unit');
 
             // return response()->json([
             //     'status' => true, 
@@ -48,11 +45,7 @@ class GroupTaskUnitController extends Controller
             ]);
 
             $unit->update($field);
-
-            return response()->json([
-                'status' => true, 
-                'message' => 'Task Updates Successfully'
-            ]);
+            return redirect()->back()->with('success', 'Berhasil mengedit unit');
             
         }catch(\Exception $e) {
             return response()->json([
@@ -67,11 +60,10 @@ class GroupTaskUnitController extends Controller
         try{
             $unit->delete();
     
-            return response()->json([
-                'status' => true, 
-                'message' => 'Task Deleted Successfully'
-            ]);
+            return redirect()->back()->with('success', 'Berhasil menghapus unit');
         }catch(\Exception $e) {
+            return redirect()->back()->with('error', 'gagal menghapus unit' . $e->getMessage());
+
             return response()->json([
                 'status' => false, 
                 'message' => $e->getMessage()

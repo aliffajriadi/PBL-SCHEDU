@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="mt-6 flex justify-end">
-                <button type="button" onclick="closeModal('errorModal')" class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200 text-sm">
+                <button type="button" onclick="close_fail('errorModal')" class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200 text-sm">
                     OK
                 </button>
             </div>
@@ -84,5 +84,11 @@
             close_fail();
         }, 2000);
     }
+
+    @if(session('success'))
+        open_success("{{ session('success') }}");
+    @elseif(session('error'))
+        open_fail("{{ session('error') }}");
+    @endif
 
 </script>

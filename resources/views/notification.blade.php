@@ -99,6 +99,8 @@
         </div>
     </div>
 
+    <x-delete-modal></x-delete-modal>
+
     <!-- Script for Search and Filter -->
     <script>
 
@@ -133,7 +135,9 @@
             api_destroy('/notification/api', id).then(response => {
                 document.getElementById('content-open').classList.add('hidden');
                 document.getElementById('content-close').style.display = 'block';
-                search()
+                search();
+                closeDeleteModal();
+
             });
         }
 
@@ -169,7 +173,7 @@
             document.getElementById('content-open').classList.remove('hidden');
             document.getElementById('content-close').style.display = 'none';
             document.getElementById('content-delete').onclick = () => {
-                delete_data(id)
+                openDeleteModal(id, delete_data);
             }
         }
 
@@ -181,7 +185,7 @@
             let type;
             let is_read;
 
-            if(notifications.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+            if(notifications.datas.last_page <= 1) document.getElementById('pagination').classList.add('hidden'); 
             else document.getElementById('pagination').classList.remove('hidden');  
 
             let datas = notifications.datas;
@@ -285,7 +289,7 @@
                 let notif;
                 let is_read;
 
-                if(notifications.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+                if(notifications.datas.last_page <= 1) document.getElementById('pagination').classList.add('hidden'); 
                 else document.getElementById('pagination').classList.remove('hidden');  
 
                 let datas = notifications.datas;
@@ -352,7 +356,7 @@
                 document.getElementById('content-open').classList.remove('hidden');
                 document.getElementById('content-close').style.display = 'none';
                 document.getElementById('content-delete').onclick = () => {
-                    delete_data(id)
+                    openDeleteModal(id, delete_data);
                 }
             }
 
@@ -362,6 +366,8 @@
                     document.getElementById('content-open').classList.add('hidden');
                     document.getElementById('content-close').style.display = 'block';
                     search();
+
+                    closeDeleteModal();
                 });
             }
 

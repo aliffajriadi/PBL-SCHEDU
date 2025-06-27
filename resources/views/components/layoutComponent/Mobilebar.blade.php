@@ -1,5 +1,7 @@
 @props(['role'])
-
+@php
+    $path = '/group/' . Request::segment(2);    
+@endphp
 <aside id="menuMobile"
     class="w-4/5 max-w-xs bg-emerald-500/80 backdrop-blur-sm text-white flex-col p-5 fixed z-50 md:hidden overflow-y-auto">
     <div class="flex justify-between items-center mb-6 pt-3">
@@ -58,37 +60,41 @@
                     <p class="font-semibold">Group</p>
                 </a>
 
-                <div class="ps-5">
-                    <a href="/group"
-                        class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                        <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
-                        <p class="font-semibold">Group Dashboard</p>
-                    </a>
-                    <a href="/group/note"
-                        class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                        <img src="{{ asset('assets/bx-notepad 2.svg') }}" class="w-5 h-auto" />
-                        <p class="font-semibold">Group Notes</p>
-                    </a>
+                @if(Request::segment(1) === 'group' && Request::segment(2) !== null)
 
-                    <a href="/group/task"
-                        class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                        <img src="{{ asset('assets/bx-task (1) 2.svg') }}" class="w-5 h-auto" />
-                        <p class="font-semibold">Group Task</p>
-                    </a>
-
-                    <a href="/group/schedule"
-                        class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                        <img src="{{ asset('assets/calender-white.svg') }}" class="w-5 h-auto" />
-                        <p class="font-semibold">Group Schedule</p>
-                    </a>
-                    @if ($role == 'teacher')
-                        <a href="/group/settings"
+                    <div class="ps-5">
+                        <a href="/group"
                             class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                            <img src="{{ asset('assets/setting.svg') }}" class="w-5 h-auto" />
-                            <p class="font-semibold">Group Settings</p>
+                            <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
+                            <p class="font-semibold">Group Dashboard</p>
                         </a>
-                    @endif
-                </div>
+                        <a href="/group/note"
+                            class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                            <img src="{{ asset('assets/bx-notepad 2.svg') }}" class="w-5 h-auto" />
+                            <p class="font-semibold">Group Notes</p>
+                        </a>
+
+                        <a href="/group/task"
+                            class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                            <img src="{{ asset('assets/bx-task (1) 2.svg') }}" class="w-5 h-auto" />
+                            <p class="font-semibold">Group Task</p>
+                        </a>
+
+                        <a href="/group/schedule"
+                            class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                            <img src="{{ asset('assets/calender-white.svg') }}" class="w-5 h-auto" />
+                            <p class="font-semibold">Group Schedule</p>
+                        </a>
+                        @if ($role == 'teacher')
+                            <a href="/group/settings"
+                                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                                <img src="{{ asset('assets/setting.svg') }}" class="w-5 h-auto" />
+                                <p class="font-semibold">Group Settings</p>
+                            </a>
+                        @endif
+                    </div>
+                @endif
+            
             </div>
         @endif
 

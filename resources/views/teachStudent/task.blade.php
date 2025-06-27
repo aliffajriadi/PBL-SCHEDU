@@ -100,6 +100,11 @@
         </div>
     </section>
 
+        
+    <x-success></x-success>
+    <x-delete-modal></x-delete-modal>
+    <x-update-modal></x-update-modal>
+
     <!-- Enhanced Modals -->
     <div id="add-task-modal" class="all-modal hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl p-8 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0 modal-content">
@@ -182,7 +187,7 @@
                         class="flex-1 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 transition-all font-medium">
                         Cancel
                     </button>
-                    <button type="button" id="update-button" onclick="update_data()"
+                    <button type="button" id="update-button-task" 
                         class="flex-1 bg-blue-500 text-white px-6 py-3 rounded-xl hover:bg-blue-600 transition-all font-medium">
                         Update Task
                     </button>
@@ -190,8 +195,7 @@
             </form>
         </div>
     </div>
-    
-    <x-success></x-success>
+
 
     <style>
         /* Enhanced Dropdown Animation */
@@ -297,9 +301,11 @@
                 document.getElementById('update-title').value = data.title;
                 document.getElementById('update-content').value = data.content;
                 document.getElementById('update-deadline').value = data.deadline;
-                document.getElementById('update-button').onclick = () => {
-                    update_data(data.id);
-                }
+                document.getElementById('update-button-task').onclick = () => {
+                    open_update_modal(data.id, update_data);
+                    document.getElementById('update-task-modal').classList.add('hidden');
+                };
+                console.log(data.id)
             }
 
             close_all_modal();
@@ -311,6 +317,7 @@
                 if (modalContent) {
                     modalContent.style.transform = 'scale(1)';
                     modalContent.style.opacity = '1';
+                    modalContent.ad
                 }
             }, 10);
         }
@@ -362,7 +369,7 @@
             const cardClass = `task-card bg-white/95 backdrop-blur-sm mb-4 p-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border-l-4 ${getPriorityClass()}`;
             
             const actionButton = isComplete 
-                ? `<button onclick="delete_data(${data.id})" class="bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs py-2 px-4 transition-all duration-300 flex items-center">
+                ? `<button onclick="openDeleteModal(${data.id}, delete_data)" class="bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs py-2 px-4 transition-all duration-300 flex items-center">
                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"></path>
                      </svg>
@@ -397,7 +404,7 @@
                                         </svg>
                                         View Details
                                     </button>
-                                    <button onclick="delete_data(${data.id})" 
+                                    <button onclick="openDeleteModal(${data.id}, delete_data)" 
                                         class="block w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 transition-colors">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"></path>
@@ -469,6 +476,9 @@
                 search();
                 if(response.status) open_success(response.message);
                 else open_fail(response.message);
+
+                close_update_modal()
+
             });
 
             close_all_modal();
@@ -479,6 +489,7 @@
                 search();
                 if(response.status) open_success(response.message);
                 else open_fail(response.message);
+                closeDeleteModal();
             });
         }
 

@@ -126,7 +126,7 @@
         let member_count;
         let group_pic;
 
-        if(groups.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+        if(groups.datas.last_page <= 1) document.getElementById('pagination').classList.add('hidden'); 
         else document.getElementById('pagination').classList.remove('hidden');  
 
         max_page = groups.datas.last_page;
@@ -301,11 +301,5 @@
         }
         api_store('/group/api', formData);
     }
-
-    @if(session('success'))
-        open_success("{{ session('success') }}");
-    @elseif(session('error'))
-        open_fail("{{ session('error') }}");
-    @endif
 
 </script>

@@ -183,13 +183,19 @@ class MemberOfController extends Controller
 
             $query->delete();
 
-            return redirect()->back();
+            $pesan = match($table) {
+                'notes' => 'catatan',
+                'schedules' => 'jadwal',
+                'tasks' => 'unit dan tugas',
+                'members' => 'anggota di dalam grup',
+                'pending' => 'semua permintaan masuk ke dalam grup'
+            };
+
+            return redirect()->back()->with('success', 'berhasil menghapus semua ' . $pesan);
 
         }catch(\Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            return redirect()->back()->with('error', 'gagal menjalankan fungsi: ' . $e->getMessage() );
+            
         }
     }
 }

@@ -116,16 +116,20 @@
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeModal()"
                         class="bg-gray-500 text-white px-4 py-2 rounded-xl hover:opacity-75">Cancel</button>
-                    <button type="button" onclick="update_data()"
+                    <button type="button" onclick="open_update_modal(-1, update_data); closeModal();"
                         class="bg-emerald-400 text-white px-4 py-2 rounded-xl hover:opacity-75">Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <x-delete-modal></x-delete-modal>
     <x-success></x-success>
+    <x-update-modal></x-update-modal>
 
     <script>
+   
+
         const debounce_search = debounce(search, 500);
 
         function debounce_refresh() {
@@ -178,6 +182,7 @@
                 if (response.status) open_success(response.message);
                 else open_fail(response.message);
                 search();
+                close_update_modal();
             });
         }
 
@@ -185,7 +190,7 @@
             api_destroy('/note/api', id).then(response => {
                 if (response.status) open_success(response.message);
                 else open_fail(response.message);
-
+                closeDeleteModal()
                 closeContent()
                 search();
             });
@@ -197,26 +202,26 @@
 
             max_page = datas.datas.last_page;
 
-            if (datas.datas.data.length > 5) document.getElementById('pagination').classList.remove('hidden');
+            if (datas.datas.last_page <= 1) document.getElementById('pagination').classList.add('hidden');
             else document.getElementById('pagination').classList.remove('hidden');
 
             datas.datas.data.forEach((data) => {
                 parent.innerHTML += `
-<div onclick="openContent(${data.id})"
-     class="block w-full border-l-4 border-emerald-400 bg-white p-4 mb-3 rounded-lg shadow-sm hover:shadow-md hover:border-emerald-600 cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5 notelist">
-     <div class="flex justify-between items-start">
-         <div class="flex-1 min-w-0 mr-3">
-             <h3 class="text-lg font-semibold text-gray-800 truncate">${data.title}</h3>
-             <p class="text-gray-600 mt-2 text-sm line-clamp-2">${strLimit(data.content, 100)}</p>
-         </div>
-         <div class="flex flex-col items-end">
-             <span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">
-                 ${formatTanggal1(data.created_at)}
-             </span>
-         </div>
-     </div>
-</div>
-`;
+                <div onclick="openContent(${data.id})"
+                    class="block w-full border-l-4 border-emerald-400 bg-white p-4 mb-3 rounded-lg shadow-sm hover:shadow-md hover:border-emerald-600 cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5 notelist">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1 min-w-0 mr-3">
+                            <h3 class="text-lg font-semibold text-gray-800 truncate">${data.title}</h3>
+                            <p class="text-gray-600 mt-2 text-sm line-clamp-2">${strLimit(data.content, 100)}</p>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">
+                                ${formatTanggal1(data.created_at)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                `;
             });
         }
 
@@ -238,7 +243,7 @@
                 <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
                 <p class="text-xs md:text-md">Edit</p>
             </button>
-            <button onclick="delete_data(${note.id})"
+            <button onclick="openDeleteModal(${note.id}, delete_data)"
                 class="text-sm py-1 flex items-center gap-1 cursor-pointer bg-red-500 px-2 rounded-lg hover:opacity-75 transition-all duration-300">
                 <img src="{{ asset('assets/edit.svg') }}" class="w-4 h-auto">
                 <p class="text-xs md:text-md">Delete</p>

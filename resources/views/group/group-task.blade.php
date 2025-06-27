@@ -1,3 +1,5 @@
+{{-- @dd(session('success'), session('error')) --}}
+
 <x-layout title="Group Task" role="{{ $role }}" :user="$user">
     <x-nav-group type="search" page="tasks"></x-nav-group>
 
@@ -44,8 +46,8 @@
                         
                         
                         <div class="flex gap-4">
-                            <button type="button" onclick="update_data()" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Task</button>
-                            <button type="button" onclick="openDeleteModal()"
+                            <button type="button" onclick="open_update_modal(false, update_data)" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Task</button>
+                            <button type="button" onclick="openDeleteModalTask()"
                                 class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Delete Task</button>
                         </div>
                     </form>
@@ -228,7 +230,7 @@
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-4">
-                        <button type="button" onclick="closeDeleteModal()"
+                        <button type="button" onclick="closeDeleteModalTask()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
@@ -265,6 +267,9 @@
     @endif
 
     <x-success></x-success>
+    <x-update-modal></x-update-modal>
+    <x-delete-modal></x-delete-modal>
+
 
     <!-- JavaScript untuk Pratinjau File, Modal Tambah, Modal Unit, dan Modal Delete -->
     <script>
@@ -350,16 +355,10 @@
                 modal.classList.add('hidden');
             };
 
-            window.open_update_modal = function ()
-            {
-                const modal = document.getElementById('add-unit-modal');
-                const form = document.getElementById('form-unit');
-                form.action = '/task/unit/'; 
-                modal.classList.remove('hidden');
-            }
+
 
             // Fungsi Modal Delete
-            window.openDeleteModal = function() {
+            window.openDeleteModalTask = function() {
                 const modal = document.getElementById('delete-modal');
                 // const titleSpan = document.getElementById('delete-task-title');
                 // const form = document.getElementById('delete-task-form');
@@ -368,7 +367,7 @@
                 modal.classList.remove('hidden');
             };
 
-            window.closeDeleteModal = function() {
+            window.closeDeleteModalTask = function() {
                 const modal = document.getElementById('delete-modal');
                 modal.classList.add('hidden');
             };
@@ -405,7 +404,7 @@
         parent.innerHTML = '';
         max_page = units.datas.last_page;
 
-        if(units.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+        if(units.datas.last_page <= 1) document.getElementById('pagination').classList.add('hidden'); 
         else document.getElementById('pagination').classList.remove('hidden');  
 
         units.datas.data.forEach(unit => {
@@ -477,7 +476,7 @@
 
     }
 
-    function insert_data2(id) 
+    function insert_submission(id) 
     {
         // Buat objek FormData
         const form = document.getElementById('submission-form');
@@ -501,7 +500,7 @@
         });
     }
 
-    function update_submission(id, task_id)
+    function update_submission(submission_id)
     {
         const form = document.getElementById('submission-form');
 
@@ -512,17 +511,20 @@
             formData.append('files[]', file);
         });
 
-        api_update(`${path}/s`, formData, id, true).then((response) => {
-            show_data(task_id)
+        api_update(`${path}/s`, formData, submission_id, true).then((response) => {
+            show_data(task_selected);
+            close_update_modal();
         });
     }
 
-    function delete_submission(id, task_id)
+    function delete_submission(id)
     {
         api_destroy(`${path}/s`, id).then((response) => {
-            show_data(task_id);
+            show_data(task_selected);
             if(response.status) open_success(response.message);
             else open_fail(response.message);
+
+            closeDeleteModal();
         });
 
     }
@@ -604,11 +606,11 @@
                 document.getElementById('not-submitted-button').classList.add('hidden');
 
                 document.getElementById('delete-submission').onclick = () => {
-                    delete_submission(submission.id, data.id);
+                    openDeleteModal(submission.id, delete_submission);
                 };
 
                 document.getElementById('update-submission').onclick = () => {
-                    update_submission(submission.id, data.id);
+                    open_update_modal(submission.id, update_submission);
                 };
 
                 document.getElementById('content-submission-description').value = submission.description;
@@ -637,7 +639,7 @@
                 document.getElementById('not-submitted-button').classList.remove('hidden');
 
                 document.getElementById('submit-submission').onclick = () => {
-                    insert_data2(data.id);
+                    insert_submission(data.id);
                 }
             }
             
@@ -678,6 +680,8 @@
             if(response.status) open_success(response.message);
             else open_fail(response.message);
             reset_list();
+
+            close_update_modal();
         });
     }
 
@@ -688,6 +692,8 @@
             else open_fail(response.message);
             closeDeleteModal();
             reset_list();
+            document.getElementById('default-content').classList.remove('hidden');
+            document.getElementById('content-active').classList.add('hidden');
         });
 
     }

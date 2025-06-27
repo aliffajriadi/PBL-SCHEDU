@@ -33,7 +33,7 @@
         <h2 class="font-semibold text-green-600 pt-12 text-3xl pb-6">
           Login
         </h2>
-        <form action="/login" method="POST" class="md:w-full md:px-44">
+        <form id="form-login" action="/login" method="POST" class="md:w-full md:px-44">
           @csrf
           <div class="flex flex-col space-y-4">
             <div class="flex flex-col text-start">
@@ -58,8 +58,20 @@
                 type="password"
                 required/>
             </div>
-        
-            <button class="bg-green-600 mt-3 text-white p-2 rounded-2xl">
+
+            <div class="flex flex-col text-start">
+              <label for="password" class="text-green-600 ps-2">Login as :</label>
+              <div class="flex items-center gap-x-3">
+                <input id="login_participant" name="login_as" type="radio" checked class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-emerald-600 checked:bg-emerald-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="login_participant" class="block text-sm/6 font-medium text-gray-900">Teacher/Student</label>
+              </div>
+              <div class="flex items-center gap-x-3">
+                <input id="login_organizer" name="login_as" type="radio" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-emerald-600 checked:bg-emerald-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="login_organizer" class="block text-sm/6 font-medium text-gray-900">Instance Organizer</label>
+              </div>
+            </div>
+
+            <button type="submit" class="bg-green-600 mt-3 text-white p-2 rounded-2xl">
               Sign in
             </button>
           </div>
@@ -89,10 +101,25 @@
 
   <script>
 
+    const form = document.getElementById('form-login');
+    form.addEventListener('submit', function (e) {
+            
+      e.preventDefault()
+
+      if (document.getElementById('login_participant').checked) {
+        form.action = '/login';
+      }else if(document.getElementById('login_organizer').checked){
+        form.action = '/staff/login';
+      }
+
+      form.submit();
+    })
 
     @if(session('error'))
       open_fail("{{session('error')}}");
     @endif
+
+
 
   </script>
 

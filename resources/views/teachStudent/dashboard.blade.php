@@ -172,11 +172,5 @@
             updateProgress({{ $data['f_task_count'] }}, {{ $data['uf_task_count'] + $data['f_task_count'] }}); // Ubah disini untuk data nya nanti
         };
 
-        @if(session('success'))
-            open_success("{{ session('success') }}");
-        @elseif(session('error'))
-            open_fail("{{ session('error') }}");
-        @endif
-
     </script>
 </x-layout>

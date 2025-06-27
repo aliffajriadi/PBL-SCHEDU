@@ -40,7 +40,7 @@
 
                     <br>
                     <div class="flex gap-4">
-                        <button type="button" onclick="update_data()" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Note</button>
+                        <button type="button" onclick="open_update_modal(false, update_data)" class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">Update Note</button>
                         <button id="delete-button" type="button" onclick="openDeleteModal(1, a)"
                             class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Delete Note</button>
                     </div>
@@ -156,6 +156,7 @@
     @endif
 
     <x-success></x-success>
+    <x-update-modal></x-update-modal>
 
     <!-- JavaScript untuk Pratinjau File, Modal Tambah, dan Modal Delete -->
     <script>
@@ -235,7 +236,7 @@
             const parent = document.getElementById('note-list');
             parent.innerHTML = '';
 
-            if(notes.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+            if(notes.datas.last_page <= 1) document.getElementById('pagination').classList.add('hidden'); 
             else document.getElementById('pagination').classList.remove('hidden');  
 
             max_page = notes.datas.last_page;
@@ -345,6 +346,8 @@
 
                 if(response.status) open_success(response.message);
                 else open_fail(response.message);
+
+                close_update_modal();
             });
         }
 

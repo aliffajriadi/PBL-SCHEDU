@@ -80,11 +80,11 @@
                 <input type="datetime-local" id="start-update" name="start_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <input type="datetime-local" id="end-update" name="end_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <div class="flex justify-end gap-4">
-                    <button type="button" onclick="close_update_modal()"
+                    <button type="button" onclick="close_update_modal_schedule()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                         Batal
                     </button>
-                    <button type="button" id="update-button"
+                    <button type="button" id="update-button-schedule"
                         {{-- onclick="update_data()" --}}
                         class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
                         Simpan
@@ -94,6 +94,8 @@
         </div>
     </div>
 
+    <x-delete-modal></x-delete-modal>
+    <x-update-modal></x-update-modal>
     <x-success></x-success>
 
 </x-layout>
@@ -125,7 +127,7 @@
         const parent = document.getElementById('schedule-list');
         parent.innerHTML = '';
 
-        if(datas.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+        if(datas.datas.last_page <= 1) document.getElementById('pagination').classList.add('hidden'); 
         else document.getElementById('pagination').classList.remove('hidden');  
 
         max_page = datas.datas.last_page;
@@ -148,10 +150,10 @@
                                 <span class="text-lg font-bold hover:text-2xl">⋮</span>
                             </button>
                             <div class="all-modal dropdown-menu hidden absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg z-10">
-                                <button data-detail='${JSON.stringify(data).replace(/'/g, "&apos;")}' class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100" onclick="open_update_modal(this)">
+                                <button data-detail='${JSON.stringify(data).replace(/'/g, "&apos;")}' class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-emerald-100" onclick="open_update_modal_schedule(this)">
                                     Detail
                                 </button>
-                                <button class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-emerald-100" onclick="delete_data(${data.id})">
+                                <button class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-emerald-100" onclick="openDeleteModal(${data.id}, delete_data)">
                                     Delete
                                 </button>
                             </div>
@@ -184,10 +186,11 @@
 
     function delete_data(id)
     {
-        api_destroy('schedule/api', id).then(response => {
+        api_destroy('/schedule/api', id).then(response => {
             search();
             if(response.status) open_success(response.message);
             else open_fail(response.message);
+            closeDeleteModal()
         });
     }
 
@@ -200,6 +203,8 @@
             search();
             if(response.status) open_success(response.message);
             else open_fail(response.message);
+
+            close_update_modal_schedule();
         });
     }
 
@@ -215,10 +220,9 @@
         modal.classList.add('hidden')
     }
 
-    function open_update_modal(el)
+    function open_update_modal_schedule(el)
     {
         const schedule = JSON.parse(el.getAttribute('data-detail'));
-        console.log(schedule)
 
         const modal = document.getElementById('update-schedule-modal');
         modal.classList.remove('hidden');
@@ -227,13 +231,18 @@
         document.getElementById('start-update').value = schedule.start_datetime;
         document.getElementById('end-update').value = schedule.end_datetime;
 
-        document.getElementById('update-button').onclick = () => update_data(schedule.id);
+        document.getElementById('update-button-schedule').onclick = () => {
+            open_update_modal(schedule.id, update_data)
+            close_update_modal_schedule();
+            
+        };
+        
     }
 
-    function close_update_modal()
+    function close_update_modal_schedule()
     {
         const modal = document.getElementById('update-schedule-modal');
-        modal.classList.add('hidden')
+        modal.classList.add('hidden');
     }
 
     function toggleDropdown(button) {

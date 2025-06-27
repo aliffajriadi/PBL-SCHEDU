@@ -103,7 +103,7 @@ class PersonalTaskController extends Controller
             }
 
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'message' => 'Task Updated Successfully'
             ]);
 

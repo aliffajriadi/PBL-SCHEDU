@@ -72,7 +72,7 @@
                             Batal
                         </button>
                         <button type="button"
-                            onclick="update_data()"
+                            onclick="open_update_modal(false, update_data); closeEditScheduleModal();"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
                             Simpan
                         </button>
@@ -108,9 +108,11 @@
     @endif
 
     <x-success></x-success>
+    <x-update-modal></x-update-modal>
 
     <!-- JavaScript untuk Modal -->
     <script>
+
 
         const path = window.location.pathname;
         let schedule_selected = -1;
@@ -150,7 +152,7 @@
             max_page = datas.datas.last_page;
             set_calendar(datas.calendar);
 
-            if(datas.datas.from === null) document.getElementById('pagination').classList.add('hidden'); 
+            if(datas.datas.last_page <= 1) document.getElementById('pagination').classList.add('hidden'); 
             else document.getElementById('pagination').classList.remove('hidden');  
 
             const parent = document.getElementById('schedule-list');
@@ -196,9 +198,9 @@
                 if(response.status) open_success(response.message);
                 else open_fail(response.message);
                 
+                close_update_modal();
             });
         
-            closeEditScheduleModal();
         }
 
         function delete_data()
@@ -227,6 +229,7 @@
             // Fungsi Modal Edit Jadwal
             window.openEditScheduleModal = function(id, title, body, start, end) {
                 schedule_selected = id;
+                console.log(schedule_selected);
                 const modal = document.getElementById('edit-schedule-modal');
                 const form = document.getElementById('edit-schedule-form');
                 document.getElementById('edit-title').value = title;
@@ -238,7 +241,6 @@
             };
 
             window.closeEditScheduleModal = function() {
-                schedule_selected = -1;
 
                 const modal = document.getElementById('edit-schedule-modal');
                 modal.classList.add('hidden');
@@ -257,7 +259,6 @@
             };
 
             window.closeDeleteModal = function() {
-                schedule_selected = -1;
                 const modal = document.getElementById('delete-modal');
                 modal.classList.add('hidden');
             };

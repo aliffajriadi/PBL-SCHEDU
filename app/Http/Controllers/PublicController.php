@@ -21,7 +21,7 @@ class PublicController extends Controller
     public function login(Request $request)
     {
         try {
-            // if(Auth::user() !== null) redirect('/dashboard');
+        // if(Auth::user() !== null) redirect('/dashboard');
 
             $credentials = $request->validate([
                 'email' => 'required',
