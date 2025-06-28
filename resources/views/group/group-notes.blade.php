@@ -105,7 +105,7 @@
 
     <!-- Modal Tambah Catatan (Hanya untuk Guru) -->
     @if($role === 'teacher')
-        <div id="add-note-modal" class="hidden fixed inset-0 bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
+        <div id="add-note-modal" class="hidden overflow-auto fixed inset-0 bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Catatan Baru</h3>
                 <form id="add-note-form" action="api" method="POST" enctype="multipart/form-data">

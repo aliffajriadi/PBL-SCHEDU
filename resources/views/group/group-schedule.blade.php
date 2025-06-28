@@ -29,8 +29,8 @@
 
     <!-- Modal Tambah Jadwal (Hanya untuk Guru) -->
     @if($role === 'teacher')
-        <div id="add-schedule-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <div id="add-schedule-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md slide-down">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Jadwal Baru</h3>
                 <form id="add-form" action="/schedules/add" method="POST">
                     @csrf
