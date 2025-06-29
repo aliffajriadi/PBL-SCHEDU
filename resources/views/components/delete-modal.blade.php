@@ -1,4 +1,4 @@
-    <div id="delete-modal" class="hidden fixed inset-0 bg-slate-50/50 shadow-md backdrop-blur-sm flex items-center justify-center">
+    <div id="delete-modal" class="hidden fixed inset-0 bg-black/50 shadow-md backdrop-blur-sm flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus Catatan</h3>
             <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus catatan ini? Tindakan ini tidak dapat dibatalkan.</p>
