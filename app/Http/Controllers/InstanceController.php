@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Group;
 use App\Models\Instance;
+use App\Models\InstanceNotification;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\NotificationStatus;
@@ -83,11 +84,14 @@ class InstanceController extends Controller
                 'teacher' => User::where('is_teacher', 1,)->where('instance_uuid', $user->uuid)->count(),
                 'group' => Group::where('instance_uuid', $user->uuid)->count(),
             ];
-            $notifications = NotificationStatus::with('notification')
-                ->where('user_uuid', $user->uuid)
-                ->latest()
-                ->limit(4)
-                ->get();
+
+            $notifications = InstanceNotification::where('instance_uuid', $user->uuid)->latest()->limit(4)->get();
+
+            // $notifications = NotificationStatus::with('notification')
+            //     ->where('user_uuid', $user->uuid)
+            //     ->latest()
+            //     ->limit(4)
+            //     ->get();
             $groups = Group::with('user:uuid,name')
                 ->where('instance_uuid', $user->uuid)
                 ->latest()
@@ -132,7 +136,11 @@ class InstanceController extends Controller
 
             return redirect('/staff/dashboard')->with('success', 'Login Success');
         } catch (\Throwable $e) {
-            return redirect()->back()->with('error', 'Login failed: ' . $e->getMessage());
+            return [
+                'message' => $e->getMessage()
+            ];
+
+            // return redirect()->back()->with('error', 'Login failed: ' . $e->getMessage());
         }
     }
 

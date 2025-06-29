@@ -26,15 +26,6 @@ class UserController extends Controller
         NotificationController::refresh_notification();
     }
 
-    public function user_check(Request $request)
-    {
-        return response()->json([
-            'participant' => Auth::user(),
-            'staff' => Auth::guard('staff')->user(),
-            'admin' => Auth::guard('admin')->user(),
-        ]);
-    }
-
     public function insert_file(Request $request)
     {
         try {

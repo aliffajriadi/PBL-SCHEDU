@@ -130,7 +130,7 @@
             <p class="font-semibold">Edit Profile</p>
         </a>
 
-        <form action="{{ $role === 'staff' ? '/staff/logout' : '/logout' }}" method="POST"
+        <form action="/logout" method="POST"
             class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
             @csrf
             <button type="submit" class="flex items-center gap-2 w-full text-left">

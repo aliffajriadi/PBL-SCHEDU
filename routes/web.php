@@ -42,7 +42,7 @@ use App\Http\Controllers\InstanceNotificationController;
 */
 
 
-Route::get('user-check', [UserController::class, 'user_check']);
+Route::get('user-check', [PublicController::class, 'user_check']);
 
 Route::get('/', [PublicController::class, 'index']);
 Route::get('/login', [PublicController::class, 'login_page']);
@@ -55,13 +55,14 @@ Route::get('/login', [PublicController::class, 'login_page']);
 Route::get('/login', [PublicController::class, 'login_page']);
 Route::post('/login', [PublicController::class, 'login'])->name('login');
 
+Route::post('/logout', [PublicController::class, 'logout']);
+
 
 // User Routes
 /* 
     Route ini digunakan untuk semua user dengan role teacher / student dengan guard default 'web'
 */
 Route::middleware('auth:web')->prefix('/')->group(function () {
-    Route::post('/logout', [PublicController::class, 'logout']);
     
     Route::get('/join_group/{group_code:group_code}', [MemberOfController::class, 'join_link']);
     

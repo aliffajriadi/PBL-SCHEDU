@@ -20,7 +20,7 @@ class InstanceNotificationController extends Controller
 
     public function home()
     {
-        return view('notification', [
+        return view('staff.notification', [
             'user' =>  Auth::guard('staff')->user(),
             'role' => session('role')
         ]);
@@ -49,7 +49,7 @@ class InstanceNotificationController extends Controller
 
             return response()->json([
                 'status' => true,
-                'datas' => $notifications->get(),
+                'datas' => $notifications->paginate(5),
                 'keyword' => $keyword,
                 'carbon_now' => Carbon::now()->toDateTimeString()
             ]);

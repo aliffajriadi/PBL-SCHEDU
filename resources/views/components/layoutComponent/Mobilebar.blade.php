@@ -124,11 +124,26 @@
                 <p class="font-semibold">Edit Profile</p>
             </a>
 
-            <a href="{{ $role == 'staff' ? '/staff/logout' : '/logout'}}"
+            <form id="logout_form" action="/logout" method="POST">
+                @csrf
+            </form>
+            <a href="/logout" onclick="logout(event)"
                 class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
                 <img src="{{ asset('assets/Log out.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Logout</p>
             </a>
         </div>
+
+        <script>
+
+            function logout(e)
+            {
+                e.preventDefault();
+                const logout_form = document.getElementById('logout_form');
+            
+                logout_form.submit();
+            }
+
+        </script>
 
 </aside>

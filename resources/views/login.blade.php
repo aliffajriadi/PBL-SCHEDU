@@ -104,13 +104,15 @@
     const form = document.getElementById('form-login');
     form.addEventListener('submit', function (e) {
             
-      e.preventDefault()
+      e.preventDefault();
 
       if (document.getElementById('login_participant').checked) {
         form.action = '/login';
       }else if(document.getElementById('login_organizer').checked){
         form.action = '/staff/login';
       }
+
+      console.log(form.action);
 
       form.submit();
     })

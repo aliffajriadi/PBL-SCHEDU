@@ -7,6 +7,15 @@ use Illuminate\Support\Facades\Auth;
 
 class PublicController extends Controller
 {
+    public function user_check(Request $request)
+    {
+        return response()->json([
+            'participant' => Auth::user(),
+            'staff' => Auth::guard('staff')->user(),
+            'admin' => Auth::guard('admin')->user(),
+        ]);
+    }
+
     public function index()
     {
         return view('home');
@@ -15,6 +24,8 @@ class PublicController extends Controller
     public function login_page()
     {
         if(Auth::check()) return redirect('/dashboard');
+        if(Auth::guard('staff')->check()) return redirect('/staff/dashboard');
+
         return view('login');
     }
 
