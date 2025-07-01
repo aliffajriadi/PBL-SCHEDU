@@ -486,7 +486,7 @@
         <a href="#about" class="text-slate-50 hover:underline py-2">About Us</a>
         <a href="#features" class="text-slate-50 hover:underline py-2">Feature</a>
         <a href="#report" class="text-slate-50 hover:underline py-2">Report</a>
-        <a href="login.html"
+        <a href="/login"
             class="btn-hover flex items-center text-white bg-green-500 hover:text-green-600 rounded-[20px] px-4 py-2 my-1 transition duration-300">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -533,15 +533,10 @@
                     class="w-full max-w-md object-contain rounded-lg animate-in" style="animation-delay: 0.2s;" />
             </div>
             <p class="text-lg md:text-xl text-black animate-in" style="animation-delay: 0.4s;">
-                Selamat datang di SchedU, platform yang dirancang khusus untuk
-                membantu mahasiswa dalam mengelola jadwal perkuliahan, tugas, dan
-                kolaborasi akademik secara efektif.
+                SchedU is a web-based app that helps schools manage schedules and academic collaboration. It supports different user roles like admins, staff, teachers, and students—each with features tailored to their needs.
             </p>
             <p class="text-lg md:text-xl text-black mt-4 animate-in" style="animation-delay: 0.6s;">
-                Kami memahami betapa pentingnya manajemen waktu dalam kehidupan
-                perkuliahan, itulah sebabnya kami menyediakan fitur pengingat otomatis
-                untuk jadwal kuliah, deadline tugas, serta sistem kolaborasi yang
-                memudahkan komunikasi dalam kerja kelompok.
+                From personal tasks to group events, SchedU makes planning and communication easier in academic environments.
             </p>
         </div>
         <div class="flex-1 flex justify-center hidden md:block">

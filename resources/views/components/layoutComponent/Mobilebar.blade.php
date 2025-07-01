@@ -6,6 +6,7 @@
     class="w-4/5 max-w-xs bg-emerald-500/80 backdrop-blur-sm text-white flex-col p-5 fixed z-50 md:hidden overflow-y-auto">
     <div class="flex justify-between items-center mb-6 pt-3">
         <img src="{{ asset('image/logowhite.png') }}" alt="logo" class="w-28 h-auto" />
+        
         <button class="text-white" onclick="toggleMenu()">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
