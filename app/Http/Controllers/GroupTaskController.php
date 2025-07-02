@@ -67,7 +67,9 @@ class GroupTaskController extends Controller
             'role' => $role, 
             'user' => $user_data,
             'unit_datas' => GroupTaskUnit::where('group_id', $group->id)->orderBy('created_at')->get(),
-            'submissions' => $submissions
+            'submissions' => $submissions,
+            'userData' => $user
+
         ]);
     }
 

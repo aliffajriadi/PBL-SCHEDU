@@ -72,7 +72,8 @@ class GroupController extends Controller
             'schedule_total' => $schedule->count(),
             'notes' => $note->orderBy('updated_at', 'DESC')->limit(3)->get(),
             'tasks' => $task->orderBy('updated_at', 'DESC')->limit(3)->get(),
-            'schedules' => $schedule->get()
+            'schedules' => $schedule->get(),
+            'userData' => $user
         ]);
     }
 
@@ -87,7 +88,8 @@ class GroupController extends Controller
         return view('group.group-list', [
             'role' => $role,
             'user' => $user_data,
-            'folder_name' => Auth::user()->instance->folder_name
+            'folder_name' => Auth::user()->instance->folder_name,
+            'userData' => $user
         ]);
     }
 

@@ -27,8 +27,9 @@
     <x-layoutComponent.SidebarDesktop :role="$role" />
 
     <!-- MOBILE NAVBAR -->
-    <nav
-        class="flex justify-between px-6 bg-white/50 backdrop-blur-sm fixed top-0 w-full left-0 py-2 shadow-md md:hidden items-center z-40">
+    <nav id="mobileNavbar"
+        class="flex justify-between px-6 bg-white/50 backdrop-blur-sm fixed top-0 w-full left-0 py-2 shadow-md md:hidden items-center z-40 transition-transform duration-300 transform">
+
         <div>
             <button class="focus:outline-none" id="menuToggle" onclick="toggleMenu()">
                 <div class="flex flex-col justify-between h-6 w-8 transform transition-all duration-500">
@@ -45,7 +46,7 @@
             <img src="{{ $image }}"
                 class="w-12 border-2 border-green-500 h-12 rounded-full shadow-md transition-all duration-300 hover:border-emerald-600 cursor-pointer"
                 alt="profile" onclick="dropdown('dropdownMenu')" id="dropdownButton" />
-                
+
         </div>
     </nav>
 
@@ -66,7 +67,7 @@
 
 
 
-    
+
     <script>
 
         function toggleMenu() {
@@ -100,5 +101,8 @@
 
         }
     </script>
+   
+
 </body>
+
 </html>

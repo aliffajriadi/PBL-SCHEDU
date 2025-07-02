@@ -507,7 +507,7 @@
             style="animation-delay: 0.2s;">
             Manage your tasks, events, and notes without the clutter.
         </h2>
-        <a href="#"
+        <a href="/login"
             class="mt-6 inline-block fade-in-left btn-hover bg-green-500 text-white px-6 py-2 rounded-[20px] hover:bg-green-600 transition duration-300 animate-in"
             style="animation-delay: 0.4s;">Get Started</a>
     </main>
@@ -625,21 +625,21 @@
                     <!-- Instansi Card -->
                     <div class="bg-white p-6 rounded-lg shadow-md card-hover hover:shadow-lg transition animate-in"
                         style="animation-delay: 0.2s;">
-                        <h2 class="text-5xl font-bold text-yellow-400 counter" data-target="27">0</h2>
+                        <h2 class="text-5xl font-bold text-yellow-400 counter" data-target="{{$dataCount['instansi']}}">0</h2>
                         <p class="text-lg font-semibold text-gray-700 mt-2">Instansi</p>
                     </div>
 
                     <!-- Teacher Card -->
                     <div class="bg-white p-6 rounded-lg shadow-md card-hover hover:shadow-lg transition animate-in"
                         style="animation-delay: 0.4s;">
-                        <h2 class="text-5xl font-bold text-green-400 counter" data-target="177">0</h2>
+                        <h2 class="text-5xl font-bold text-green-400 counter" data-target="{{$dataCount['teacher']}}">0</h2>
                         <p class="text-lg font-semibold text-gray-700 mt-2">Teacher</p>
                     </div>
 
                     <!-- Student Card -->
                     <div class="bg-white p-6 rounded-lg shadow-md card-hover hover:shadow-lg transition animate-in"
                         style="animation-delay: 0.6s;">
-                        <h2 class="text-5xl font-bold text-slate-800 counter" data-target="900">0</h2>
+                        <h2 class="text-5xl font-bold text-slate-800 counter" data-target="{{$dataCount['student']}}">0</h2>
                         <p class="text-lg font-semibold text-gray-700 mt-2">Student</p>
                     </div>
                 </div>

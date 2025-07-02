@@ -34,7 +34,8 @@ class MemberOfController extends Controller
             'members' => $members,
             'pending_requests' => $pending_requests,
             'group_name' => $group->name,
-            'group' => $group
+            'group' => $group,
+            'userData' => $user
         ]);
     }
 

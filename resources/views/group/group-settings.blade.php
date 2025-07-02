@@ -5,7 +5,7 @@
 @endphp
 
 
-<x-layout role="{{ $role }}" title="Group Settings" :user="$user">
+<x-layout role="{{ $role }}" title="Group Settings" :user="$user" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <x-nav-group type="name" page="settings" group_name="{{ $group_name }}"></x-nav-group>
 
     <!-- Konten Utama -->

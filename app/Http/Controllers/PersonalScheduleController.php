@@ -20,7 +20,8 @@ class PersonalScheduleController extends Controller
         $user_data = [$user->name, $user->email];
     
         return view('teachStudent.schedule', [
-            'user' => $user_data
+            'user' => $user_data,
+            'userData' => $user
         ]);
     }
 

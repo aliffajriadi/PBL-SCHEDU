@@ -27,7 +27,8 @@ class GroupScheduleController extends Controller
     
         return view('group.group-schedule', [
             'role' => $role, 
-            'user' => $user_data
+            'user' => $user_data,
+            'userData' => $user
         ]);
     }
 

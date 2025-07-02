@@ -1,4 +1,4 @@
-<x-layout title="Group" role={{$role}} :user="$user">
+<x-layout title="Group" role={{$role}} :user="$user" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <!-- Header Section -->
 
     <div class="bg-white p-4 mb-4 flex flex-col sm:flex-row justify-between items-center shadow-md rounded-2xl">

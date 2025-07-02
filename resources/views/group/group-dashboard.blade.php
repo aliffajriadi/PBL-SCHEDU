@@ -1,4 +1,4 @@
-<x-layout title="Group Dashboard" role="{{ $role }}" :user="$user">
+<x-layout title="Group Dashboard" role="{{ $role }}" :user="$user" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <x-nav-group type="name" page="dashboard" group_name="{{ $group->name }}"></x-nav-group>
 
     {{-- @dd($schedules) --}}

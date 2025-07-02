@@ -20,7 +20,8 @@ class PersonalTaskController extends Controller
             $user_data = [$user->name, $user->email];
 
             return view('teachStudent.task', [
-                'user' => $user_data
+                'user' => $user_data,
+                'userData' => $user
 
             ]);
     }

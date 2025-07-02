@@ -29,7 +29,8 @@ class GroupNoteController extends Controller
         return view('group.group-notes', [
             'role' => $role, 
             'user' => $user_data,
-            'latest_notes' => $latest_notes
+            'latest_notes' => $latest_notes,
+            'userData' => $user
         ]);
     }
 
