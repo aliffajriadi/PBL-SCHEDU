@@ -22,18 +22,27 @@
 
 
         @if ($role == 'teacher' or $role == 'student')
-            <a href="/note" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/note" class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item 
+                   hover:bg-green-400 
+                   {{ Request::is('note') ? 'bg-green-400 text-white' : '' }}">
                 <img src="{{ asset('assets/bx-notepad 2.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Notes</p>
             </a>
-            <a href="/task" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+
+            <a href="/task" class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item 
+                   hover:bg-green-400 
+                   {{ Request::is('task') ? 'bg-green-400 text-white' : '' }}">
                 <img src="{{ asset('assets/bx-task (1) 2.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Task</p>
             </a>
-            <a href="/schedule" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+
+            <a href="/schedule" class="flex items-center gap-2 p-2 rounded-xl cursor-pointer menu-item 
+                   hover:bg-green-400 
+                   {{ Request::is('schedule') ? 'bg-green-400 text-white' : '' }}">
                 <img src="{{ asset('assets/calender-white.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Schedule</p>
             </a>
+
         @endif
 
         @php
