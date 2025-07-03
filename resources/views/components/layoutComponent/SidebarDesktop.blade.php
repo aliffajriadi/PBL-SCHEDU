@@ -134,7 +134,7 @@
     <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">SETTING</p>
     <div>
         <a href="{{ $role === 'staff' ? '/staff/profile' : '/profile' }}"
-            class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            class="flex {{ request()->is('staff/account') ? 'bg-green-400' : 'hover:bg-green-400' }} items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
             <img src="{{ asset('assets/profile.svg') }}" class="w-5 h-auto" />
             <p class="font-semibold">Edit Profile</p>
         </a>
