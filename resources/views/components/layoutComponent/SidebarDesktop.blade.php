@@ -84,13 +84,11 @@
                         <img src="{{ asset('assets/calender-white.svg') }}" class="w-5 h-auto" />
                         <p class="font-semibold">Group Schedule</p>
                     </a>
-                    @if ($role == 'teacher')
-                        <a href="{{ $path }}/settings"
-                            class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
-                            <img src="{{ asset('assets/setting.svg') }}" class="w-5 h-auto" />
-                            <p class="font-semibold">Group Settings</p>
-                        </a>
-                    @endif
+                    <a href="{{ $path }}/settings"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                        <img src="{{ asset('assets/setting.svg') }}" class="w-5 h-auto" />
+                        <p class="font-semibold">Group Settings</p>
+                    </a>
 
                 </div>
 

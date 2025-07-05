@@ -28,7 +28,7 @@ class NotificationController extends Controller
         ); 
     }
 
-    public static function store($title, $content, $type, $item_id, $is_reminder, $visible_schedule, $group_id = null)
+    public static function store($title, $content, $type, $item_id, $is_reminder, $visible_schedule, $group_id = null, $target_id = null)
     {
         try{
             $notif = Notification::create([
@@ -63,7 +63,7 @@ class NotificationController extends Controller
             }else{
                 NotificationStatus::create([
                     'notif_id' => $notif_id,
-                    'user_uuid' => Auth::user()->uuid,
+                    'user_uuid' => $target_id ?: Auth::user()->uuid,
                 ]);
                 
             }

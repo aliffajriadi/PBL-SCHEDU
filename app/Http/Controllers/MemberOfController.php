@@ -13,7 +13,7 @@ use App\Models\NotificationStatus;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Hash;
 
 class MemberOfController extends Controller
 {
@@ -25,8 +25,8 @@ class MemberOfController extends Controller
             $user->name, $user->email
         ];
         
-        $members = MemberOf::with('user:uuid,name,email')->where('user_uuid', '!=', Auth::user()->uuid)->where('group_id', $group->id)->where('verified', true)->get();
-        $pending_requests = MemberOf::with('user:uuid,name,email')->where('user_uuid', '!=', Auth::user()->uuid)->where('group_id', $group->id)->where('verified', false)->get();
+        $members = MemberOf::with('user:uuid,name,email')->where('user_uuid', '!=', $group->created_by)->where('group_id', $group->id)->where('verified', true)->get();
+        $pending_requests = MemberOf::with('user:uuid,name,email')->where('user_uuid', '!=', $group->created_by)->where('group_id', $group->id)->where('verified', false)->get();
 
         return view('group.group-settings', [
             'role' => $role, 
@@ -55,11 +55,22 @@ class MemberOfController extends Controller
                 throw new \Exception('You have already joined this Group');
             }
 
+            $user = Auth::user();
+
             MemberOf::create([
-                'user_uuid' => Auth::user()->uuid,
+                'user_uuid' => $user->uuid,
                 'group_id' => $group->first()->id,
                 'verified' => false
             ]);
+
+            NotificationController::store("Permintaan baru bergabung ke grup {$group->name}.", 
+                "{$user->name} mengajukan permintaan bergabung ke dalam grup {$group->name}. Approve pada group settings untuk menyetujuinya dan Reject untuk menolaknya bergabung ke dalam group.", 
+                Group::class,
+                $group->id, 
+                false,
+                now(),
+                target_id: $group->created_by
+            );
 
             return redirect()->back();         
 
@@ -104,6 +115,15 @@ class MemberOfController extends Controller
                 'group_id' => $group->id,
                 'verified' => false
             ]);
+
+            NotificationController::store("Permintaan baru bergabung ke grup {$group->name}.", 
+                "{$user->name} mengajukan permintaan bergabung ke dalam grup {$group->name}. Approve pada group settings untuk menyetujuinya dan Reject untuk menolaknya bergabung ke dalam group.", 
+                Group::class,
+                $group->id, 
+                false,
+                now(),
+                target_id: $group->created_by
+            );
 
             return redirect('group')->with('success', 'Berhasil mengajukan permintaan bergabung ke dalam grup');         
 
@@ -164,6 +184,19 @@ class MemberOfController extends Controller
     public function delete_all(Request $request, Group $group, String $table)
     {
         try{
+
+            $request->validate([
+                'password' => 'required|string'
+            ]);
+
+            $password = $request->input('password');
+
+            $user = Auth::user();
+
+            if(!Hash::check($password, $user->password)){
+                throw new \Exception('Wrong input password');
+            }
+
 
             $table_name = match ($table) {
                 'notes' => 'group_notes',

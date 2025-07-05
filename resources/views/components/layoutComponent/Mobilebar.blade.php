@@ -68,30 +68,28 @@
                             <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                             <p class="font-semibold">Group Dashboard</p>
                         </a>
-                        <a href="/group/note"
+                        <a href="{{ $path }}/note"
                             class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
                             <img src="{{ asset('assets/bx-notepad 2.svg') }}" class="w-5 h-auto" />
                             <p class="font-semibold">Group Notes</p>
                         </a>
 
-                        <a href="/group/task"
+                        <a href="{{ $path }}/task"
                             class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
                             <img src="{{ asset('assets/bx-task (1) 2.svg') }}" class="w-5 h-auto" />
                             <p class="font-semibold">Group Task</p>
                         </a>
 
-                        <a href="/group/schedule"
+                        <a href="{{ $path }}/schedule"
                             class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
                             <img src="{{ asset('assets/calender-white.svg') }}" class="w-5 h-auto" />
                             <p class="font-semibold">Group Schedule</p>
                         </a>
-                        @if ($role == 'teacher')
-                            <a href="/group/settings"
-                                class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
-                                <img src="{{ asset('assets/setting.svg') }}" class="w-5 h-auto" />
-                                <p class="font-semibold">Group Settings</p>
-                            </a>
-                        @endif
+                        <a href="{{ $path }}/settings"
+                            class="flex items-center gap-2 p-2 hover:bg-green-400 active:bg-green-400 rounded-xl cursor-pointer menu-item">
+                            <img src="{{ asset('assets/setting.svg') }}" class="w-5 h-auto" />
+                            <p class="font-semibold">Group Settings</p>
+                        </a>
                     </div>
                 @endif
             

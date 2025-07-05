@@ -30,7 +30,6 @@ class PersonalNoteController extends Controller
     {
         $notes = PersonalNote::query()->where('user_uuid', Auth::user()->uuid);
 
-
         try {
             $keyword = $request->query('keyword');
 

@@ -22,20 +22,7 @@
         <div class="bg-white p-3 w-full md:w-5/12 shadow-md rounded-2xl">
             <h2 class="text-lg mb-4 font-semibold text-gray-800">Schedule List</h2>
             <div id="schedule-list" class="p-3 rounded-2xl h-96 overflow-auto">
-                @php
-                    $notes = [
-                        ['title' => 'Nasi Padang', 'created_at' => '87 minutes ago'],
-                        ['title' => 'Nasi Goreng', 'created_at' => '2 hours ago'],
-                        ['title' => 'Sate Ayam', 'created_at' => '1 day ago'],
-                        ['title' => 'Rendang Daging', 'created_at' => '3 days ago'],
-                        ['title' => 'Gado-Gado', 'created_at' => '5 days ago'],
-                        ['title' => 'Nasi Padang', 'created_at' => '87 minutes ago'],
-                        ['title' => 'Nasi Goreng', 'created_at' => '2 hours ago'],
-                        ['title' => 'Sate Ayam', 'created_at' => '1 day ago'],
-                        ['title' => 'Rendang Daging', 'created_at' => '3 days ago'],
-                        ['title' => 'Gado-Gado', 'created_at' => '5 days ago'],
-                    ];
-                @endphp
+              
             </div>
             <x-pagination></x-pagination>
         </div>
@@ -205,6 +192,7 @@
             else open_fail(response.message);
 
             close_update_modal_schedule();
+            close_update_modal();
         });
     }
 

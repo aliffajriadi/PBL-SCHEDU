@@ -63,9 +63,7 @@
         <a href="{{ $path }}/note" class="hover:bg-emerald-400 hover:text-white rounded-md px-3 py-1.5 transition-all duration-300 {{ $page_segment === 'note' ? 'bg-emerald-400 text-white' : '' }}">Notes</a>
         <a href="{{ $path }}/task" class="hover:bg-emerald-400 hover:text-white rounded-md px-3 py-1.5 transition-all duration-300 {{ $page_segment === 'task' ? 'bg-emerald-400 text-white' : '' }}">Task</a>
         <a href="{{ $path }}/schedule" class="hover:bg-emerald-400 hover:text-white rounded-md px-3 py-1.5 transition-all duration-300 {{ $page_segment === 'schedule' ? 'bg-emerald-400 text-white' : '' }}">Schedule</a>
-        @if($role === 'teacher')
         <a href="{{ $path }}/settings" class="hover:bg-emerald-400 hover:text-white rounded-md px-3 py-1.5 transition-all duration-300 {{ $page_segment === 'settings' ? 'bg-emerald-400 text-white' : '' }}">Settings</a>
-        @endif
     </div>
 
     <!-- Conditional Content (Hidden when mobile menu is open) -->

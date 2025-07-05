@@ -1,10 +1,12 @@
-{{-- @dd(session('success'), session('error')) --}}
+
 
 <x-layout title="Group Task" role="{{ $role }}" :user="$user">
     <x-nav-group type="search" page="tasks"></x-nav-group>
 
     @php
         $url = request()->url();
+
+        $priviledge = $role === 'teacher';
     @endphp
 
     <!-- Konten Utama -->
@@ -15,10 +17,14 @@
                 <p class="text-md font-semibold text-gray-800">Task List</p>
                 @if($role === 'teacher')
                     <div class="flex gap-2">
+                        
+                        @if(!empty($unit_datas))
                         <button onclick="openAddTaskModal()"
                             class="bg-emerald-400 text-white px-3 py-1 rounded-lg hover:bg-emerald-500 transition">
                             + Add Task
                         </button>
+                        @endif
+
                         <button onclick="openAddUnitModal()"
                             class="bg-blue-400 text-white px-3 py-1 rounded-lg hover:bg-blue-500 transition">
                             + Add Unit
@@ -419,31 +425,34 @@
             title.className = 'text-gray-800 font-medium';
             title.textContent = unit.name;
 
-            const buttonGroup = document.createElement('div');
-            buttonGroup.className = 'flex gap-2';
-
-            const editBtn = document.createElement('button');
-            editBtn.className = 'bg-blue-500 hover:bg-blue-600 text-white text-sm px-2 py-1 rounded';
-            editBtn.textContent = 'Edit';
-            // Tambahkan event listener jika perlu
-            editBtn.onclick = () => {
-                // console.log('Edit:', unit.name);
-                unit_update_toggle(unit.id, unit.name)
-            };
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'bg-red-500 hover:bg-red-600 text-white text-sm px-2 py-1 rounded';
-            deleteBtn.textContent = 'Delete';
-            // Tambahkan event listener jika perlu
-            deleteBtn.onclick = () => {
-                unit_delete_toggle(unit.id);
-            };
-
-            buttonGroup.appendChild(editBtn);
-            buttonGroup.appendChild(deleteBtn);
-
             header.appendChild(title);
-            header.appendChild(buttonGroup);
+
+            @if($role === 'teacher')
+                const buttonGroup = document.createElement('div');
+                buttonGroup.className = 'flex gap-2';
+
+                const editBtn = document.createElement('button');
+                editBtn.className = 'bg-blue-500 hover:bg-blue-600 text-white text-sm px-2 py-1 rounded';
+                editBtn.textContent = 'Edit';
+                // Tambahkan event listener jika perlu
+                editBtn.onclick = () => {
+                    // console.log('Edit:', unit.name);
+                    unit_update_toggle(unit.id, unit.name)
+                };
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'bg-red-500 hover:bg-red-600 text-white text-sm px-2 py-1 rounded';
+                deleteBtn.textContent = 'Delete';
+                // Tambahkan event listener jika perlu
+                deleteBtn.onclick = () => {
+                    unit_delete_toggle(unit.id);
+                };
+
+                buttonGroup.appendChild(editBtn);
+                buttonGroup.appendChild(deleteBtn);
+
+                header.appendChild(buttonGroup);
+            @endif
 
             const container = document.createElement('div');
             container.className = 'flex flex-col gap-2';

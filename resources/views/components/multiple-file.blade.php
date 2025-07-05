@@ -24,7 +24,7 @@
         <span>Drag and drop your</span>&nbsp;<span>files anywhere or</span>
       </p>
       <input id="hidden-input" type="file" name="file_submissions[]" multiple class="hidden" />
-      <button id="button"
+      <button id="button" type="button"
         class="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
         Upload a file
       </button>
@@ -70,7 +70,7 @@
             </i>
           </span>
           <p class="p-1 size text-xs text-gray-700"></p>
-          <button class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md text-gray-800">
+          <button type="button" class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md text-gray-800">
             <svg class="pointer-events-none fill-current w-4 h-4 ml-auto" xmlns="http://www.w3.org/2000/svg" width="24"
               height="24" viewBox="0 0 24 24">
               <path class="pointer-events-none"
@@ -103,7 +103,7 @@
           </span>
 
           <p class="p-1 size text-xs"></p>
-          <button class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md">
+          <button type="button" class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md">
             <svg class="pointer-events-none fill-current w-4 h-4 ml-auto" xmlns="http://www.w3.org/2000/svg" width="24"
               height="24" viewBox="0 0 24 24">
               <path class="pointer-events-none"

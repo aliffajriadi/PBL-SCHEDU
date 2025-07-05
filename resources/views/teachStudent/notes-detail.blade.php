@@ -173,15 +173,16 @@
 
         function update_data() {
             const form = document.getElementById('editModal');
-            const id = document.getElementById('note_id');
+            const id = document.getElementById('note_id').value;
 
             const formData = new FormData(form);
 
-            api_update('/note/api', formData, id.value).then(response => {
+            api_update('/note/api', formData, id).then(response => {
                 closeModal();
                 if (response.status) open_success(response.message);
                 else open_fail(response.message);
                 search();
+                openContent(id);
                 close_update_modal();
             });
         }

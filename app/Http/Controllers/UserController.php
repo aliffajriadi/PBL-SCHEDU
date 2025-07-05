@@ -23,7 +23,9 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        NotificationController::refresh_notification();
+        if(Auth::check()){
+            NotificationController::refresh_notification();
+        }
     }
 
     public function insert_file(Request $request)

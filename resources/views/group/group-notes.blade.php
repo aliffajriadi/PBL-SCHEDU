@@ -217,13 +217,19 @@
                 files.forEach((file) => {
                     file_list.innerHTML += `
                         <li>
-                                        <a href="${path}/file/${file.stored_name}" target="_blank" class="text-emerald-400 hover:underline">
-                                            ${file.original_name}
-                                        </a>
-                                        <button type="button" onclick="delete_file('${file.stored_name}', ${id})"> <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg></button>
-                                    </li>
+                            <a href="${path}/file/${file.stored_name}" target="_blank" class="text-emerald-400 hover:underline">
+                                ${file.original_name}
+                            </a>
+
+                            @if($role === 'teacher')
+                                <button type="button" onclick="delete_file('${file.stored_name}', ${id})"> 
+                                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            @endif
+
+                        </li>
                     `;
                 })
                 

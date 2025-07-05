@@ -23,42 +23,67 @@
                             <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Nama</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Email</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Tanggal Bergabung</th>
-                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Aksi</th>
+
+                            @if($role === 'teacher')
+                                <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($members as $member)
-                            <tr class="border-t">
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member->user->name }}</td>
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member->user->email }}</td>
-                                <td class="py-2 px-4 text-sm text-gray-700">{{ $member->updated_at }}</td>
-                                <td class="py-2 px-4 text-sm">
-                                    <button onclick="openKickModal({{ $member->id }}, '{{ $member->user->name }}')"
-                                        class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
-                                        Kick
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
+                        @if($role === 'teacher')
+                            @foreach($members as $member)
+                                <tr class="border-t">
+                                    <td class="py-2 px-4 text-sm text-gray-700">{{ $member->user->name }}</td>
+                                    <td class="py-2 px-4 text-sm text-gray-700">{{ $member->user->email }}</td>
+                                    <td class="py-2 px-4 text-sm text-gray-700">{{ $member->updated_at }}</td>
+                                    <td class="py-2 px-4 text-sm">
+                                        <button onclick="openKickModal({{ $member->id }}, '{{ $member->user->name }}')"
+                                            class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
+                                            Kick
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            @foreach($members as $member)
+                                <tr class="border-t">
+                                    <td class="py-2 px-4 text-sm text-gray-700">{{ $member->user->name }}</td>
+                                    <td class="py-2 px-4 text-sm text-gray-700">{{ $member->user->email }}</td>
+                                    <td class="py-2 px-4 text-sm text-gray-700">{{ $member->updated_at }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                        
                     </tbody>
                 </table>
             </div>
             <!-- Card untuk Mobile -->
             <div class="md:hidden flex flex-col gap-3">
-                @foreach($members as $member)
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                        <p class="text-sm font-medium text-gray-800">{{ $member->user->name }}</p>
-                        <p class="text-sm text-gray-600">{{ $member->user->email }}</p>
-                        <p class="text-sm text-gray-500">Bergabung: {{ $member->updated_at }}</p>
-                        <button onclick="openKickModal({{ $member->id }}, '{{ $member->user->name }}')"
-                            class="mt-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
-                            Kick
-                        </button>
-                    </div>
-                @endforeach
+
+                @if($role === 'teacher')
+                    @foreach($members as $member)
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <p class="text-sm font-medium text-gray-800">{{ $member->user->name }}</p>
+                            <p class="text-sm text-gray-600">{{ $member->user->email }}</p>
+                            <p class="text-sm text-gray-500">Bergabung: {{ $member->updated_at }}</p>
+                            <button onclick="openKickModal({{ $member->id }}, '{{ $member->user->name }}')"
+                                class="mt-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
+                                Kick
+                            </button>
+                        </div>
+                    @endforeach
+                @else
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <p class="text-sm font-medium text-gray-800">{{ $member->user->name }}</p>
+                            <p class="text-sm text-gray-600">{{ $member->user->email }}</p>
+                            <p class="text-sm text-gray-500">Bergabung: {{ $member->updated_at }}</p>
+                        </div>
+                @endif
             </div>
         </div>
 
+
+        @if($role === 'teacher')
         <!-- Card untuk Approve Student -->
         <div class="bg-white shadow-md rounded-2xl p-4">
             <div class="flex justify-between items-center mb-4">
@@ -124,6 +149,7 @@
                 @endforeach
             </div>
         </div>
+        @endif
 
         <div class="bg-white shadow-md rounded-2xl p-4">
 
@@ -306,7 +332,25 @@
             <form id="delete-confirm-form" action="" method="POST">
                 @csrf
                 @method('DELETE')
-                <div class="flex justify-end gap-4">
+
+                    <div class="sm:col-span-2">
+         
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                            Password <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('password') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+                            id="password" name="password" required placeholder="isi password untuk mengkonfirmasi">
+                        @error('password')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+
+                    </div>
+
+                    <br>
+
+                <div class="flex justify-between gap-4">
+                
                     <button type="button" onclick="closeDeleteConfirmModal()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                         Batal
@@ -470,5 +514,12 @@
             console.log('a');
 
         }
+
+        @if(session('success'))
+            open_success(session('success'));
+        @elseif(session('error'))
+            open_fail(session('error'));
+        @endif
+
     </script>
 </x-layout>

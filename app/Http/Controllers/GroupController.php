@@ -13,7 +13,7 @@ use App\Models\InstanceNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
-
+use Illuminate\Support\Facades\Hash;
 
 class GroupController extends Controller
 {
@@ -57,8 +57,6 @@ class GroupController extends Controller
                 $query->where('user_uuid', $user->uuid);
             });
         }
-
-
 
         $members = MemberOf::with(['user:uuid,name'])->where('group_id', $id)->limit(5)->get();
 
@@ -225,11 +223,19 @@ class GroupController extends Controller
         }
     }
 
-    public function destroy(Group $group)
+    public function destroy(Request $request, Group $group)
     {
         try {
 
             $user = Auth::user();
+
+            $request->validate([
+                'password' => 'required|string'
+            ]);
+
+            if(!Hash::check($request->input('password'), $user->password)){
+                throw new \Exception('Wrong password');
+            }
 
             Gate::allows('is_member', [$group]);
             Gate::allows('modify_permission', [$group]);
@@ -248,7 +254,7 @@ class GroupController extends Controller
 
             
         }catch(\Exception $e) {
-            return redirect('/group')->with('error', 'There is something wrong when deleting group: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'There is something wrong when deleting group: ' . $e->getMessage());
         }
     }
 }
