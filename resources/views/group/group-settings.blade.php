@@ -13,19 +13,19 @@
         <!-- Card untuk Murid (Daftar Anggota) -->
         <div class="bg-white shadow-md rounded-2xl p-4">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-800">Daftar Anggota Grup</h2>
+                <h2 class="text-lg font-semibold text-gray-800">List Member Group</h2>
             </div>
             <!-- Tabel untuk Desktop -->
             <div class="hidden md:block overflow-x-auto">
                 <table class="min-w-full border border-gray-200">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Nama</th>
+                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Name</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Email</th>
-                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Tanggal Bergabung</th>
+                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Join at</th>
 
                             @if($role === 'teacher')
-                                <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Aksi</th>
+                                <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Action</th>
                             @endif
                         </tr>
                     </thead>
@@ -76,7 +76,7 @@
                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
                             <p class="text-sm font-medium text-gray-800">{{ $member->user->name }}</p>
                             <p class="text-sm text-gray-600">{{ $member->user->email }}</p>
-                            <p class="text-sm text-gray-500">Bergabung: {{ $member->updated_at }}</p>
+                            <p class="text-sm text-gray-500">Joined: {{ $member->updated_at }}</p>
                         </div>
                 @endif
             </div>
@@ -87,17 +87,17 @@
         <!-- Card untuk Approve Student -->
         <div class="bg-white shadow-md rounded-2xl p-4">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-800">Permintaan Bergabung</h2>
+                <h2 class="text-lg font-semibold text-gray-800">Join Request</h2>
             </div>
             <!-- Tabel untuk Desktop -->
             <div class="hidden md:block overflow-x-auto">
                 <table class="min-w-full border border-gray-200">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Nama</th>
+                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Name</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Email</th>
-                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Tanggal Permintaan</th>
-                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Aksi</th>
+                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Request at</th>
+                            <th class="py-2 px-4 text-left text-sm font-semibold text-gray-700">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -191,7 +191,7 @@
                     @endif
                     
 
-                    <!-- component -->
+            
 
                 <div class="sm:col-span-2">
                     <label for="group_code" class="block text-sm/6 font-medium text-gray-900">Group Code</label>
@@ -248,32 +248,33 @@
 
         <!-- Custom Section dengan Tombol Hapus -->
         <div class="bg-white shadow-md rounded-2xl p-4">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Pengaturan Penghapusan</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Delete Preferences</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button onclick="openDeleteConfirmModal('notes')"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                    Hapus Seluruh Catatan
-                </button>
-                <button onclick="openDeleteConfirmModal('tasks')"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                    Hapus Seluruh Tugas
-                </button>
-                <button onclick="openDeleteConfirmModal('schedules')"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                    Hapus Seluruh Jadwal
-                </button>
-                <button onclick="openDeleteConfirmModal('members')"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                    Hapus Seluruh Murid
-                </button>
-                <button onclick="openDeleteConfirmModal('pending')"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                    Hapus Seluruh Permintaan Masuk
-                </button>
-                <button onclick="openDeleteConfirmModal('group')"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                    Hapus Grup
-                </button>
+    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+    Delete All Notes
+</button>
+<button onclick="openDeleteConfirmModal('tasks')"
+    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+    Delete All Tasks
+</button>
+<button onclick="openDeleteConfirmModal('schedules')"
+    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+    Delete All Schedules
+</button>
+<button onclick="openDeleteConfirmModal('members')"
+    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+    Remove All Members
+</button>
+<button onclick="openDeleteConfirmModal('pending')"
+    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+    Delete All Join Requests
+</button>
+<button onclick="openDeleteConfirmModal('group')"
+    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+    Delete This Group
+</button>
+
             </div>
         </div>
         @endif
@@ -281,51 +282,59 @@
 
     @if($role === 'teacher')
     <!-- Modal Konfirmasi Kick -->
-    <div id="kick-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div id="kick-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Kick Anggota</h3>
-            <p class="text-gray-600 mb-6">Apakah Anda yakin ingin mengeluarkan "<span id="kick-student-name"></span>" dari grup? Tindakan ini tidak dapat dibatalkan.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirm Member Removal</h3>
+            <p class="text-gray-600 mb-6">
+                Are you sure you want to remove "<span id="kick-student-name"></span>" from the group?
+                This action cannot be undone.
+            </p>
             <form id="kick-student-form" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-4">
                     <button type="button" onclick="closeKickModal()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit"
                         class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                        Kick
+                        Remove
                     </button>
                 </div>
             </form>
         </div>
     </div>
+    
 
     <!-- Modal Konfirmasi Reject -->
-    <div id="reject-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div id="reject-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Tolak Permintaan</h3>
-            <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menolak permintaan "<span id="reject-student-name"></span>" untuk bergabung? Tindakan ini tidak dapat dibatalkan.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirm Join Request Rejection</h3>
+            <p class="text-gray-600 mb-6">
+                Are you sure you want to reject the join request from "<span id="reject-student-name"></span>"?
+                This action cannot be undone.
+            </p>
             <form id="reject-student-form" action="" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-4">
                     <button type="button" onclick="closeRejectModal()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit"
                         class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                        Tolak
+                        Reject
                     </button>
                 </div>
             </form>
         </div>
     </div>
+    
 
     <!-- Modal Konfirmasi Penghapusan Massal -->
-    <div id="delete-confirm-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div id="delete-confirm-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 class="text-lg font-semibold text-gray-800 mb-4" id="delete-confirm-title"></h3>
             <p class="text-gray-600 mb-6" id="delete-confirm-message"></p>
@@ -353,11 +362,11 @@
                 
                     <button type="button" onclick="closeDeleteConfirmModal()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                        Batal
+                        Cancel
                     </button>
                     <button type="submit"
                         class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                        Hapus
+                        Delete
                     </button>
                 </div>
             </form>
@@ -416,36 +425,39 @@
                 let actionUrl = '';
 
                 switch(type) {
-                    case 'notes':
-                        titleText = 'Hapus Seluruh Catatan';
-                        messageText = 'Apakah Anda yakin ingin menghapus seluruh catatan? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '{{ $current_url }}/delete_all/notes';
-                        break;
-                    case 'tasks':
-                        titleText = 'Hapus Seluruh Tugas';
-                        messageText = 'Apakah Anda yakin ingin menghapus seluruh tugas? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '{{ $current_url }}/delete_all/tasks';
-                        break;
-                    case 'schedules':
-                        titleText = 'Hapus Seluruh Jadwal';
-                        messageText = 'Apakah Anda yakin ingin menghapus seluruh jadwal? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '{{ $current_url }}/delete_all/schedules';
-                        break;
-                    case 'members':
-                        titleText = 'Hapus Seluruh Murid';
-                        messageText = 'Apakah Anda yakin ingin menghapus seluruh murid dari grup? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '{{ $current_url }}/delete_all/members';
-                        break;
-                    case 'pending':
-                        titleText = 'Hapus Seluruh Permintaan Masuk';
-                        messageText = 'Apakah Anda yakin ingin menghapus seluruh permintaan masuk? Tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '{{ $current_url }}/delete_all/pending';
-                        break;
-                    case 'group':
-                        titleText = 'Hapus Grup';
-                        messageText = 'Apakah Anda yakin ingin menghapus grup ini? Semua data terkait akan hilang dan tindakan ini tidak dapat dibatalkan.';
-                        actionUrl = '{{ $current_url }}/delete';
-                        break;
+                    
+    case 'notes':
+        titleText = 'Delete All Notes';
+        messageText = 'Are you sure you want to delete all notes? This action cannot be undone.';
+        actionUrl = '{{ $current_url }}/delete_all/notes';
+        break;
+    case 'tasks':
+        titleText = 'Delete All Tasks';
+        messageText = 'Are you sure you want to delete all tasks? This action cannot be undone.';
+        actionUrl = '{{ $current_url }}/delete_all/tasks';
+        break;
+    case 'schedules':
+        titleText = 'Delete All Schedules';
+        messageText = 'Are you sure you want to delete all schedules? This action cannot be undone.';
+        actionUrl = '{{ $current_url }}/delete_all/schedules';
+        break;
+    case 'members':
+        titleText = 'Remove All Members';
+        messageText = 'Are you sure you want to remove all members from the group? This action cannot be undone.';
+        actionUrl = '{{ $current_url }}/delete_all/members';
+        break;
+    case 'pending':
+        titleText = 'Delete All Join Requests';
+        messageText = 'Are you sure you want to delete all pending join requests? This action cannot be undone.';
+        actionUrl = '{{ $current_url }}/delete_all/pending';
+        break;
+    case 'group':
+        titleText = 'Delete Group';
+        messageText = 'Are you sure you want to delete this group? All related data will be permanently removed and this action cannot be undone.';
+        actionUrl = '{{ $current_url }}/delete';
+        break;
+
+
                 }
 
                 title.textContent = titleText;

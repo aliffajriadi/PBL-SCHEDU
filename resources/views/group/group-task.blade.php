@@ -18,12 +18,13 @@
                 @if($role === 'teacher')
                     <div class="flex gap-2">
                         
-                        @if(!empty($unit_datas))
+                        
                         <button onclick="openAddTaskModal()"
-                            class="bg-emerald-400 text-white px-3 py-1 rounded-lg hover:bg-emerald-500 transition">
+                            class="bg-emerald-400 {{ count($unit_datas) > 0 ? 'block' : 'hidden' }}
+ text-white px-3 py-1 rounded-lg hover:bg-emerald-500 transition">
                             + Add Task
                         </button>
-                        @endif
+                        
 
                         <button onclick="openAddUnitModal()"
                             class="bg-blue-400 text-white px-3 py-1 rounded-lg hover:bg-blue-500 transition">
@@ -95,7 +96,7 @@
             </div>
 
             <div id="default-content" class="flex items-center justify-center h-full text-gray-500">
-                <p>Pilih tugas di sebelah kiri untuk melihat detail.</p>
+                <p>Select Task for Review.</p>
             </div>
         
         </div>
@@ -121,7 +122,7 @@
                 @foreach($submissions as $submission)
                     <div class="bg-white border border-gray-200 rounded-md p-3">
                         <p class="text-gray-800 font-medium">{{ $submission->task->title }}</p>
-                        <p class="text-sm text-gray-500">Dikumpulkan: {{ $submission['updated_at'] }}</p>
+                        <p class="text-sm text-gray-500">Submit at: {{ $submission['updated_at'] }}</p>
                         <div class="mt-2">
                             <p class="text-sm font-medium text-gray-700">File:</p>
                             <ul class="list-disc pl-5 text-sm text-gray-600">
@@ -135,12 +136,12 @@
                             </ul>
                         </div>
                         <p class="text-sm mt-2">
-                            <span class="font-medium text-gray-700">Nilai: </span>
+                            <span class="font-medium text-gray-700">Score: </span>
                             @if($submission['grade'] !== null)
                                 <span class="text-emerald-400">{{ $submission['grade'] }}/100</span>
-                                <span class="text-gray-500">(Dinilai pada {{ $submission['graded_at'] }})</span>
+                                <span class="text-gray-500">(Scoring at {{ $submission['graded_at'] }})</span>
                             @else
-                                <span class="text-gray-500">Menunggu Penilaian</span>
+                                <span class="text-gray-500">Waiting for Scoring</span>
                             @endif
                         </p>
                     </div>
@@ -148,36 +149,36 @@
             </div>
         @else
             <div class="text-gray-500 text-center">
-                <p>Pilih tugas untuk melihat riwayat pengumpulan.</p>
+                <p>Select Task for Review History.</p>
             </div>
         @endif
 </section>
 
     <!-- Modal Tambah Tugas (Hanya untuk Guru) -->
     @if($role === 'teacher')
-        <div id="add-task-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
+        <div id="add-task-modal" class="hidden fixed inset-0 slide-down shadow-md bg-black/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Tugas Baru</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Task</h3>
                 <form id="add-form" action="task/api" method="POST">
                     @csrf
-                    <input type="text" name="title" placeholder="Judul Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <input type="text" name="title" placeholder="Title Task" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <select name="unit_id" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                        <option value="" disabled selected>Pilih Unit</option>
+                        <option value="" disabled selected>Select Unit</option>
                         @foreach($unit_datas as $unit)
                             <option value="{{ $unit->id }}">{{ $unit->name }}</option>
                         @endforeach
                     </select>
                     <input type="datetime-local" name="deadline" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                    <textarea name="content" placeholder="Deskripsi Tugas" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                    <textarea name="content" placeholder="Description Task" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddTaskModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                            Batal
+                            Cancel
                         </button>
                         <button type="button"
                             onclick="insert_data()"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
-                            Simpan
+                            Save
                         </button>
                     </div>
                 </form>
@@ -185,28 +186,28 @@
         </div>
 
     <!-- Modal Tambah Unit (Hanya untuk Guru) -->
-        <div id="add-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Unit Baru</h3>
+        <div id="add-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-black/50 backdrop-blur-sm flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-2xl">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Unit</h3>
                 <form id="form-unit" action="{{ $url }}/unit" method="POST">
                     @csrf
-                    <input type="text" name="name" placeholder="Nama Unit (contoh: Unit 3)" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                    <input type="text" name="name" placeholder="Name for unit (example : BAB 1)" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="close_unit_modal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                            Batal
+                            Cancel
                         </button>
                         <button type="submit"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
-                            Simpan
+                            Save
                         </button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div id="update-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <div id="update-unit-modal" class="hidden fixed inset-0 slide-down shadow-md bg-black/50 backdrop-blur-sm flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-2xl">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Update Unit</h3>
                 <form id="update-form-unit" action="/task/unit" method="POST">
                     @method("PATCH")
@@ -215,11 +216,11 @@
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="unit_update_toggle()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                            Batal
+                            Cancel
                         </button>
                         <button type="submit"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
-                            Simpan
+                            Save
                         </button>
                     </div>
                 </form>
@@ -228,10 +229,10 @@
 
 
     <!-- Modal Konfirmasi Delete (Hanya untuk Guru) -->
-        <div id="delete-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+        <div id="delete-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus Tugas</h3>
-                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus tugas "<span id="delete-task-title"></span>"? Tindakan ini tidak dapat dibatalkan.</p>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirmation for <span class="text-red-400">DELETE</span>Task</h3>
+                <p class="text-gray-600 mb-6">Are you sure you want to delete this note? <span id="delete-task-title"></span>This action cannot be undone.</p>
                 <form id="delete-task-form" action="" method="POST">
                     @csrf
                     @method('DELETE')
@@ -250,21 +251,21 @@
         </div>
 
         <!-- Modal Konfirmasi Delete (Hanya untuk Guru) -->
-        <div id="unit-delete-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+        <div id="unit-delete-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus Unit</h3>
-                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus Unit ini beserta tugas-tugas dan jawabannya?"<span id="delete-task-title"></span>"? Tindakan ini tidak dapat dibatalkan.</p>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirmation for <span class="text-red-400">DELETE</span>  Unit</h3>
+                <p class="text-gray-600 mb-6">Are you sure you want to delete this Unit along with its tasks and answers? "<span id='delete-task-title'></span>" This action cannot be undone.</p>
                 <form id="delete-unit-form" action="" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="unit_delete_toggle()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                            Batal
+                            Cancel
                         </button>
                         <button type="submit"
                             class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                            Hapus
+                            Delete
                         </button>
                     </div>
                 </form>

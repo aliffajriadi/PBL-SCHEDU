@@ -105,9 +105,12 @@
 
     <!-- Modal Tambah Catatan (Hanya untuk Guru) -->
     @if($role === 'teacher')
-        <div id="add-note-modal" class="hidden overflow-auto fixed inset-0 bg-slate-50/50 backdrop-blur-sm flex items-center justify-center">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Catatan Baru</h3>
+    <div id="add-note-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center overflow-y-auto px-4">
+
+
+        <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Task</h3>
                 <form id="add-note-form" action="api" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input id="add-title" type="text" name="title" placeholder="Note Title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
@@ -119,13 +122,13 @@
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddNoteModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                            Batal
+                            Cancel
                         </button>
                         <button 
                             type="button"
                             onclick="insert_data()"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
-                            Simpan
+                            Save Task
                         </button>
                     </div>
                 </form>
@@ -133,21 +136,21 @@
         </div>
 
     <!-- Modal Konfirmasi Delete (Hanya untuk Guru) -->
-        <div id="delete-modal" class="hidden fixed inset-0 bg-slate-50/50 shadow-md backdrop-blur-sm flex items-center justify-center">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus Catatan</h3>
-                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus catatan ini? Tindakan ini tidak dapat dibatalkan.</p>
+        <div id="delete-modal" class="hidden fixed inset-0 bg-black-70/50 shadow-md backdrop-blur-sm flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-2xl">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirmation for <span class="text-red-400">DELETE</span> Task</h3>
+                <p class="text-gray-600 mb-6">Are you sure you want to delete this note? This action cannot be undone.</p>
                 <form id="delete-note-form" action="" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeDeleteModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                            Batal
+                            Cancel
                         </button>
                         <button type="button" onclick="delete_data()"
                             class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                            Hapus
+                            Delete
                         </button>
                     </div>
                 </form>
