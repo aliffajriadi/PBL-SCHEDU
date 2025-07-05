@@ -1,20 +1,23 @@
 <x-layout title="Schedule" role="teacher" :user="$userData" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <!-- Header Section -->
-    <div class="bg-white mb-3 flex flex-row-reverse md:flex-row justify-between items-center p-3 shadow-md rounded-2xl">
-        <button 
-            onclick="open_add_modal()"
-            class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300"
-        >
-            + Add schedule
-        </button>
-        <input 
-            type="text" 
-            id="search" 
-            placeholder="Search Note list..." 
-            class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-            oninput="debounce_search()"
-        >
+    <div class="bg-white mb-3 p-3 shadow-md rounded-2xl">
+        <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-2">
+            <input 
+                type="text" 
+                id="search" 
+                placeholder="Search schedule list..." 
+                class="w-full md:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                oninput="debounce_search()"
+            >
+            <button 
+                onclick="open_add_modal()"
+                class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300 w-full md:w-auto"
+            >
+                + Add Schedule
+            </button>
+        </div>
     </div>
+    
 
     <!-- Main Content -->
     <div class="flex flex-col md:flex-row gap-3 mt-3 pb-7 animate-fadeIn w-full">

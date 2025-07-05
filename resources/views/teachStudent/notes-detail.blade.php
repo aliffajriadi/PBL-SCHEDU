@@ -1,17 +1,17 @@
 <x-layout title="Notes" role="teacher" :user="$userData" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
 
-    <div class="bg-white mb-3 flex md:flex-row justify-between p-3 shadow-md rounded-2xl items-center">
-        {{-- <button
-            class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">Back
-            to list</button> --}}
-        <button onclick="openAddModal()"
-            class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">
-            + Add Notes
-        </button>
-        <input type="text" id="search" placeholder="Search Note list...."
-            class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-            oninput="debounce_refresh()">
+    <div class="bg-white mb-3 p-3 shadow-md rounded-2xl">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+            <button onclick="openAddModal()"
+                class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300 w-full md:w-auto">
+                + Add Note
+            </button>
+            <input type="text" id="search" placeholder="Search notes..."
+                class="w-full md:w-80 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                oninput="debounce_refresh()">
+        </div>
     </div>
+    
 
     <div class="flex gap-3">
         {{-- BAGIAN KIRI --}}

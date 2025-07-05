@@ -1,17 +1,24 @@
 <x-layout title="Task" role="teacher" :user="$userData" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <!-- Header Section (unchanged as requested) -->
-    <div
-        class="bg-white flex items-center justify-between p-3 mt-3 mb-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-        <button id="openModalBtn"
-            onclick="open_modal('add-task-modal')"
-            class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300">
-            Add Task
-        </button>
-        <input type="text" id="search" placeholder="Search Note list...."
-            class="mt-2 sm:mt-0 w-full sm:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
-            oninput="debounce_search()">
+    <div class="bg-white p-3 mt-3 mb-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+        <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-2">
+            <input
+                type="text"
+                id="search"
+                placeholder="Search task list..."
+                class="w-full md:w-1/3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all"
+                oninput="debounce_search()"
+            >
+            <button
+                id="openModalBtn"
+                onclick="open_modal('add-task-modal')"
+                class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm transition-all duration-300 w-full md:w-auto"
+            >
+                + Add Task
+            </button>
+        </div>
     </div>
-
+    
     <!-- Mobile-Only List (unchanged as requested) -->
     <div class="block md:hidden bg-white p-4 rounded-xl shadow-md mb-6">
         <h3 class="text-md font-semibold text-gray-800 mb-3">Task Overview</h3>
