@@ -139,7 +139,6 @@
                             <span class="font-medium text-gray-700">Score: </span>
                             @if($submission['score'] !== null)
                                 <span class="text-emerald-400">{{ $submission['score'] }}/100</span>
-                                <span class="text-gray-500">(Scoring at {{ $submission['updated_at'] }})</span>
                             @else
                                 <span class="text-gray-500">Waiting for Scoring</span>
                             @endif
