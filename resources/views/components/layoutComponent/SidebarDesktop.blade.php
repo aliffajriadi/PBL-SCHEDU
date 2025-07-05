@@ -1,6 +1,6 @@
 @props(['role'])
 @php
-    $path = '/group/' . Request::segment(2);    
+    $path = 'group/' . Request::segment(2);    
 @endphp
 <aside class="w-64 bg-emerald-500 text-white flex-col p-4 fixed h-screen overflow-y-auto hidden md:flex">
     <div class="flex justify-center bg-emerald-500 mb-2">
@@ -67,34 +67,34 @@
         <!-- GROUP -->
         <p class="text-sm py-2 mt-4 text-emerald-100 font-medium">GROUP</p>
         <div>
-            <a href="/group" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+            <a href="/group" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item {{ Request::is('group') ? 'bg-green-400 text-white' : '' }}">
                 <img src="{{ asset('assets/bx-group (1) 3.svg') }}" class="w-5 h-auto" />
                 <p class="font-semibold">Group</p>
             </a>
 
             @if(Request::segment(1) === 'group' && Request::segment(2) !== null)
                 <div class="ps-5">
-                    <a href="/group" class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <a href="/{{ $path }}" class="flex items-center gap-2  p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item {{ Request::is($path) ? 'bg-green-400 text-white' : '' }}">
                         <img src="{{ asset('assets/Home.svg') }}" class="w-5 h-auto" />
                         <p class="font-semibold">Group Dashboard</p>
                     </a>
-                    <a href="{{ $path }}/note"
-                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <a href="/{{ $path }}/note"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item {{ Request::is($path . '/note') ? 'bg-green-400 text-white' : '' }}">
                         <img src="{{ asset('assets/bx-notepad 2.svg') }}" class="w-5 h-auto" />
                         <p class="font-semibold">Group Notes</p>
                     </a>
-                    <a href="{{ $path }}/task"
-                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <a href="/{{ $path }}/task"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item {{ Request::is($path . '/task') ? 'bg-green-400 text-white' : '' }}">
                         <img src="{{ asset('assets/bx-task (1) 2.svg') }}" class="w-5 h-auto" />
                         <p class="font-semibold">Group Task</p>
                     </a>
-                    <a href="{{ $path }}/schedule"
-                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <a href="/{{ $path }}/schedule"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item {{ Request::is($path . '/schedule') ? 'bg-green-400 text-white' : '' }}">
                         <img src="{{ asset('assets/calender-white.svg') }}" class="w-5 h-auto" />
                         <p class="font-semibold">Group Schedule</p>
                     </a>
-                    <a href="{{ $path }}/settings"
-                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item">
+                    <a href="/{{ $path }}/settings"
+                        class="flex items-center gap-2 p-2 hover:bg-green-400 rounded-xl cursor-pointer menu-item {{ Request::is($path . '/settings') ? 'bg-green-400 text-white' : '' }}">
                         <img src="{{ asset('assets/setting.svg') }}" class="w-5 h-auto" />
                         <p class="font-semibold">Group Settings</p>
                     </a>
