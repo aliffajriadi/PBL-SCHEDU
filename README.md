@@ -1,66 +1,197 @@
-# 🚀 SchedU - Web Application Platform for Schedule Reminder
+# Schedu
 
+Schedu adalah aplikasi reminder jadwal tugas personal dan kolaboratif grup edukatif yang membantu pengguna mengelola tugas-tugas mereka secara efektif baik secara individu maupun dalam tim.
 
-> Your Smart Academic Companion ⏰📚
+## 🚀 Fitur Utama
 
-[![Laravel Version](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.3.x-06B6D4?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
-[![Vite](https://img.shields.io/badge/Vite-4.x-B73BFE?style=for-the-badge&logo=vite)](https://vitejs.dev)
+- **Manajemen Tugas Personal**: Kelola jadwal dan tugas pribadi dengan mudah
+- **Kolaborasi Grup**: Bekerja sama dalam tim untuk menyelesaikan tugas bersama
+- **Reminder Otomatis**: Notifikasi pengingat untuk tugas yang akan datang
+- **Interface Edukatif**: Dirancang khusus untuk lingkungan pendidikan
+- **Dashboard Interaktif**: Visualisasi jadwal dan progress tugas
 
-## 🌟 Featured in SchedU
+## 🛠️ Teknologi yang Digunakan
+
+- **Backend**: PHP 8.2 dengan Laravel Framework
+- **Database**: MySQL
+- **Frontend**: HTML, CSS, JavaScript
+- **Package Manager**: Composer (PHP), NPM (Node.js)
+- **Build Tools**: Vite/Laravel Mix
+
+## 📋 Persyaratan Sistem
+
+Pastikan sistem Anda memiliki:
+
+- PHP >= 8.2
+- MySQL >= 5.7 atau MariaDB >= 10.3
+- Composer
+- Node.js >= 16.x
+- NPM >= 8.x
+- Git
+
+## 🔧 Instalasi
+
+Ikuti langkah-langkah berikut untuk menginstal aplikasi Schedu:
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/aliffajriadi/PBL-SCHEDU.git
+cd PBL-SCHEDU
+```
+
+### 2. Install Dependencies PHP
+
+```bash
+composer install
+```
+
+### 3. Install Dependencies Node.js
+
+```bash
+npm install
+```
+
+### 4. Konfigurasi Environment
+
+```bash
+cp .env.example .env
+```
+
+Edit file `.env` dan sesuaikan konfigurasi database:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=schedu_db
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+### 5. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 6. Jalankan Migrasi Database
+
+```bash
+php artisan migrate
+```
+
+### 7. Seed Database (Opsional)
+
+```bash
+php artisan db:seed DatabaseSeeder
+```
+
+### 8. Build Assets
+
+```bash
+npm run build
+```
+
+### 9. Jalankan Aplikasi
+
+```bash
+php artisan serve
+```
+
+Aplikasi akan berjalan di `http://127.0.0.1:8000`
+
+## 🚀 Penggunaan
+
+### Akses Aplikasi
+
+1. Buka browser dan kunjungi `http://127.0.0.1:8000`
+2. Daftar akun baru atau login dengan akun yang sudah ada
+3. Mulai membuat jadwal dan tugas personal
+4. Bergabung atau buat grup untuk kolaborasi
+
+### Fitur Utama
+
+#### Tugas Personal
+- Buat tugas baru dengan deadline
+- Set reminder untuk tugas penting
+- Tandai tugas sebagai selesai
+- Lihat riwayat tugas
+
+#### Kolaborasi Grup
+- Buat grup baru atau bergabung dengan grup existing
+- Assign tugas ke anggota grup
+- Monitor progress tugas grup
+- Komunikasi dalam grup
+
+## 📁 Struktur Project
+
+```
+PBL-SCHEDU/
+├── app/                    # Application logic
+├── bootstrap/              # Bootstrap files
+├── config/                 # Configuration files
+├── database/               # Database migrations and seeders
+├── public/                 # Public assets
+├── resources/              # Views, CSS, JS
+├── routes/                 # Route definitions
+├── storage/                # Storage files
+├── tests/                  # Test files
+├── vendor/                 # Composer dependencies
+├── node_modules/           # NPM dependencies
+├── .env.example            # Environment example
+├── composer.json           # PHP dependencies
+├── package.json            # Node.js dependencies
+└── README.md              # This file
+```
+
+## 🔧 Development
+
+### Menjalankan dalam Mode Development
+
+```bash
+# Terminal 1 - Laravel Server
+php artisan serve
+
+# Terminal 2 - Asset Watcher (jika diperlukan)
+npm run dev
+```
+
+## 🤝 Kontribusi
+
+1. Fork repository ini
+2. Buat branch fitur baru (`git checkout -b feature/AmazingFeature`)
+3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
+
+## 📝 License
+
+Project ini dilisensikan under MIT License. Lihat file `LICENSE` untuk detail lebih lanjut.
+
+## 👥 Tim Pengembang
+
+- **Alif Fajriadi** - *Lead Developer* - [@aliffajriadi](https://github.com/aliffajriadi)
+
+## 📞 Support
+
+Jika Anda mengalami masalah atau memiliki pertanyaan:
+
+1. Buka issue di GitHub repository
+2. Hubungi tim pengembang melalui email
+3. Lihat dokumentasi di wiki repository
+
+## 🔄 Changelog
+
+### v1.0.0
+- Initial release
+- Fitur manajemen tugas personal
+- Sistem kolaborasi grup
+- Dashboard interaktif
+- Sistem reminder
 
 ---
 
-## ✨ Key Features
-- ✅ **Smart Schedule Syncing**  
-- 📅 **Interactive Calendar Dashboard**  
-- 👥 **Group Collaboration**  
-- 🔔 **Customizable Auto-Reminders**  
-- 📊 **Academic Progress Analytics**  
-- 📱 **Mobile-First Design Responsive**
+**Schedu** - Kelola jadwal tugas Anda dengan lebih efektif! 📅✨
+```
 
----
-
-## 🛠 Tech Stack Supercharge
-### Core Framework
-- **Laravel 12** - Robust PHP Framework
-- **Eloquent ORM** - Advanced Database Management
-
-### Frontend Power
-- **Tailwind CSS** - Utility-First CSS Framework
-- **Vite 4** - Next-Gen Frontend Tooling
-
-### Database
-- **MySQL** - Relational Database System
-
----
-
-
-### Prerequisites
-Make sure you have the following installed on your system:
-- PHP 8.2+
-- Composer 2.5+
-- Node.js 18.x+
-- MySQL 8.0+
-
-
-##👨💻 Development Team
-
-**Project Manager:**  
-Metta Santiputri, S.T., M.Sc, Ph.D  
-
-Team Leader	Alif Fajriadi	3312401103
-
-Member	Bastian Herinko Limbong	3312401092
-
-Member	Dwiky Putra Dachi	3312401086
-
-Member	Rafif Ihsan Syahwaly	3312401095	
-
-
-📬 Connect With Us
-Have questions or suggestions?
-✉️ Contact Project Lead: aliffajriadi@gmail.com
-
-
-Made with ❤️ by Team SchedU - Proudly presented for PBL IF2D01
