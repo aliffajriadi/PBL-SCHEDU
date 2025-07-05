@@ -1,4 +1,5 @@
 # Schedu
+**PBLIF-2D-01**
 
 Schedu adalah aplikasi reminder jadwal tugas personal dan kolaboratif grup edukatif yang membantu pengguna mengelola tugas-tugas mereka secara efektif baik secara individu maupun dalam tim.
 
@@ -106,7 +107,20 @@ Aplikasi akan berjalan di `http://127.0.0.1:8000`
 ### Akses Aplikasi
 
 1. Buka browser dan kunjungi `http://127.0.0.1:8000`
-2. Daftar akun baru atau login dengan akun yang sudah ada
+2. Masukkan username dan password dengan 
+    - Guru 
+    email : a@gmail.com
+    password : 123
+    - Murid
+    email : b@gmail.com
+    password : 123
+    - Staff
+    email : sma2@gmail.com
+    password : password
+    - Admin
+    Login di halaman http://127.0.0.1:8000/admin/login
+    username : onlydev1
+    password : password
 3. Mulai membuat jadwal dan tugas personal
 4. Bergabung atau buat grup untuk kolaborasi
 
@@ -122,7 +136,7 @@ Aplikasi akan berjalan di `http://127.0.0.1:8000`
 - Buat grup baru atau bergabung dengan grup existing
 - Assign tugas ke anggota grup
 - Monitor progress tugas grup
-- Komunikasi dalam grup
+- Penugasan dan penilaian
 
 ## 📁 Struktur Project
 
@@ -157,38 +171,20 @@ php artisan serve
 npm run dev
 ```
 
-## 🤝 Kontribusi
-
-1. Fork repository ini
-2. Buat branch fitur baru (`git checkout -b feature/AmazingFeature`)
-3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
-5. Buat Pull Request
-
-## 📝 License
-
-Project ini dilisensikan under MIT License. Lihat file `LICENSE` untuk detail lebih lanjut.
-
 ## 👥 Tim Pengembang
 
-- **Alif Fajriadi** - *Lead Developer* - [@aliffajriadi](https://github.com/aliffajriadi)
+- **Metta Santiputri, S.T., M.Sc, Ph.D.** - *Project Manager* 
+*=============================================================================* 
+- **Alif Fajriadi** - *Lead Team* - 3312401103 - [@aliffajriadi](https://github.com/aliffajriadi)
+- **Bastian Herinko** - *Member Team* - 3312401092 -  (https://github.com/bastian1603)
+- **Dwiky Putra Dachi** - *Member Team* - 3312401086 -  (https://github.com/kutu-guling)
+- **Rafif Ihsan Syahwaly** - *Member Team* - 3312401095 -  (https://github.com/Seicy)
 
-## 📞 Support
 
-Jika Anda mengalami masalah atau memiliki pertanyaan:
+## 📞 Informasi Kontak
 
-1. Buka issue di GitHub repository
-2. Hubungi tim pengembang melalui email
-3. Lihat dokumentasi di wiki repository
+- **Alif Fajriadi** - *Lead Team* - email : aliffajriadi@gmail.com
 
-## 🔄 Changelog
-
-### v1.0.0
-- Initial release
-- Fitur manajemen tugas personal
-- Sistem kolaborasi grup
-- Dashboard interaktif
-- Sistem reminder
 
 ---
 
