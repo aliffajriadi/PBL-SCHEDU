@@ -114,7 +114,7 @@
     </div>
 
     {{-- Mobile Modal for Notification Preview --}}
-    <div id="mobile-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden lg:hidden">
+    <div id="mobile-modal" class="fixed inset-0 backdrop-blur-sm bg-black/50 z-50 hidden lg:hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col">
                 {{-- Modal Header --}}
@@ -142,13 +142,15 @@
                 @if($role !== 'staff')
                     <div class="p-4 border-t border-gray-200">
                         <button 
+                        onclick="closeMobileModal()"
                             id="mobile-delete" 
+                            
                             class="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-all duration-300 flex items-center justify-center gap-2"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
-                            Delete Notification
+                            Delete Notificationasd
                         </button>
                     </div>
                 @endif
@@ -180,6 +182,7 @@
                 item.style.display = isVisible ? "block" : "none";
             });
         }
+        
 
         function closePreview() {
             document.getElementById('content-open').classList.add('hidden');
@@ -192,7 +195,8 @@
             document.getElementById('mobile-content').innerHTML = content;
             
             @if($role !== 'staff')
-                document.getElementById('mobile-delete').onclick = deleteCallback;
+            document.getElementById('mobile-delete').onclick = () => deleteCallback(); 
+
             @endif
             
             document.getElementById('mobile-modal').classList.remove('hidden');
@@ -234,12 +238,18 @@
                 }
 
                 if (isMobile()) {
-                    openMobileModal(
-                        notif.title,
-                        notif.created_at,
-                        notif.content,
-                        () => openDeleteModal(notification.data.notification_id, delete_data)
-                    );
+    openMobileModal(
+        notif.title,
+        notif.created_at,
+        notif.content,
+        () => {
+            closeMobileModal(); // Tutup modal detail
+            openDeleteModal(notif.id, delete_data); // Kirim ID yang benar
+        }
+    );
+
+
+
                 } else {
                     document.getElementById('content-title').innerHTML = notif.title;
                     document.getElementById('content-date').innerHTML = notif.created_at;

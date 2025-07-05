@@ -16,19 +16,13 @@
     </div>
 
     <script>
-        function openDeleteModal (id, callback) 
-        {
-            document.getElementById('delete-button').onclick = () => {
-                callback(id);
-            };
-            
-            const modal = document.getElementById('delete-modal');
-            // const titleSpan = document.getElementById('delete-note-title');
-            const form = document.getElementById('delete-note-form');
-            // titleSpan.textContent = noteTitle;
-            // form.action = `/notes/delete/${noteId}`;
-            modal.classList.remove('hidden');
-        };
+        function openDeleteModal(id, callback) {
+    document.getElementById('delete-button').onclick = () => {
+        callback(id);
+    };
+    document.getElementById('delete-modal').classList.remove('hidden');
+}
+
 
         function closeDeleteModal () 
         {
