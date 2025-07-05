@@ -137,9 +137,9 @@
                         </div>
                         <p class="text-sm mt-2">
                             <span class="font-medium text-gray-700">Score: </span>
-                            @if($submission['grade'] !== null)
-                                <span class="text-emerald-400">{{ $submission['grade'] }}/100</span>
-                                <span class="text-gray-500">(Scoring at {{ $submission['graded_at'] }})</span>
+                            @if($submission['score'] !== null)
+                                <span class="text-emerald-400">{{ $submission['score'] }}/100</span>
+                                <span class="text-gray-500">(Scoring at {{ $submission['updated_at'] }})</span>
                             @else
                                 <span class="text-gray-500">Waiting for Scoring</span>
                             @endif
@@ -361,8 +361,6 @@
                 const modal = document.getElementById('add-unit-modal');
                 modal.classList.add('hidden');
             };
-
-
 
             // Fungsi Modal Delete
             window.openDeleteModalTask = function() {
