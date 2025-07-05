@@ -35,46 +35,46 @@
 
     <div id="add-schedule-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Jadwal Baru</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Schedule</h3>
             <form id="add-form" action="/schedules/add" method="POST">
                 @csrf
-                <input type="text" name="title" placeholder="Judul Jadwal" id="add-title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                <textarea name="content" placeholder="Deskripsi Jadwal" id="add-content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                <input type="text" name="title" placeholder="Title Schedule" id="add-title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                <textarea name="content" placeholder="Description Schedule" id="add-content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                 <input type="datetime-local" name="start_datetime" id="add-start-datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <input type="datetime-local" name="end_datetime" id="add-end-datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <div class="flex justify-end gap-4">
                     <button type="button" onclick="close_add_modal()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                        Batal
+                        Cancel
                     </button>
                     <button type="button"
                         onclick="insert_data()"
                         class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
-                        Simpan
+                        Save
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="update-schedule-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div id="update-schedule-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Jadwal Baru</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Update Schedule</h3>
             <form id="update-form" action="/schedules/add" method="POST">
                 @csrf
-                <input type="text" id="title-update" name="title" placeholder="Judul Jadwal" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                <textarea name="content" id="content-update" placeholder="Deskripsi Jadwal" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
+                <input type="text" id="title-update" name="title" placeholder="Title Schedule" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                <textarea name="content" id="content-update" placeholder="Description Schedule" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
                 <input type="datetime-local" id="start-update" name="start_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <input type="datetime-local" id="end-update" name="end_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <div class="flex justify-end gap-4">
                     <button type="button" onclick="close_update_modal_schedule()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                        Batal
+                        Cancel
                     </button>
                     <button type="button" id="update-button-schedule"
                         {{-- onclick="update_data()" --}}
                         class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
-                        Simpan
+                        Save
                     </button>
                 </div>
             </form>
