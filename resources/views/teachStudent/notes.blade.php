@@ -1,4 +1,4 @@
-<x-layout title="Notes" role="teacher" :user="$user">
+<x-layout title="Notes" role="teacher" :user="$user" :image="$data['user']->profile_pic !== null ? asset('storage/' . $data['user']->instance->folder_name . '/' . $data['user']->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <!-- Header dengan Search dan Tombol Add -->
     <div class="bg-white mb-3 flex flex-row-reverse md:flex-row justify-between p-3 shadow-md rounded-2xl items-center">
   

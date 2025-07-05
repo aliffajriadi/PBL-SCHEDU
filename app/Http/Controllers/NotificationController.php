@@ -88,7 +88,8 @@ class NotificationController extends Controller
 
         return view('notification', [
             'user' => $user_data,
-            'role' => $user->is_teacher ? 'teacher' : 'student'
+            'role' => $user->is_teacher ? 'teacher' : 'student',
+            'userData' => $user
         ]);
     }
 

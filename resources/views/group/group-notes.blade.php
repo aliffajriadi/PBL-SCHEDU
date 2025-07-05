@@ -1,4 +1,4 @@
-<x-layout title="Group Notes" role="{{ $role }}" :user="$user">
+<x-layout title="Group Notes" role="{{ $role }}" :user="$user" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <x-nav-group type="search" page="notes"></x-nav-group>
 
     <!-- Konten Utama -->

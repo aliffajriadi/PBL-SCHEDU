@@ -1,5 +1,5 @@
 
-<x-layout title="Group Schedule" role="{{ $role }}" :user="$user">
+<x-layout title="Group Schedule" role="{{ $role }}" :user="$user" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <x-nav-group type="search" page="schedule"></x-nav-group>
 
     <!-- Konten Utama -->

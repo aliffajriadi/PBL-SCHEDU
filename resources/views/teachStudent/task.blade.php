@@ -1,4 +1,4 @@
-<x-layout title="Task" role="teacher" :user="$user">
+<x-layout title="Task" role="teacher" :user="$userData" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <!-- Header Section (unchanged as requested) -->
     <div
         class="bg-white flex items-center justify-between p-3 mt-3 mb-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">

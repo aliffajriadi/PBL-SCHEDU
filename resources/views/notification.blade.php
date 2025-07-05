@@ -1,4 +1,4 @@
-<x-layout title="Notifications" role="{{ $role }}" :user="$user">
+<x-layout title="Notifications" role="{{ $role }}" :user="$user" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <!-- Header with Search and Back Button -->
     <div class="bg-white mb-4 flex flex-row items-center justify-between p-4 shadow-md rounded-2xl">
         <input 

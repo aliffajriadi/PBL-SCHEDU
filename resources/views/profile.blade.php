@@ -1,4 +1,4 @@
-<x-layout title="Profile" role="student" :user="$user_data">
+<x-layout title="Profile" role="student" :user="$user_data" :image="$userData->profile_pic !== null ? asset('storage/' . $userData->instance->folder_name . '/' . $userData->profile_pic) : 'image/Ryan-Gosling.jpg'">
 
     {{-- @dd($user) --}}
 

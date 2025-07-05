@@ -1,4 +1,4 @@
-<x-layout title="Dashboard" :role="$data['role']" :user="$data['user_data']">
+<x-layout title="Dashboard" :role="$data['role']" :user="$data['user_data']" :image="$data['user']->profile_pic !== null ? asset('storage/' . $data['user']->instance->folder_name . '/' . $data['user']->profile_pic) : 'image/Ryan-Gosling.jpg'">
     <!-- Main container with responsive padding -->
 
     {{-- @dd(session()->get('notification_count')) --}}

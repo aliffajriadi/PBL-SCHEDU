@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instance;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +20,12 @@ class PublicController extends Controller
 
     public function index()
     {
-        return view('home');
+        $dataCount = [
+            'instansi' => Instance::count('email'),
+            'teacher' => User::where('is_teacher', '==', '1')->count(),
+            'student' => User::where('is_teacher', '==', '0')->count(),
+        ];
+        return view('home', compact('dataCount'));
     }
 
     public function login_page()
