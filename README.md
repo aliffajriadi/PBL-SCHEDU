@@ -175,7 +175,7 @@ npm run dev
 
 - **Metta Santiputri, S.T., M.Sc, Ph.D.** - *Project Manager* 
 *=============================================================================* 
-- **Alif Fajriadi** - *Lead Team* - 3312401103 - [@aliffajriadi](https://github.com/aliffajriadi)
+- **Alif Fajriadi** - *Lead Team* - 3312401103 - [aliffajriadi@gmail.com] - (https://github.com/aliffajriadi)
 - **Bastian Herinko** - *Member Team* - 3312401092 -  (https://github.com/bastian1603)
 - **Dwiky Putra Dachi** - *Member Team* - 3312401086 -  (https://github.com/kutu-guling)
 - **Rafif Ihsan Syahwaly** - *Member Team* - 3312401095 -  (https://github.com/Seicy)
