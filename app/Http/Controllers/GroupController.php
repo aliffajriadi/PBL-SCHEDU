@@ -58,7 +58,7 @@ class GroupController extends Controller
             });
         }
 
-        $members = MemberOf::with(['user:uuid,name,profile_pic'])->where('group_id', $id)->limit(5)->get();
+        $members = MemberOf::with(['user:uuid,name,profile_pic,is_teacher'])->where('group_id', $id)->limit(5)->get();
 
         return view('group.group-dashboard', [
             'role' => $role, 
