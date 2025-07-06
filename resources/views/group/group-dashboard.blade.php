@@ -12,6 +12,7 @@
                     class="bg-emerald-400 rounded-2xl w-full shadow-sm p-4 flex flex-col sm:flex-row items-center sm:items-start gap-4">
                     <img src="{{ $group->pic === null ? asset('image/image2.jpg') : asset('storage/' . $group->instance->folder_name . '/groups/' . $group->group_code . '/' . $group->pic) }}"
                         alt="Group Picture"
+                        loading="lazy"
                         class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl border border-amber-300 object-cover flex-shrink-0">
                     <div class="text-white text-center sm:text-left">
                         <p class="text-lg font-semibold">{{ $group->name }}</p>

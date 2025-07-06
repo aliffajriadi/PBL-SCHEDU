@@ -77,7 +77,9 @@
                 <h2 class="text-lg md:text-xl">Notification</h2>
             </div>
         
-            <div class="space-y-2 md:space-y-3">
+            <div class="space-y-2 md:space-y-3 overflow-y-auto max-h-[230px] pr-1">
+
+
                 <!-- Notifikasi -->
 
 
@@ -133,9 +135,6 @@
         <x-calender></x-calender>
     </div>
 
-    <div class="bg-white rounded-xl p-3 mb-3 shadow-md hover:shadow-lg transition-all duration-300">
-
-    </div>
 
 
     <x-success></x-success>
