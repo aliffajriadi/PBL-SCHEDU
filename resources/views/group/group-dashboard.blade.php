@@ -74,7 +74,7 @@
                     @foreach ($members as $member)
                         <div class="flex items-center gap-3 bg-emerald-50 rounded-2xl p-3">
                             <img 
-                                src="{{ asset('image/Ryan-Gosling.jpg') }}" 
+                                src="{{ asset('storage/' . $group->instance->folder_name . '/' . $member->user->profile_pic) }}" 
                                 alt="Member Avatar" 
                                 class="w-12 h-12 rounded-full border border-emerald-400 object-cover flex-shrink-0"
                             >
