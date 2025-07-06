@@ -122,12 +122,26 @@ class GroupTaskController extends Controller
             $visible_schedule = $field['deadline'] < now()->setTimezone('Asia/Jakarta') ? now()->setTimezone('Asia/Jakarta') : $field['deadline'];
 
             NotificationController::store(
-                'Tugas grup baru dibuat', "Jadwal grup baru saja dibuat di grup $group->name dengan judul \"{$field['title']}\"", GroupTask::class, $task->id, false, now()->setTimezone('Asia/Jakarta'), $group->id
+                'New group task created',
+                "A new group schedule has just been created in the group $group->name with the title \"{$field['title']}\"",
+                GroupTask::class,
+                $task->id,
+                false,
+                now()->setTimezone('Asia/Jakarta'),
+                $group->id
             );
+            
 
             NotificationController::store(
-                'Pengingat Tugas', "Jangan lupa dengan tugas \"{$field['title']}\" dari grup $group->name", GroupTask::class, $task->id, true, $visible_schedule, $group->id
+                'Task Reminder',
+                "Don't forget about the task \"{$field['title']}\" from the group $group->name",
+                GroupTask::class,
+                $task->id,
+                true,
+                $visible_schedule,
+                $group->id
             );
+            
 
             return response()->json([
                 'status' => true, 
@@ -160,18 +174,25 @@ class GroupTaskController extends Controller
 
             $new_visible_schedule = $field['deadline'] > $now ? $field['deadline'] : $now;
 
-            if($notif->visible_schedule <= $now){
+            if ($notif->visible_schedule <= $now) {
                 NotificationController::store(
-                    'Pengingat Tugas', "Jangan lupa dengan tugas \"{$field['title']}\" dari grup $group->name", GroupTask::class, $api->id, true, $new_visible_schedule, $group->id
+                    'Task Reminder',
+                    "Don't forget about the task \"{$field['title']}\" from the group $group->name",
+                    GroupTask::class,
+                    $api->id,
+                    true,
+                    $new_visible_schedule,
+                    $group->id
                 );
-            }else{
+            } else {
                 $notif->update([
-                    'title' => 'Pengingat Tugas',
-                    'content' => "Jangan lupa dengan tugas \"{$field['title']}\" dari grup $group->name",
+                    'title' => 'Task Reminder',
+                    'content' => "Don't forget about the task \"{$field['title']}\" from the group $group->name",
                     'visible_schedule' => $new_visible_schedule
                 ]);
                 $notif->save();
             }
+            
 
             return response()->json([
                 'status' => true, 

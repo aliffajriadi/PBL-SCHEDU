@@ -64,14 +64,16 @@ class MemberOfController extends Controller
                 'verified' => false
             ]);
 
-            NotificationController::store("Permintaan baru bergabung ke grup {$group->name}.", 
-                "{$user->name} mengajukan permintaan bergabung ke dalam grup {$group->name}. Approve pada group settings untuk menyetujuinya dan Reject untuk menolaknya bergabung ke dalam group.", 
+            NotificationController::store(
+                "New join request for group {$group->name}.", 
+                "{$user->name} has requested to join the group {$group->name}. Approve the request in group settings to accept, or Reject to deny the request.",
                 Group::class,
                 $group->id, 
                 false,
                 now(),
                 target_id: $group->created_by
             );
+            
 
             return redirect()->back();         
 
@@ -91,25 +93,22 @@ class MemberOfController extends Controller
 
             $user = Auth::user();
 
-            if($user->is_teacher === 1){
-                return redirect('/group')->with('error', 'Guru tidak bisa bergabung ke grup');
-                throw new \Exception('Guru tidak bisa bergabung ke grup');
-            }          
-
+            if ($user->is_teacher === 1) {
+                return redirect('/group')->with('error', 'Teachers are not allowed to join a group');
+            }
+            
             $group = Group::where('group_code', $group_code)->first();
             
-            if($group === null){
-
-                return redirect('/group')->with('error', 'Group ini tidak ada di instansi anda');
-                throw new \Exception('This group not exists in your instance');
-            }
+            if ($group === null) {
+                return redirect('/group')->with('error', 'This group does not exist in your institution');
+            }            
 
             $member = MemberOf::where('group_id', $group->first()->id)->where('user_uuid', Auth::user()->uuid);
 
-            if($member->exists()){
-                return redirect('/group')->with('error', 'Kamu sudah join masuk ke dalam group ini');
-                throw new \Exception('You have already joined this Group');
+            if ($member->exists()) {
+                return redirect('/group')->with('error', 'You have already joined this group');
             }
+            
 
             MemberOf::create([
                 'user_uuid' => Auth::user()->uuid,
@@ -117,16 +116,18 @@ class MemberOfController extends Controller
                 'verified' => false
             ]);
 
-            NotificationController::store("Permintaan baru bergabung ke grup {$group->name}.", 
-                "{$user->name} mengajukan permintaan bergabung ke dalam grup {$group->name}. Approve pada group settings untuk menyetujuinya dan Reject untuk menolaknya bergabung ke dalam group.", 
+            NotificationController::store(
+                "New join request for group {$group->name}.", 
+                "{$user->name} has requested to join the group {$group->name}. Approve the request in group settings to accept it, or Reject to deny the request.",
                 Group::class,
                 $group->id, 
                 false,
                 now(),
                 target_id: $group->created_by
             );
-
-            return redirect('group')->with('success', 'Berhasil mengajukan permintaan bergabung ke dalam grup');         
+            
+            return redirect('group')->with('success', 'Successfully submitted a join request to the group');
+            
 
         }catch(\Exception $e) {
             return response()->json([

@@ -161,8 +161,8 @@ class GroupController extends Controller
             ]);
 
             InstanceNotificationController::store(
-                'Grup dibuat', 
-                "Sebuah grup dengan nama {$field['name']} telah dibuat oleh {$user->name}", 
+                'Grup has ready', 
+                "Group has reade created for {$field['name']} created by {$user->name}", 
                 $user->instance_uuid
             );
             
@@ -172,7 +172,7 @@ class GroupController extends Controller
                 'verified' => true
             ]);
 
-            return redirect('/group')->with('success', 'berhasil menambahkan group');
+            return redirect('/group')->with('success', 'Success Add In Group.');
             
         }catch(\Exception $e) {
             return redirect('/group')->with('error', $e->getMessage());
@@ -218,7 +218,7 @@ class GroupController extends Controller
             $group->name = $request->input('name');
             $group->save();
 
-            return redirect("/group/{$group->group_code}/settings")->with('success', 'Berhasil melakukan update pada grup');
+            return redirect("/group/{$group->group_code}/settings")->with('success', 'Success Update Data Group.');
             
         }catch(\Exception $e) {
             return redirect("/group/{$group->group_code}/settings")->with('error', $e->getMessage());
@@ -247,8 +247,8 @@ class GroupController extends Controller
             $group->delete();
 
             InstanceNotificationController::store(
-                'Grup dihapus', 
-                "Sebuah grup dengan nama {$group->name} telah dihapus oleh {$user->name}", 
+                'Group Has Deleted', 
+                "A Group Has Ben Delete {$group->name} by {$user->name}", 
                 $user->instance_uuid
             );
 

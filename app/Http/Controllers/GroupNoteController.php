@@ -90,7 +90,7 @@ class GroupNoteController extends Controller
             $note = GroupNote::create($field);
 
             $notification = NotificationController::store(
-                'Catatan Group Baru', "Catatan baru sudah dibuat di grup $group->name.", GroupNote::class, $note->id, false, now()->setTimezone('Asia/Jakarta'), $group->id
+                'Notes Group Has Created', "New Notes Has Ben Created in $group->name.", GroupNote::class, $note->id, false, now()->setTimezone('Asia/Jakarta'), $group->id
             );
 
             if($request->hasFile('files')){

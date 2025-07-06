@@ -23,7 +23,7 @@ class GroupTaskUnitController extends Controller
 
             GroupTaskUnit::create($field);
 
-            return redirect()->back()->with('success', 'Berhasil menambahkan unit');
+            return redirect()->back()->with('success', 'Succes Add New Unit For ' . $field['name']);
 
             // return response()->json([
             //     'status' => true, 
@@ -45,7 +45,7 @@ class GroupTaskUnitController extends Controller
             ]);
 
             $unit->update($field);
-            return redirect()->back()->with('success', 'Berhasil mengedit unit');
+            return redirect()->back()->with('success', 'Success Update unit.');
             
         }catch(\Exception $e) {
             return response()->json([
@@ -57,17 +57,13 @@ class GroupTaskUnitController extends Controller
 
     public function destroy(String $group, GroupTaskUnit $unit)
     {
-        try{
+        try {
             $unit->delete();
-    
-            return redirect()->back()->with('success', 'Berhasil menghapus unit');
-        }catch(\Exception $e) {
-            return redirect()->back()->with('error', 'gagal menghapus unit' . $e->getMessage());
-
-            return response()->json([
-                'status' => false, 
-                'message' => $e->getMessage()
-            ]);
+        
+            return redirect()->back()->with('success', 'Successfully deleted the unit');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete the unit: ' . $e->getMessage());
         }
+        
     }
 }

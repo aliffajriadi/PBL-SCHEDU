@@ -106,9 +106,9 @@ class UserController extends Controller
         $user = Auth::user();
         $user_data = [$user->name, $user->email];
     
-        $notif = NotificationStatus::with('notification')->where('user_uuid', $user->uuid)->where('is_read', false);
+        $notif = NotificationStatus::with('notification')->where('user_uuid', $user->uuid)->where('is_read', 0)->latest()->get();
         $personal_task = PersonalTask::where('user_uuid', $user->uuid);
-
+        // dd($notif);
         if($user->is_teacher === 0){
             $total_group_task = GroupTask::whereIn('group_id', MemberOf::where('user_uuid', $user->uuid)->pluck('group_id'))->count();
             $finished_group_task = GroupTaskSubmission::where('user_uuid', $user->uuid)->count();
@@ -120,7 +120,7 @@ class UserController extends Controller
                 'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
                 'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count() + $total_group_task - $finished_group_task,
                 'f_task_count' => (clone $personal_task)->where('is_finished', true)->count() + $finished_group_task,
-                'notifications' => $notif->limit(3)->get(),
+                'notifications' => $notif->take(3),
                 'count_notif' =>$notif->count()
                 
             ];
@@ -132,7 +132,7 @@ class UserController extends Controller
                 'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
                 'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count(),
                 'f_task_count' => (clone $personal_task)->where('is_finished', true)->count(),
-                'notifications' => $notif->limit(3)->get(),
+                'notifications' => $notif->take(3),
                 'count_notif' =>$notif->count()
             ];
         }

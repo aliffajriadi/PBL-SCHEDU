@@ -82,7 +82,7 @@ class GroupScheduleController extends Controller
             $now = now()->setTimezone('Asia/Jakarta');
 
             $username = Auth::user()->name;
-            NotificationController::store('Jadwal Group Baru', "$username baru saja membuat jadwal untuk grup $group->name", GroupSchedule::class, $schedule->id, false, $now, $group->id);
+            NotificationController::store('New Schedule In Group', "$username has ben create schedule in $group->name", GroupSchedule::class, $schedule->id, false, $now, $group->id);
 
             $date = Carbon::parse($field['start_datetime']);
             $end_date = Carbon::parse($field['end_datetime']);
@@ -91,7 +91,7 @@ class GroupScheduleController extends Controller
             while($date < $now) $date->addDay();
 
             while($date <= $end_date){
-                NotificationController::store('Pengingat Jadwal Grup', "Ada jadwal \"$title\" hari ini pada Jam {$date->format('h:i')}", GroupSchedule::class, $schedule->id, true, $date->toDateTimeString(), $group->id);
+                NotificationController::store('Reminder for Schedule', "Schedule for \"$title\" Today in {$date->format('h:i')}", GroupSchedule::class, $schedule->id, true, $date->toDateTimeString(), $group->id);
                 $date->addDay();
             }
 
@@ -131,7 +131,7 @@ class GroupScheduleController extends Controller
             while($date < $now) $date->addDay();
 
             while($date <= $end_date){
-                NotificationController::store('Pengingat Jadwal Grup', "Ada jadwal \"$title\" hari ini pada Jam {$date->format('h:i')}", GroupSchedule::class, $api->id, true, $date->toDateTimeString(), $group->id);
+                NotificationController::store('Reminder Group Schedule', "Have Schedule \"$title\" today in {$date->format('h:i')}", GroupSchedule::class, $api->id, true, $date->toDateTimeString(), $group->id);
                 $date->addDay();
             }
 

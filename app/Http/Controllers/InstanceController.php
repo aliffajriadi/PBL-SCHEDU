@@ -182,9 +182,9 @@ class InstanceController extends Controller
 
             Instance::create($field);
 
-            return redirect()->back()->with('success', 'Berhasil Menambahkan Instance');
+            return redirect()->back()->with('success', 'Success Added New Instance');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal Menambahkan Instance');
+            return redirect()->back()->with('error', 'Failed to add new instance');
         }
     }
 
@@ -220,9 +220,9 @@ class InstanceController extends Controller
 
             $staff->save();
 
-            return redirect()->back()->with('success', 'Berhasil memperbarui data.');
+            return redirect()->back()->with('success', 'Success to update data.');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Failed update : ' . $th->getMessage());
         }
     }
 
@@ -256,9 +256,9 @@ class InstanceController extends Controller
 
             $instance->save();
 
-            return redirect()->back()->with('success', 'Berhasil memperbarui data.');
+            return redirect()->back()->with('success', 'Success update data.');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Failed update : ' . $th->getMessage());
         }
     }
 
