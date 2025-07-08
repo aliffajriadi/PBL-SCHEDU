@@ -205,7 +205,7 @@
 
         function delete_data()
         {
-            api_destroy(`${path}/api`, schedule_selected).then(resposne => {
+            api_destroy(`${path}/api`, schedule_selected).then(response => {
                 search();
                 if(response.status) open_success(response.message);
                 else open_fail(response.message);

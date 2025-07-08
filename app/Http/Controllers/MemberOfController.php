@@ -44,13 +44,13 @@ class MemberOfController extends Controller
     {
         try {
 
-            $group = Group::where('group_code', $request->input('group_code'))->where('instance_uuid', Auth::user()->instance_uuid);
-
-            if(!$group->exists()){
+            $group = Group::where('group_code', $request->input('group_code'))->where('instance_uuid', Auth::user()->instance_uuid)->first();
+            
+            if(!$group){
                 throw new \Exception('This group not exists in your instance');
             }
 
-            $member = MemberOf::where('group_id', $group->first()->id)->where('user_uuid', Auth::user()->uuid);
+            $member = MemberOf::where('group_id', $group->id)->where('user_uuid', Auth::user()->uuid);
 
             if($member->exists()){
                 throw new \Exception('You have already joined this Group');
@@ -73,15 +73,11 @@ class MemberOfController extends Controller
                 now(),
                 target_id: $group->created_by
             );
-            
 
-            return redirect()->back();         
+            return redirect('/group')->with('success', 'Waiting for join request approval');         
 
         }catch(\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            return redirect('/group')->with('error', $e->getMessage());
         }
     }
 
@@ -89,7 +85,7 @@ class MemberOfController extends Controller
     {
         try {
 
-            if(!Auth::check()) return redirect('/login')->with('error', 'Harus login sebelum join');
+            if(!Auth::check()) return redirect('/login')->with('error', 'Must login before join a groups');
 
             $user = Auth::user();
 
@@ -100,7 +96,7 @@ class MemberOfController extends Controller
             $group = Group::where('group_code', $group_code)->first();
             
             if ($group === null) {
-                return redirect('/group')->with('error', 'This group does not exist in your institution');
+                return redirect('/group')->with('error', 'This group does not exist in your instance');
             }            
 
             $member = MemberOf::where('group_id', $group->first()->id)->where('user_uuid', Auth::user()->uuid);

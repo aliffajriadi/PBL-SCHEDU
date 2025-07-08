@@ -302,4 +302,9 @@
         api_store('/group/api', formData);
     }
 
+    @if(session('error'))
+      open_fail("{{session('error')}}");
+    @elseif(session('success'))
+        open_success("{{ session('success') }}");
+    @endif
 </script>
