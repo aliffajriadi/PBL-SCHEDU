@@ -189,8 +189,8 @@ class GroupController extends Controller
     {
         try {
      
-            // Gate::allows('is_member', [$group]);
-            // Gate::allows('modify_permission', [$group]);
+            Gate::allows('is_member', [$group]);
+            Gate::allows('modify_permission', [$group]);
 
             $request->validate([
                 'name' => 'required|max:255',

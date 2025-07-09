@@ -3,18 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\GroupTask;
 use App\Models\GroupTaskSubmission;
+use App\Models\MemberOf;
 use App\Models\TaskFileSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class GroupTaskSubmissionController extends Controller
 {
-    public function store(Request $request, String $group, int $group_task)
+    public function store(Request $request, Group $group, GroupTask $group_task)
     {
         try{
+
+            $user = Auth::user();
+
+            Gate::allows('create_submission', $group_task);
+
+            if($user->is_teacher || !MemberOf::where('user_uuid', $user->uuid)->where('group_id', $group_task->group_id)->exists()){
+                abort(403, 'Your\'e not allowed to submit on this task!');
+            }
+
             $field = $request->validate([
                 'description' => 'string',
                 'files' => 'array',
@@ -25,11 +37,11 @@ class GroupTaskSubmissionController extends Controller
 
             $submission_template = [];
             $submission_template['user_uuid'] = Auth::user()->uuid;
-            $submission_template['group_task_id'] = $group_task;
+            $submission_template['group_task_id'] = $group_task->id;
             $submission_template['description'] = $field['description'];
             $submission = GroupTaskSubmission::create($submission_template);
 
-            $folder_name = Auth::user()->instance->folder_name . '/groups/' . $group;
+            $folder_name = Auth::user()->instance->folder_name . '/groups/' . $group->group_code;
 
             if($request->hasFile('files')){
                 $files = $request->file('files');
@@ -72,14 +84,15 @@ class GroupTaskSubmissionController extends Controller
     public function update(Request $request, String $group, GroupTaskSubmission $submission)
     {
         try{
+            
+            Gate::allows('owning', [$submission]);
+            
             $field = $request->validate([
                 'description' => 'string',
                 'score' => 'int',
                 'files' => 'array',
                 'files.*' => 'file' 
             ]);
-
-            // return $request->all();
 
             if($request->filled('description')){
                 $submission->description = $field['description'];
@@ -129,6 +142,8 @@ class GroupTaskSubmissionController extends Controller
     public function destroy(String $group, GroupTaskSubmission $submission)
     {
         try{        
+            Gate::allows('owning', [$submission]);
+
             $submission_files = $submission->file()->get();
             $folder_name = Auth::user()->instance->folder_name;
 
@@ -154,6 +169,11 @@ class GroupTaskSubmissionController extends Controller
     public function delete_file(String $group, TaskFileSubmission $taskFileSubmission)
     {
         try {
+     
+            $submission = $taskFileSubmission->task;
+
+            Gate::allows('own_file', [$submission]);
+
             $folder_name = Auth::user()->instance->folder_name;
          
             Storage::disk('public')->delete("{$folder_name}/groups/{$group}/{$taskFileSubmission->stored_name}");

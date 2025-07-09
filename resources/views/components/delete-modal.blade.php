@@ -17,12 +17,11 @@
 
     <script>
         function openDeleteModal(id, callback) {
-    document.getElementById('delete-button').onclick = () => {
-        callback(id);
-    };
-    document.getElementById('delete-modal').classList.remove('hidden');
-}
-
+            document.getElementById('delete-button').onclick = () => {
+                callback(id);
+            };
+            document.getElementById('delete-modal').classList.remove('hidden');
+        }
 
         function closeDeleteModal () 
         {

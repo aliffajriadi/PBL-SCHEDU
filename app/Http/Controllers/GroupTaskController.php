@@ -75,7 +75,7 @@ class GroupTaskController extends Controller
 
     public function show(Group $group, GroupTask $api)
     {
-        // Gate::allows('access', $api);
+        Gate::allows('access', $api);
 
         try {
 
@@ -157,7 +157,7 @@ class GroupTaskController extends Controller
 
     public function update(Request $request, Group $group, GroupTask $api)
     {
-        // Gate::allows('permission', [$api]);
+        Gate::allows('permission', [$api]);
 
         try{
             $field = $request->validate([
@@ -210,7 +210,7 @@ class GroupTaskController extends Controller
 
     public function destroy(String $group, GroupTask $api)
     {
-        // Gate::allows('permission', [$api]);
+        Gate::allows('permission', [$api]);
         try{
             $notifications = $api->notification()->where('is_reminder', true)->orderBy('created_at', 'DESC')->first();
             

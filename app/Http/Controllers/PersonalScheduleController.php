@@ -6,6 +6,7 @@ use App\Models\PersonalSchedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PersonalScheduleController extends Controller
 {
@@ -46,6 +47,7 @@ class PersonalScheduleController extends Controller
     public function store(Request $request)
     {
         try {
+
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required',
@@ -88,6 +90,9 @@ class PersonalScheduleController extends Controller
     public function update(Request $request, PersonalSchedule $api)
     {
         try {
+            
+            Gate::allows('own', [$api]);
+            
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required',
@@ -131,6 +136,8 @@ class PersonalScheduleController extends Controller
     public function destroy(PersonalSchedule $api)
     {
         try {
+            Gate::allows('own', [$api]);
+            
             $old_notifications = $api->notification()->where('is_reminder', true)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->get();
             $api->delete();
             $old_notifications->each->delete();

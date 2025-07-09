@@ -12,8 +12,8 @@ class PersonalNotePolicy
     {
         return $user->uuid === $note->user_uuid
             ? Response::allow()
-            :     abort(403, "You\'re not allowed to access and modify this content.");
-            ; 
+            : abort(403, "You\'re not allowed to access and modify this content.");
+            
     }
 
 }

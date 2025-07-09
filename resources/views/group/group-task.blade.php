@@ -521,6 +521,10 @@
         api_update(`${path}/s`, formData, submission_id, true).then((response) => {
             show_data(task_selected);
             close_update_modal();
+
+            if(response.status) open_success(response.message);
+            else open_fail(response.message);
+
         });
     }
 
@@ -656,11 +660,17 @@
 
     function delete_file(stored_name, id)
     {
-        api_destroy(`${path}/file`, stored_name).then(response => {
-            show_data(id);
-            if(response.status) open_success(response.message);
-            else open_fail(response.message);
+        openDeleteModal(id, function(file_id) {
+            api_destroy(`${path}/file`, stored_name).then(response => {
+                show_data(file_id);
+                if(response.status) open_success(response.message);
+                else open_fail(response.message);
+
+                closeDeleteModal();
+            });
         });
+
+
     }
 
     function insert_data()

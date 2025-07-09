@@ -8,16 +8,20 @@ use App\Models\Group;
 use App\Models\GroupNote;
 use App\Models\TaskFileSubmission;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class GroupNoteController extends Controller
 {
     public function __construct()
     {
         NotificationController::refresh_notification();
+   
     }
     
     public function home(Request $request, Group $group)
     {
+        Gate::allows('is_member', [$group]);
+
         $role = session('role');
         $user = Auth::user();
         $user_data = [

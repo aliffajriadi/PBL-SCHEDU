@@ -17,8 +17,10 @@ class GroupScheduleController extends Controller
         NotificationController::refresh_notification();
     }
     
-    public function home()
+    public function home(Group $group)
     {
+        Gate::allows('is_member', [$group]);
+
         $role = session('role');
         $user = Auth::user();
         $user_data = [
@@ -52,7 +54,7 @@ class GroupScheduleController extends Controller
 
             return response()->json([
                 'calendar' => $schedules->get(),
-                'datas' => $schedules->paginate(1),
+                'datas' => $schedules->paginate(5),
                 'status' => true,
             ]);
             
@@ -66,7 +68,7 @@ class GroupScheduleController extends Controller
 
     public function store(Request $request, Group $group)
     {
-        // Gate::allows('create');
+        Gate::allows('create', [$group]);
         
         try {
             $field = $request->validate([
@@ -111,7 +113,7 @@ class GroupScheduleController extends Controller
     public function update(Request $request, Group $group, GroupSchedule $api)
     {
         try{
-            // Gate::allows('permission', [$api]);
+            Gate::allows('permission', [$api, $group]);
 
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -154,7 +156,7 @@ class GroupScheduleController extends Controller
     public function destroy(Request $request, Group $group, GroupSchedule $api)
     {
         try {
-            // Gate::allows('permission', [$api]);
+            Gate::allows('permission', [$api, $group]);
 
             $notifications = $api->notification()->where('is_reminder', true)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->get();
 

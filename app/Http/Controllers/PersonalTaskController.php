@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PersonalTask;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PersonalTaskController extends Controller
 {
@@ -79,6 +80,7 @@ class PersonalTaskController extends Controller
     public function update(Request $request, PersonalTask $api)
     {
         try{
+            Gate::allows('own', [$api]);
 
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -119,6 +121,8 @@ class PersonalTaskController extends Controller
     public function destroy(PersonalTask $api)
     {
         try{
+            Gate::allows('own', [$api]);
+
             $notifications = $api->notification()->where('is_reminder', true)->where('visible_schedule', '>', now()->setTimezone('Asia/Jakarta'))->get();
 
             $notifications->each->delete();
@@ -139,6 +143,8 @@ class PersonalTaskController extends Controller
     public function set_finish(Request $request, PersonalTask $task)
     {
         try{
+            Gate::allows('own', [$task]);
+
             $field = $request->validate([
                 'is_finished' => 'required'
             ]);
@@ -161,6 +167,8 @@ class PersonalTaskController extends Controller
     public function reset_finish(PersonalTask $task)
     {
         try{
+            Gate::allows('own', [$task]);
+            
             $task->update([
                 'is_finished' => false
             ]);

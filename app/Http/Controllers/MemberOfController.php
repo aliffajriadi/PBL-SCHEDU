@@ -13,12 +13,15 @@ use App\Models\NotificationStatus;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class MemberOfController extends Controller
 {
     public function index(Group $group)
     {
+        Gate::allows('is_member', [$group]);
+
         $role = session('role');
         $user = Auth::user();
         $user_data = [
@@ -28,6 +31,7 @@ class MemberOfController extends Controller
         $members = MemberOf::with('user:uuid,name,email')->where('user_uuid', '!=', $group->created_by)->where('group_id', $group->id)->where('verified', true)->get();
         $pending_requests = MemberOf::with('user:uuid,name,email')->where('user_uuid', '!=', $group->created_by)->where('group_id', $group->id)->where('verified', false)->get();
 
+        
         return view('group.group-settings', [
             'role' => $role, 
             'user' => $user_data,
@@ -45,7 +49,7 @@ class MemberOfController extends Controller
         try {
 
             $group = Group::where('group_code', $request->input('group_code'))->where('instance_uuid', Auth::user()->instance_uuid)->first();
-            
+
             if(!$group){
                 throw new \Exception('This group not exists in your instance');
             }
@@ -60,7 +64,7 @@ class MemberOfController extends Controller
 
             MemberOf::create([
                 'user_uuid' => $user->uuid,
-                'group_id' => $group->first()->id,
+                'group_id' => $group->id,
                 'verified' => false
             ]);
 
@@ -149,7 +153,6 @@ class MemberOfController extends Controller
                 'status' => false,
                 'message' => $e->getMessage(),
             ]);
-        
         }
     }
 
@@ -159,7 +162,6 @@ class MemberOfController extends Controller
     public function leave_group(Request $request, Group $group, MemberOf $member_of)
     {
         try {
-
             $member_of->delete();
             
             return redirect()->back();
@@ -182,7 +184,6 @@ class MemberOfController extends Controller
     public function delete_all(Request $request, Group $group, String $table)
     {
         try{
-
             $request->validate([
                 'password' => 'required|string'
             ]);
