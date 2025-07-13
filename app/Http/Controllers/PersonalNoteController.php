@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PersonalNote;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 
@@ -84,7 +85,7 @@ class PersonalNoteController extends Controller
     public function store(Request $request)
     {
         try {
-            
+            DB::beginTransaction();
            
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -95,12 +96,16 @@ class PersonalNoteController extends Controller
 
             PersonalNote::create($field);
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Note Added Successfully'
             ]);
             
         }catch(\Exception $e) {
+
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -110,6 +115,7 @@ class PersonalNoteController extends Controller
 
     public function update(Request $request, PersonalNote $api)
     {
+        DB::beginTransaction();
         try {
 
             Gate::allows('own', [$api]);
@@ -122,12 +128,16 @@ class PersonalNoteController extends Controller
             $api->update($field);
             $api->save();
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Note Updated Successfully'
             ]);
             
         }catch(\Exception $e) {
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -137,10 +147,14 @@ class PersonalNoteController extends Controller
 
     public function destroy(PersonalNote $api)
     {
+        DB::beginTransaction();
+
         try {
             Gate::allows('own', [$api]);
 
             $api->delete();
+
+            DB::commit();
 
             return response()->json([
                 'status' => true,
@@ -148,6 +162,9 @@ class PersonalNoteController extends Controller
             ]);
             
         }catch(\Exception $e) {
+            
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

@@ -8,6 +8,7 @@ use App\Models\Group;
 use App\Models\GroupNote;
 use App\Models\TaskFileSubmission;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class GroupNoteController extends Controller
@@ -79,8 +80,10 @@ class GroupNoteController extends Controller
 
     public function store(Request $request, Group $group)
     {
-        try {
 
+        DB::beginTransaction();
+
+        try {
             $field = $request->validate([
                 'title' => 'required|max:255',
                 'content' => 'required',
@@ -120,6 +123,8 @@ class GroupNoteController extends Controller
                 }
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'New Note Added Successfully',
@@ -127,6 +132,8 @@ class GroupNoteController extends Controller
             ]);
 
         }catch(\Exception $e){
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -136,9 +143,9 @@ class GroupNoteController extends Controller
 
     public function update(Request $request, Group $group, GroupNote $api)
     {
+        DB::beginTransaction();
         try {
             // return ['request' => $request->file('files')];
-
 
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -174,6 +181,8 @@ class GroupNoteController extends Controller
                 }
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Note Updated Successfully',
@@ -182,6 +191,9 @@ class GroupNoteController extends Controller
             ]);
 
         }catch(\Exception $e){
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -192,6 +204,9 @@ class GroupNoteController extends Controller
 
     public function destroy(Group $group, GroupNote $api)
     {
+
+        DB::beginTransaction();
+
         try {
             $api->notification->delete();
 
@@ -203,6 +218,8 @@ class GroupNoteController extends Controller
 
             $api->delete();
 
+            DB::commit();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Note Deleted Successfully',
@@ -210,6 +227,8 @@ class GroupNoteController extends Controller
             ]);
 
         }catch(\Exception $e){
+            
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -229,17 +248,24 @@ class GroupNoteController extends Controller
 
     public function delete_file(String $group, TaskFileSubmission $taskFileSubmission)
     {
+        DB::beginTransaction();
+
         try {
             $folder_name = Auth::user()->instance->folder_name;
          
             Storage::disk('public')->delete("{$folder_name}/groups/{$group}/{$taskFileSubmission->stored_name}");
             $taskFileSubmission->delete();
 
+            DB::commit();
+
             return response()->json([
                 'status'=> true, 
                 'message' => 'File deleted successfully'
             ]);
         }catch(\Exception $e){
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -249,6 +275,9 @@ class GroupNoteController extends Controller
 
     public function upload_file(Request $request, string $group, GroupNote $note)
     {
+
+        DB::beginTransaction();
+        
         try{
             $request->validate([
                 'file' => 'required|file' 
@@ -268,6 +297,8 @@ class GroupNoteController extends Controller
     
             $file->storeAs("{$folder_name}/groups/{$group}" , $task_file->stored_name, 'public');
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'stored_name' =>$task_file->stored_name,
@@ -277,6 +308,9 @@ class GroupNoteController extends Controller
             ]);
 
         }catch(\Exception $e){
+            
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

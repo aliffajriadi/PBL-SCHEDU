@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class GroupScheduleController extends Controller
 {
@@ -69,7 +70,9 @@ class GroupScheduleController extends Controller
     public function store(Request $request, Group $group)
     {
         Gate::allows('create', [$group]);
-        
+     
+        DB::beginTransaction();
+
         try {
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -97,12 +100,16 @@ class GroupScheduleController extends Controller
                 $date->addDay();
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'New Schedule Successfully Added'
             ]);
 
         }catch(\Exception $e) {
+
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -112,6 +119,8 @@ class GroupScheduleController extends Controller
 
     public function update(Request $request, Group $group, GroupSchedule $api)
     {
+        DB::beginTransaction();
+
         try{
             Gate::allows('permission', [$api, $group]);
 
@@ -139,13 +148,18 @@ class GroupScheduleController extends Controller
 
             $api->update($field);
             $api->save();
-            
+
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message'=> 'Group Schedule Updated Successfully'
             ]);
 
         }catch(\Exception $e) {
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message'=> $e->getMessage()
@@ -155,6 +169,8 @@ class GroupScheduleController extends Controller
 
     public function destroy(Request $request, Group $group, GroupSchedule $api)
     {
+        DB::beginTransaction();
+
         try {
             Gate::allows('permission', [$api, $group]);
 
@@ -163,12 +179,14 @@ class GroupScheduleController extends Controller
             $api->delete();
             $notifications->each->delete();
 
-
+            DB::commit();
             return response()->json([
                 'status' => true,
                 'message'=> 'Schedule Deleted Successfully'
             ]);
         }catch(\Exception $e){
+            
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message'=> $e->getMessage()

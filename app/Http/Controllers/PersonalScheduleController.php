@@ -6,6 +6,7 @@ use App\Models\PersonalSchedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class PersonalScheduleController extends Controller
@@ -46,6 +47,8 @@ class PersonalScheduleController extends Controller
     
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
 
             $field = $request->validate([
@@ -73,6 +76,8 @@ class PersonalScheduleController extends Controller
                 $date->addDay();
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'New Schedule Successfully Added',
@@ -80,6 +85,8 @@ class PersonalScheduleController extends Controller
             ]);
 
         }catch(\Exception $e) {
+            
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -89,8 +96,11 @@ class PersonalScheduleController extends Controller
 
     public function update(Request $request, PersonalSchedule $api)
     {
+        DB::beginTransaction();
+
         try {
             
+
             Gate::allows('own', [$api]);
             
             $field = $request->validate([
@@ -119,6 +129,8 @@ class PersonalScheduleController extends Controller
                 $date->addDay();
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Schedule Updated Successfully',
@@ -126,6 +138,8 @@ class PersonalScheduleController extends Controller
             ]);
 
         }catch(\Exception $e) {
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -135,6 +149,8 @@ class PersonalScheduleController extends Controller
 
     public function destroy(PersonalSchedule $api)
     {
+        DB::beginTransaction();
+
         try {
             Gate::allows('own', [$api]);
             
@@ -142,12 +158,15 @@ class PersonalScheduleController extends Controller
             $api->delete();
             $old_notifications->each->delete();
             
+            DB::commit();
             return response()->json([
                 'status' => true,
                 'message' => 'Schedule Deleted Successfully',
             ]);
 
         }catch(\Exception $e) {
+            
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

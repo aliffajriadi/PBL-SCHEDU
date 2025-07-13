@@ -11,6 +11,7 @@ use App\Models\MemberOf;
 use App\Models\GroupTaskUnit;
 use App\Models\InstanceNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -123,6 +124,9 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
+
+        DB::beginTransaction();
+
         try {
 
             Gate::allows('create');
@@ -136,21 +140,6 @@ class GroupController extends Controller
 
             $field['group_code'] = self::generate_code();
             $field['instance_uuid'] = $user->instance_uuid;
-            
-            $group_folder = $user->instance->folder_name . '/groups/' . $field['group_code'];
-
-            Storage::disk('public')->makeDirectory($group_folder);
-            
-            $file_name = null;
-            
-            if($request->hasFile('pic')){
-                $file = $request->file('pic');
-                $file_name = time() . '.' . $file->getClientOriginalExtension();
-
-                $file->storeAs($group_folder, $file_name, 'public');
-            } 
-            
-            $field['pic'] = $file_name;
 
             $group = Group::create([
                 'group_code' => $field['group_code'],
@@ -172,9 +161,28 @@ class GroupController extends Controller
                 'verified' => true
             ]);
 
+            $group_folder = $user->instance->folder_name . '/groups/' . $field['group_code'];
+
+            Storage::disk('public')->makeDirectory($group_folder);
+            
+            $file_name = null;
+            
+            if($request->hasFile('pic')){
+                $file = $request->file('pic');
+                $file_name = time() . '.' . $file->getClientOriginalExtension();
+
+                $file->storeAs($group_folder, $file_name, 'public');
+            } 
+            
+            $field['pic'] = $file_name;
+            
+            DB::commit();
+
             return redirect('/group')->with('success', 'Success Add In Group.');
             
         }catch(\Exception $e) {
+
+            DB::rollBack();
             return redirect('/group')->with('error', $e->getMessage());
             
             return response()->json([
@@ -187,6 +195,8 @@ class GroupController extends Controller
 
     public function update(Request $request, Group $group)
     {
+        DB::beginTransaction();
+
         try {
      
             Gate::allows('is_member', [$group]);
@@ -218,15 +228,22 @@ class GroupController extends Controller
             $group->name = $request->input('name');
             $group->save();
 
+            DB::commit();
+
             return redirect("/group/{$group->group_code}/settings")->with('success', 'Success Update Data Group.');
             
         }catch(\Exception $e) {
+            
+            DB::rollBack();
+
             return redirect("/group/{$group->group_code}/settings")->with('error', $e->getMessage());
         }
     }
 
     public function destroy(Request $request, Group $group)
     {
+        DB::beginTransaction();
+
         try {
 
             $user = Auth::user();
@@ -252,10 +269,13 @@ class GroupController extends Controller
                 $user->instance_uuid
             );
 
-            return redirect('/group')->with('success', 'Group Deleted Successfully');
+            DB::commit();
 
-            
+            return redirect('/group')->with('success', 'Group Deleted Successfully');
         }catch(\Exception $e) {
+            
+            DB::rollBack();
+            
             return redirect()->back()->with('error', 'There is something wrong when deleting group: ' . $e->getMessage());
         }
     }

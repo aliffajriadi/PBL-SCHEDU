@@ -6,11 +6,12 @@ use App\Models\InstanceNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InstanceNotificationController extends Controller
 {
     public static function store(string $title, string $description, string $instance_uuid)
-    {
+    {        
         InstanceNotification::create([
             'instance_uuid' => $instance_uuid,
             'title' => $title,
@@ -65,14 +66,20 @@ class InstanceNotificationController extends Controller
 
     public function destroy(InstanceNotification $notification)
     {
+        DB::beginTransaction();
+
         try{
             $notification->delete();
             
+            DB::commit();
+
             return response()->json([
                 'status' => false,
                 'message' => "notifikasi berhasil dihapus"
             ]);
         }catch(\Exception $e){
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

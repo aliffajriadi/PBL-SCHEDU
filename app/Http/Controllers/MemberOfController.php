@@ -46,6 +46,8 @@ class MemberOfController extends Controller
     // masuk ke grup
     public function join_group(Request $request)
     {
+        DB::beginTransaction();
+
         try {
 
             $group = Group::where('group_code', $request->input('group_code'))->where('instance_uuid', Auth::user()->instance_uuid)->first();
@@ -78,15 +80,22 @@ class MemberOfController extends Controller
                 target_id: $group->created_by
             );
 
+            DB::commit();
+
             return redirect('/group')->with('success', 'Waiting for join request approval');         
 
         }catch(\Exception $e) {
+            
+            DB::rollBack();
+            
             return redirect('/group')->with('error', $e->getMessage());
         }
     }
 
     public function join_link(Request $request, string $group_code)
     {
+        DB::beginTransaction();
+
         try {
 
             if(!Auth::check()) return redirect('/login')->with('error', 'Must login before join a groups');
@@ -125,11 +134,16 @@ class MemberOfController extends Controller
                 now(),
                 target_id: $group->created_by
             );
+
+            DB::commit();
             
             return redirect('group')->with('success', 'Successfully submitted a join request to the group');
             
 
         }catch(\Exception $e) {
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -142,13 +156,20 @@ class MemberOfController extends Controller
 
     public function verifying(Group $group, MemberOf $member_of)
     {
+        DB::beginTransaction();
+
         try {
             $member_of->verified = true;
             $member_of->save(); 
 
+            DB::commit();
+
             return redirect()->back();
         
         }catch(\Exception $e) {
+            
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -161,21 +182,19 @@ class MemberOfController extends Controller
 
     public function leave_group(Request $request, Group $group, MemberOf $member_of)
     {
+        DB::beginTransaction();
+
         try {
             $member_of->delete();
             
-            return redirect()->back();
+            DB::commit();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Leave the Group'
-            ]);
+            return redirect()->back()->with('success', 'Successfully leave the group.');
 
         }catch(\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'Failed to leave the group: ' . $e->getMessage());
         }
     }
 
@@ -183,6 +202,8 @@ class MemberOfController extends Controller
     // tambahkan if kalau mau hapus catatan grup nanti file catatan juga ikut ke hapus dan pada tugas semua data file tugas pengumpulan ikut ke hapus
     public function delete_all(Request $request, Group $group, String $table)
     {
+        DB::beginTransaction();
+
         try{
             $request->validate([
                 'password' => 'required|string'
@@ -223,10 +244,14 @@ class MemberOfController extends Controller
                 'pending' => 'semua permintaan masuk ke dalam grup'
             };
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'berhasil menghapus semua ' . $pesan);
 
         }catch(\Exception $e){
-            return redirect()->back()->with('error', 'gagal menjalankan fungsi: ' . $e->getMessage() );
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'gagal menjalankan fungsi: ' . $e->getMessage());
             
         }
     }

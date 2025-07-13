@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +31,8 @@ class UserController extends Controller
 
     public function insert_file(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             // Validasi file
             $request->validate([
@@ -87,9 +90,13 @@ class UserController extends Controller
             // Simpan ke database
             User::insert($participant_list);
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Add  '. count($participant_list) . ' User Successfuly.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Add User Failed.');
+
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Add User Failed: '. $e->getMessage());
 
         }
     }
@@ -182,6 +189,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             $field = $request->validate([
                 'name' => 'required|max:255',
@@ -195,8 +204,13 @@ class UserController extends Controller
             $field['password'] = Hash::make($field['password']);
             $field['is_teacher'] = $field['is_teacher'] === 'teacher' ? 1 : 0;
             User::create($field);
+
+            DB::commit();
+
             return redirect()->back()->with('success', 'Success Create Account');
         } catch (\Exception $e) {
+            
+            DB::rollBack();
             return redirect()->back()->with('success', 'Failed Create Account:' . $e);
         }
     }
@@ -222,6 +236,9 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        
+        DB::beginTransaction();
+
         try {
             $field = $request->validate([
                 'name' => 'required|max:255',
@@ -236,11 +253,16 @@ class UserController extends Controller
 
             $user->save();
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'User Updated Successfully'
             ]);
         } catch (\Exception $e) {
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -250,6 +272,9 @@ class UserController extends Controller
 
     public function change_password(Request $request)
     {
+
+        DB::beginTransaction();
+    
         try {
             $request->validate([
                 'old_password' => 'required',
@@ -270,11 +295,16 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('password'));
             $user->save();
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Password Updated Successfully'
             ]);
         } catch (\Exception $e) {
+            
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

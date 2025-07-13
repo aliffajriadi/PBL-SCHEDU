@@ -8,6 +8,7 @@ use App\Models\GroupTask;
 use App\Models\GroupTaskSubmission;
 use App\Models\GroupTaskUnit;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class GroupTaskController extends Controller
@@ -107,6 +108,8 @@ class GroupTaskController extends Controller
     {
         Gate::allows('create');
 
+        DB::beginTransaction();
+
         try{
             $field = $request->validate([
                 'title' => 'required|max:255',
@@ -142,12 +145,16 @@ class GroupTaskController extends Controller
                 $group->id
             );
             
+            DB::commit();
 
             return response()->json([
                 'status' => true, 
                 'message' => 'Task Added Successfully'
             ]);
         }catch(\Exception $e){
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false, 
                 'message' => $e->getMessage()
@@ -158,6 +165,8 @@ class GroupTaskController extends Controller
     public function update(Request $request, Group $group, GroupTask $api)
     {
         Gate::allows('permission', [$api]);
+
+        DB::beginTransaction();
 
         try{
             $field = $request->validate([
@@ -193,6 +202,7 @@ class GroupTaskController extends Controller
                 $notif->save();
             }
             
+            DB::commit();
 
             return response()->json([
                 'status' => true, 
@@ -201,6 +211,9 @@ class GroupTaskController extends Controller
             ]);
             
         }catch(\Exception $e) {
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false, 
                 'message' => $e->getMessage()
@@ -211,6 +224,9 @@ class GroupTaskController extends Controller
     public function destroy(String $group, GroupTask $api)
     {
         Gate::allows('permission', [$api]);
+
+        DB::beginTransaction();
+
         try{
             $notifications = $api->notification()->where('is_reminder', true)->orderBy('created_at', 'DESC')->first();
             
@@ -222,7 +238,7 @@ class GroupTaskController extends Controller
             //     }
             // }
 
-            
+            DB::commit();
             
             return response()->json([
                 'status' => true, 
@@ -230,6 +246,9 @@ class GroupTaskController extends Controller
                 'notifications' => $notifications
             ]);
         }catch(\Exception $e) {
+            
+            DB::rollBack();
+
             return response()->json([
                 'status' => false, 
                 'message' => $e->getMessage()

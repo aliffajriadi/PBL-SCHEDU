@@ -9,6 +9,7 @@ use App\Models\Group;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class NotificationController extends Controller
@@ -33,6 +34,8 @@ class NotificationController extends Controller
 
     public static function store($title, $content, $type, $item_id, $is_reminder, $visible_schedule, $group_id = null, $target_id = null)
     {
+        DB::beginTransaction();
+
         try {
             $notif = Notification::create([
                 'title' => $title,
@@ -70,11 +73,15 @@ class NotificationController extends Controller
                 ]);
             }
 
+            DB::commit();
+
             return [
                 'status' => true,
                 'message' => 'Notifikasi berhasil dibuat'
             ];
         } catch (\Exception $e) {
+            
+            DB::rollBack();
             return [
                 'status' => false,
                 'message' => $e->getMessage()
@@ -187,6 +194,9 @@ class NotificationController extends Controller
 
     public function destroy(Group $group, int $api)
     {
+
+        DB::beginTransaction();
+
         try {
             // Gate::allows('own', $notif);
 
@@ -204,11 +214,15 @@ class NotificationController extends Controller
                 $message .= ' along with the associated notification template data';
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'data' => $message
             ]);
         } catch (\Exception $e) {
+            
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

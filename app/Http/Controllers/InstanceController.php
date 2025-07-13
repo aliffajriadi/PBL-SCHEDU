@@ -10,6 +10,7 @@ use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\NotificationStatus;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -161,6 +162,7 @@ class InstanceController extends Controller
 
     public function store(Request $request)
     {
+        DB::beginTransaction();
 
         try {
             $field = $request->validate([
@@ -182,14 +184,20 @@ class InstanceController extends Controller
 
             Instance::create($field);
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Success Added New Instance');
         } catch (\Exception $e) {
+
+            DB::rollBack();
             return redirect()->back()->with('error', 'Failed to add new instance');
         }
     }
 
     public function update(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             /** @var \App\Models\Instance $staff */
             $staff = Auth::guard('staff')->user();
@@ -220,14 +228,22 @@ class InstanceController extends Controller
 
             $staff->save();
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Success to update data.');
         } catch (\Throwable $th) {
+
+            DB::rollBack();
+
             return redirect()->back()->with('error', 'Failed update : ' . $th->getMessage());
         }
     }
 
     public function admin_update(Request $request, Instance $instance)
     {
+
+        DB::beginTransaction();
+
         try {
 
             $request->validate([
@@ -256,14 +272,21 @@ class InstanceController extends Controller
 
             $instance->save();
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Success update data.');
         } catch (\Throwable $th) {
+            
+            DB::rollBack();
+            
             return redirect()->back()->with('error', 'Failed update : ' . $th->getMessage());
         }
     }
 
     public function update_password(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             $request->validate([
                 'current_password' => 'required',
@@ -277,14 +300,22 @@ class InstanceController extends Controller
             $passwordNew = Hash::make($request['new_password']);
             $userLogin->password = $passwordNew;
             $userLogin->save();
+
+            DB::commit();
+
             return redirect()->back()->with('success', 'Success Change Password');
         } catch (\Throwable $th) {
+            
+            DB::rollBack();
+            
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
 
     public function update_password_user(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             /** @var \App\Models\Instance $user */
             $request->validate([
@@ -300,14 +331,22 @@ class InstanceController extends Controller
             $password_new = Hash::make($request['new_password']);;
             $userInstance->password = $password_new;
             $userInstance->save();
+
+            DB::commit();
+
             return back()->with('success', 'Password updated successfully.');
         } catch (\Throwable $th) {
+            
+            DB::rollBack();
+            
             return redirect()->back()->with('error', 'Failed change password' . $th->getMessage());
         }
     }
 
     public function update_user($uuid, Request $request)
     {
+        DB::beginTransaction();
+
         try {
             $userInstance = User::where('uuid', $uuid)->firstOrFail();
 
@@ -327,8 +366,13 @@ class InstanceController extends Controller
                 'gender'
             ]));
 
+            DB::commit();
+
             return back()->with('success', 'User updated successfully!');
         } catch (\Throwable $th) {
+            
+            DB::rollBack();
+            
             return redirect()->back()->with('error', 'Failed Update Account: ' . $th->getMessage());
         }
     }
@@ -336,6 +380,8 @@ class InstanceController extends Controller
 
     public function destroy(Instance $staff)
     {
+        DB::beginTransaction();
+
         try {
             // Hapus folder jika ada
             if (!empty($staff->folder_name) && Storage::disk('public')->exists($staff->folder_name)) {
@@ -345,15 +391,22 @@ class InstanceController extends Controller
             // Tetap hapus data staff, terlepas dari folder ada atau tidak
             $staff->delete();
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Delete Success');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Delete Failed');
+            
+            DB::rollBack();
+            
+            return redirect()->back()->with('error', 'Delete Failed: ' . $e->getMessage());
         }
     }
-    public function destroy_group(Group $group){
+    public function destroy_group(Group $group)
+    {    
+        DB::beginTransaction();
+        
         try {
             
-
             Gate::allows('is_member', [$group]);
             Gate::allows('modify_permission', [$group]);
 
@@ -361,9 +414,14 @@ class InstanceController extends Controller
 
             $group->delete();
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Delete Success');
             
         }catch(\Exception $e) {
+            
+            DB::rollBack();
+            
             return redirect()->back()->with('error', 'Error for Delete Group');
 
         }

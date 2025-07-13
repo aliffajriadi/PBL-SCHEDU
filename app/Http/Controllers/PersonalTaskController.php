@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PersonalTask;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class PersonalTaskController extends Controller
@@ -46,6 +47,9 @@ class PersonalTaskController extends Controller
 
     public function store(Request $request)
     {
+
+        DB::beginTransaction();
+
         try{
                 
             $field = $request->validate([
@@ -62,6 +66,8 @@ class PersonalTaskController extends Controller
 
             $notif = NotificationController::store("Pengingat untuk '{$field['title']}'", $field['content'], PersonalTask::class, $task->id, true, $visible_schedule);
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'New Task Added Successfully',
@@ -69,6 +75,8 @@ class PersonalTaskController extends Controller
             ]);
 
         }catch(\Exception $e){
+            
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -79,6 +87,8 @@ class PersonalTaskController extends Controller
 
     public function update(Request $request, PersonalTask $api)
     {
+        DB::beginTransaction();
+
         try{
             Gate::allows('own', [$api]);
 
@@ -105,12 +115,17 @@ class PersonalTaskController extends Controller
                 ]);
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Task Updated Successfully'
             ]);
 
         }catch(\Exception $e){
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -120,6 +135,8 @@ class PersonalTaskController extends Controller
 
     public function destroy(PersonalTask $api)
     {
+        DB::beginTransaction();
+
         try{
             Gate::allows('own', [$api]);
 
@@ -127,12 +144,16 @@ class PersonalTaskController extends Controller
 
             $notifications->each->delete();
             $api->delete();
+    
+            DB::commit();
 
             return response()->json([
                 'status' => true,
                 'message' => 'Task Deleted Successfully'
             ]);
         }catch(\Exception $e){
+            
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -142,6 +163,8 @@ class PersonalTaskController extends Controller
 
     public function set_finish(Request $request, PersonalTask $task)
     {
+        DB::beginTransaction();
+
         try{
             Gate::allows('own', [$task]);
 
@@ -151,12 +174,17 @@ class PersonalTaskController extends Controller
 
             $task->update($field);
             
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'tugasnya sudah selesai dikerjakan'
             ]);
             
         }catch(\Exception $e){
+
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -166,12 +194,16 @@ class PersonalTaskController extends Controller
 
     public function reset_finish(PersonalTask $task)
     {
+        DB::beginTransaction();
+
         try{
             Gate::allows('own', [$task]);
             
             $task->update([
                 'is_finished' => false
             ]);
+
+            DB::commit();
             
             return response()->json([
                 'status' => true,
@@ -179,6 +211,9 @@ class PersonalTaskController extends Controller
             ]);
             
         }catch(\Exception $e){
+            
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

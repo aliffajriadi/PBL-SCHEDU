@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ParticipantController extends Controller
 {
@@ -58,6 +59,8 @@ class ParticipantController extends Controller
 
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             $field = $request->validate([
                 'name' => 'required|max:255',
@@ -71,12 +74,16 @@ class ParticipantController extends Controller
             $field['password'] = Hash::make($field['password']);
             $field['instance_id'] = Auth::guard('user')->user()->id;
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'New User Addedd Successfully'
             ]);
 
         }catch(\Exception $e) {
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -86,6 +93,8 @@ class ParticipantController extends Controller
 
     public function update(Request $request, User $user)
     {
+        DB::beginTransaction();
+
         try {
             $field = $request->validate([
                 'name' => 'required|max:255',
@@ -98,11 +107,15 @@ class ParticipantController extends Controller
             $user->update($field);
             $user->save();
     
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Instance Updated Successfully'
             ]);
         }catch (\Exception $e){
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -112,6 +125,8 @@ class ParticipantController extends Controller
 
     public function change_password(Request $request, User $user)
     {
+        DB::beginTransaction();
+
         try {
             $request->validate([
                 'old_password' => 'required', 
@@ -128,11 +143,15 @@ class ParticipantController extends Controller
             $user->password = $request->input('password');
             $user->save();
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Password Updated Successfully'
             ]);
         }catch (\Exception $e){
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -142,14 +161,20 @@ class ParticipantController extends Controller
 
     public function destroy(User $user)
     {
+        DB::beginTransaction();
+
         try {
             $user->delete();
             
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'User Deleted Successfully'
             ]);
         }catch (\Exception $e){
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

@@ -9,6 +9,7 @@ use App\Models\MemberOf;
 use App\Models\TaskFileSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -17,6 +18,8 @@ class GroupTaskSubmissionController extends Controller
 {
     public function store(Request $request, Group $group, GroupTask $group_task)
     {
+        DB::beginTransaction();
+
         try{
 
             $user = Auth::user();
@@ -64,6 +67,8 @@ class GroupTaskSubmissionController extends Controller
                 }
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Submission Already Submitted',
@@ -72,6 +77,8 @@ class GroupTaskSubmissionController extends Controller
             ]);
 
         }catch(\Exception $e){
+            
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'request' => $request->all(),
@@ -83,8 +90,9 @@ class GroupTaskSubmissionController extends Controller
     
     public function update(Request $request, String $group, GroupTaskSubmission $submission)
     {
+        DB::beginTransaction();
+
         try{
-            
             Gate::allows('owning', [$submission]);
             
             $field = $request->validate([
@@ -101,7 +109,6 @@ class GroupTaskSubmissionController extends Controller
             }
 
             $submission->save();
-
 
             if($request->hasFile('files')){
                 $files = $request->file('files');
@@ -125,12 +132,16 @@ class GroupTaskSubmissionController extends Controller
                 }
             }
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Submission updated successfully'
             ]);
 
         }catch(\Exception $e){
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -141,6 +152,8 @@ class GroupTaskSubmissionController extends Controller
 
     public function destroy(String $group, GroupTaskSubmission $submission)
     {
+        DB::beginTransaction();
+
         try{        
             Gate::allows('owning', [$submission]);
 
@@ -154,11 +167,15 @@ class GroupTaskSubmissionController extends Controller
 
             $submission->delete();
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Submission deleted successfully'
             ]);
         }catch(\Exception $e){
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -168,6 +185,8 @@ class GroupTaskSubmissionController extends Controller
 
     public function delete_file(String $group, TaskFileSubmission $taskFileSubmission)
     {
+        DB::beginTransaction();
+
         try {
      
             $submission = $taskFileSubmission->task;
@@ -179,11 +198,15 @@ class GroupTaskSubmissionController extends Controller
             Storage::disk('public')->delete("{$folder_name}/groups/{$group}/{$taskFileSubmission->stored_name}");
             $taskFileSubmission->delete();
 
+            DB::commit();
+
             return response()->json([
                 'status'=> true, 
                 'message' => 'File deleted successfully'
             ]);
         }catch(\Exception $e){
+            DB::rollBack();
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

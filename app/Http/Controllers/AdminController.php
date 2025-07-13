@@ -8,6 +8,7 @@ use App\Models\Instance;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -76,6 +77,9 @@ class AdminController extends Controller
 
     public function update(Request $request, Admin $admin)
     {
+
+        DB::beginTransaction();
+
         try {
             $request->validate([
                 'username' => 'required|max:255',
@@ -84,11 +88,16 @@ class AdminController extends Controller
             $admin->username = $request->input('username');
             $admin->save();
 
+            DB::commit();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Username Updated Successfully'
             ]);
         } catch (\Exception $e) {
+            
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e
@@ -98,6 +107,8 @@ class AdminController extends Controller
 
     public function change_password(Request $request, Admin $admin)
     {
+        DB::beginTransaction();
+
         try {
             $request->validate([
                 'old_password' => 'required|max:255',
@@ -114,11 +125,16 @@ class AdminController extends Controller
             $admin->password = Hash::make($request->input('password'));
             $admin->save();
 
+            DB::commit();
+            
             return response()->json([
                 'status' => true,
                 'message' => 'Password Changed Successfully'
             ]);
         } catch (\Exception $e) {
+            
+            DB::rollBack();
+            
             return response()->json([
                 'status' => false,
                 'message' => $e
@@ -132,8 +148,11 @@ class AdminController extends Controller
         $user = Auth::guard('admin')->user();
         return view('admin.profile', compact('user'));
     }
+
     public function edit_password(Admin $admin, Request $request)
     {
+        DB::beginTransaction();
+
         try {
             /** @var \App\Models\Admin $user */
 
@@ -145,17 +164,25 @@ class AdminController extends Controller
             if (Hash::check($field['current_password'], $user->password)) {
                 $user->password = Hash::make($field['password']);
                 $user->save();
+
+                DB::commit();
+
                 return redirect()->back()->with('success', 'Password Success Change');
             } else {
+
+                DB::rollBack();
+                
                 return redirect()->back()->with('error', 'Current Password not match');
             }
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Error, canot update password');
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error, can\'t update password');
         }
     }
 
     public function edit_username(Request $request)
     {
+        DB::beginTransaction();
         
         try {
             /** @var \App\Models\Admin $user */
@@ -172,11 +199,19 @@ class AdminController extends Controller
                 $user->username = $field['updateNewUsername'];
                 $user->save();
 
+                DB::commit();
+
                 return redirect()->back()->with('success', 'Username successfully changed to "' . $field['updateNewUsername'] . '".');
             } else {
+
+                DB::rollBack();
+
                 return redirect()->back()->with('error', 'Current password is incorrect.');
             }
         } catch (\Throwable $th) {
+            
+            DB::rollBack();
+            
             return redirect()->back()->with('error', 'An error occurred while updating the username.');
         }
     }
