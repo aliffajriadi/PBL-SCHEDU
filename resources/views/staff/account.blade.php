@@ -268,6 +268,11 @@
                     class="w-full sm:w-auto bg-emerald-400 text-white px-6 py-2 rounded hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     Create Account
                 </button>
+                
+                <a href="{{ asset('storage/template_excel.xlsx') }}"
+                    class="w-full sm:w-auto bg-emerald-400 text-white px-6 py-2 rounded hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    Download Excel Template
+                </a>
             </form>
 
             <!-- Upload Box (1/3 width) -->
