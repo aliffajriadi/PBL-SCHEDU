@@ -108,7 +108,7 @@
                 <div class="mb-4">
                     <label for="editContent" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
                     <textarea name="content" id="editContent"
-                        class="w-full border-2 border-emerald-400 rounded-xl p-2 h-32 focus:outline-none focus:border-emerald-600">Lorem ipsum dolor sit amet consectetur adipisicing elit...</textarea>
+                        class="w-full border-2 border-emerald-400 rounded-xl p-2 h-32 focus:outline-none focus:border-emerald-600"></textarea>
                 </div>
 
                 <input type="hidden" id="note_id">

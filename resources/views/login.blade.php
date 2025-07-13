@@ -82,11 +82,11 @@
       <div
         class="bg-green-600 w-9/12 h-screen bg-[url('/public/image/image1.png')] bg-cover flex-col text-center justify-center items-center gap-y-10 hidden md:flex"
       >
-        <h2 class="text-slate-50 font-semibold text-3xl">Lorem ipsum dolor sit amet.
+        <h2 class="text-slate-50 font-semibold text-3xl">Welcome To SchedU.
 
         </h2>
         <p class="text-slate-50 px-24">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium sit error odio tenetur amet quas ad?
+          One Step Closer to Your Goals and Start Your Journey With SchedU
         </p>
         <a href="/"
           class="border-2 border-slate-50 text-white rounded-3xl px-2 py-1 hover:bg-yellow-400 hover:text-green-600"
