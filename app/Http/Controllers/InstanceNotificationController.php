@@ -21,8 +21,9 @@ class InstanceNotificationController extends Controller
 
     public function home()
     {
+        $data = Auth::guard('staff')->user();
         return view('staff.notification', [
-            'user' =>  Auth::guard('staff')->user(),
+            'user' =>  $data,
             'role' => session('role')
         ]);
     }

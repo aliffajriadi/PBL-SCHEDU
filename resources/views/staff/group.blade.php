@@ -1,4 +1,4 @@
-<x-layout title="Manage Group" role="staff" :user="$user">
+<x-layout title="Manage Group" role="staff" :user="$user" :image="$user->logo_instance">
     <div class="bg-white p-6 rounded-2xl shadow-md overflow-x-auto w-full">
         <h2 class="text-lg font-medium mb-4">Group List</h2>
 

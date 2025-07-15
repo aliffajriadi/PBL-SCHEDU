@@ -1,4 +1,4 @@
-<x-layout title="Notifications" role="{{ $role }}" :user="$user">
+<x-layout title="Notifications" role="{{ $role }}" :user="$user" :image="$user->logo_instance">
     <!-- Header with Search and Back Button -->
     <div class="bg-white mb-4 flex flex-row items-center justify-between p-4 shadow-md rounded-2xl">
         <input 
