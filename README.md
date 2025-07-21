@@ -3,6 +3,8 @@
 
 Schedu adalah aplikasi reminder jadwal tugas personal dan kolaboratif grup edukatif yang membantu pengguna mengelola tugas-tugas mereka secara efektif baik secara individu maupun dalam tim.
 
+![Poster](https://github.com/aliffajriadi/PBL-SCHEDU/blob/main/POSTER-SCHEDU.png)
+
 ## 🚀 Fitur Utama
 
 - **Manajemen Tugas Personal**: Kelola jadwal dan tugas pribadi dengan mudah
