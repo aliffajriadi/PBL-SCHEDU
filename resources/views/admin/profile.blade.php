@@ -48,7 +48,8 @@
                             <label for="password" class="block text-xs font-medium text-gray-700">New Password</label>
                             <input type="password" id="password" name="password" required
                                 class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300 text-sm"
-                                placeholder="Enter new password" aria-describedby="password-error" />
+                                placeholder="Enter new password" aria-describedby="password-error" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                                    title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character."/>
                             @error('password')
                                 <p id="password-error" class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -58,7 +59,8 @@
                                 New Password</label>
                             <input type="password" id="password_confirmation" name="password_confirmation" required
                                 class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300 text-sm"
-                                placeholder="Confirm new password" />
+                                placeholder="Confirm new password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                                    title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character."/>
                         </div>
                         <p id="errorMessage" class="text-red-400 text-xs mb-2"></p>
                         <div class="flex justify-end">

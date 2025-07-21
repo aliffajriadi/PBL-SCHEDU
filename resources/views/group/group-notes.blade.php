@@ -251,6 +251,15 @@
             max_page = notes.datas.last_page;
 
             notes.datas.data.forEach((note) => {
+                const date = new Date(note.created_at);
+                const formatted = date.toLocaleString("en-US", {
+                    timeZone: "Asia/Jakarta",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                })
+
+
                 parent.innerHTML += `
                     <div onclick="show_data(${note.id})"
                         class="block border-l-4 border-emerald-400 pl-3 py-2 rounded-sm hover:bg-emerald-50 transition-all duration-300">
@@ -258,7 +267,7 @@
                             <h3 class="font-medium text-gray-800">${note.title}</h3>
                             <p class="text-sm text-gray-500"></p>
                         </div>
-                        <p class="text-sm text-gray-500">Created at ${note.created_at}</p>
+                        <p class="text-sm text-gray-500">Created at ${formatted}</p>
                     </a>
                 `;
             });

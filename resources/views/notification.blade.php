@@ -237,22 +237,29 @@
                     document.getElementById('side-notif-badge').innerHTML = notif_count;
                 }
 
+                const date = new Date(notif.visible_schedule);
+                const formatted = date.toLocaleString('en-US', {
+                    timezone: 'Asia/Jakarta',
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
                 if (isMobile()) {
-    openMobileModal(
-        notif.title,
-        notif.created_at,
-        notif.content,
-        () => {
-            closeMobileModal(); // Tutup modal detail
-            openDeleteModal(notif.id, delete_data); // Kirim ID yang benar
-        }
-    );
-
-
-
+                    openMobileModal(
+                        notif.title,
+                        formatted,
+                        notif.content,
+                        () => {
+                            closeMobileModal(); // Tutup modal detail
+                            openDeleteModal(notif.id, delete_data); // Kirim ID yang benar
+                        }
+                    );
                 } else {
                     document.getElementById('content-title').innerHTML = notif.title;
-                    document.getElementById('content-date').innerHTML = notif.created_at;
+                    document.getElementById('content-date').innerHTML = formatted;
                     document.getElementById('content-content').innerHTML = notif.content;
                     document.getElementById('content-open').classList.remove('hidden');
                     document.getElementById('content-close').style.display = 'none';
@@ -287,10 +294,22 @@
                 const datas = notifications.datas;
                 max_page = datas.last_page;
 
+                console.log(datas);
+
                 datas.data.forEach((notification, index) => {
                     const notif = notification.notification;
                     const type = notif.group_id ? 'group' : 'personal';
                     const is_read = notification.is_read;
+
+                    const date = new Date(notification.visible_schedule);
+                    const formatted = date.toLocaleString('en-US', {
+                        timezone: 'Asia/Jakarta',
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
 
                     parent.innerHTML += `
                         <button 
@@ -315,7 +334,7 @@
                                         <span class="text-xs font-semibold text-white bg-emerald-500 rounded-full px-2 py-1 flex-shrink-0">${index + 1}</span>
                                     </div>
                                     <p class="text-sm text-gray-600 mt-1 line-clamp-2">${notif.content}</p>
-                                    <p class="text-xs text-gray-500 mt-1">Received ${notification.created_at}</p>
+                                    <p class="text-xs text-gray-500 mt-1">Received ${formatted}</p>
                                 </div>
                             </div>
                         </button>
@@ -372,6 +391,16 @@
                 const datas = notifications.datas;
 
                 datas.forEach((notification) => {
+                    const date = new Date(notification.visible_schedule);
+                    const formatted = date.toLocaleString('en-US', {
+                        timezone: 'Asia/Jakarta',
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
                     parent.innerHTML += `
                         <button 
                             onclick="open_content(${notification.id})"
@@ -394,7 +423,7 @@
                                         <span class="text-xs font-semibold text-white bg-emerald-500 rounded-full px-2 py-1 flex-shrink-0">!</span>
                                     </div>
                                     <p class="text-sm text-gray-600 mt-1 line-clamp-2">${notification.description}</p>
-                                    <p class="text-xs text-gray-500 mt-1">Received ${notification.created_at}</p>
+                                    <p class="text-xs text-gray-500 mt-1">Received ${formatted}</p>
                                 </div>
                             </div>
                         </button>
@@ -409,17 +438,27 @@
 
             function set_content(notif) {
                 const notification = notif.data;
-                
+
+                const date = new Date(notification.visible_schedule);
+                const formatted = date.toLocaleString('en-US', {
+                    timezone: 'Asia/Jakarta',
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
                 if (isMobile()) {
                     openMobileModal(
                         notification.title,
-                        notification.created_at,
+                        formatted,
                         notification.description,
                         () => openDeleteModal(notification.id, delete_data)
                     );
                 } else {
                     document.getElementById('content-title').innerHTML = notification.title;
-                    document.getElementById('content-date').innerHTML = notification.created_at;
+                    document.getElementById('content-date').innerHTML = formatted;
                     document.getElementById('content-content').innerHTML = notification.description;
                     document.getElementById('content-open').classList.remove('hidden');
                     document.getElementById('content-close').style.display = 'none';

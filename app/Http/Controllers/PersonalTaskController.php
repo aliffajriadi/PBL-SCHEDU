@@ -62,9 +62,13 @@ class PersonalTaskController extends Controller
 
             $task = PersonalTask::create($field);
 
-            $visible_schedule = $field['deadline'] < now()->setTimezone('Asia/Jakarta') ? now()->setTimezone('Asia/Jakarta') : $field['deadline'];
+            $visible_schedule = Carbon::parse($field['deadline']) < now()->setTimezone('Asia/Jakarta')->addHour() ? now()->setTimezone('Asia/Jakarta') : Carbon::parse($field['deadline'])->subHour();
 
-            $notif = NotificationController::store("Pengingat untuk '{$field['title']}'", $field['content'], PersonalTask::class, $task->id, true, $visible_schedule);
+            $notif = NotificationController::store("Reminder for '{$field['title']}'", $field['content'], PersonalTask::class, $task->id, true, $visible_schedule);
+
+            // $visible_schedule = $field['deadline'] < now()->setTimezone('Asia/Jakarta') ? now()->setTimezone('Asia/Jakarta') : $field['deadline'];
+
+            // $notif = NotificationController::store("Pengingat untuk '{$field['title']}'", $field['content'], PersonalTask::class, $task->id, true, $visible_schedule);
 
             DB::commit();
 

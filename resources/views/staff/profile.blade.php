@@ -255,7 +255,8 @@
                                 <span class="text-red-500">*</span></label>
                             <input type="password"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('new_password') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
-                                id="new_password" name="new_password" required>
+                                id="new_password" name="new_password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                                title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character.">
                             @error('new_password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -268,7 +269,8 @@
                                     class="text-red-500">*</span></label>
                             <input type="password"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                id="new_password_confirmation" name="new_password_confirmation" required>
+                                id="new_password_confirmation" name="new_password_confirmation" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                                title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character.">
                             @error('new_password_confirmation')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror

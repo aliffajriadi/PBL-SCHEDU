@@ -61,7 +61,7 @@
                 @else
                     <!-- Tampilan untuk Murid -->
                     <h3 id="content-title" class="text-xl font-bold text-gray-800 mb-2">**title**</h3>
-                    <p id="content-deadline" class="text-sm text-gray-500 mb-4">Tenggat: **tanggal**</p>
+                    <p id="content-deadline" class="text-sm text-gray-500 mb-4">deadline: **tanggal**</p>
                     <p id="content-description" class="text-gray-700 mb-6">**deskriprsi**</p>
                     <div class="border-t border-gray-200 pt-4">
                         <h4 class="font-semibold text-gray-700 mb-2">Kumpulkan Tugas</h4>
@@ -465,7 +465,7 @@
 
                 const p2 = document.createElement('p');
                 p2.className = 'text-sm text-gray-500';
-                p2.textContent = `Tenggat: ${data.deadline}`;
+                p2.textContent = `deadline: ${data.deadline}`;
 
                 a.appendChild(p1);
                 a.appendChild(p2);

@@ -135,7 +135,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Deadline</label>
                     <input type="datetime-local" name="deadline" 
-                        class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" required>
+                        class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"  min="{{ now()->format('Y-m-d\TH:i') }}">
                 </div>
                 
                 <div>
@@ -180,7 +180,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Deadline</label>
                     <input type="datetime-local" id="update-deadline" name="deadline" 
-                        class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required>
+                        class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" required min="{{ now()->format('Y-m-d\TH:i') }}">
                 </div>
                 
                 <div>
@@ -386,7 +386,7 @@
                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                      </svg>
-                     ${type === 'progress' ? 'Mark Done' : 'Start Task'}
+                        Mark as Done
                    </button>`;
 
             return `

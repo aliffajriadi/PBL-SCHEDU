@@ -284,10 +284,7 @@ class UserController extends Controller
             // dd($request->input('old_password'));
 
             if (!Hash::check($request->input('old_password'), Auth::user()->password)) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Wrong Old Password'
-                ]);
+                throw new \Exception('Wrong old password');
             }
 
             $user = Auth::user();
@@ -297,6 +294,8 @@ class UserController extends Controller
 
             DB::commit();
 
+            return redirect()->back()->with('success', 'Password updated successfully');
+
             return response()->json([
                 'status' => true,
                 'message' => 'Password Updated Successfully'
@@ -304,6 +303,8 @@ class UserController extends Controller
         } catch (\Exception $e) {
             
             DB::rollBack();
+
+            return redirect()->back()->with('error', 'Failed to delete password: ' . $e->getMessage());
             
             return response()->json([
                 'status' => false,

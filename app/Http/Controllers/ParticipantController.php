@@ -145,6 +145,8 @@ class ParticipantController extends Controller
 
             DB::commit();
 
+            return redirect()->back()->with('success', 'Password updated successfully');
+
             return response()->json([
                 'status' => true,
                 'message' => 'Password Updated Successfully'
@@ -152,6 +154,8 @@ class ParticipantController extends Controller
         }catch (\Exception $e){
             DB::rollBack();
             
+            return redirect()->back()->with('error', 'Failed to update password');
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()

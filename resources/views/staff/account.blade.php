@@ -190,10 +190,15 @@
                     <h3 class="text-md font-semibold mb-2">Change Password</h3>
                     <input type="password" name="current_password_instance" id="currentPassword"
                         placeholder="Current Password Instance" class="w-full px-4 py-2 border rounded" required />
+                    
                     <input type="password" name="new_password" id="newPassword" placeholder="New Password"
-                        class="w-full px-4 py-2 border rounded" required />
+                        class="w-full px-4 py-2 border rounded" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                        title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character."/>
+                    
                     <input type="password" name="new_password_confirmation" id="confirmPassword"
-                        placeholder="Confirm New Password" class="w-full px-4 py-2 border rounded" required />
+                        placeholder="Confirm New Password" class="w-full px-4 py-2 border rounded" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                        title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character."/>
+                    
                     <p id="passwordError" class="text-red-500 text-sm hidden">Passwords do not match</p>
                     <div class="flex justify-end">
                         <button type="button" onclick="formUpdatePassword()"

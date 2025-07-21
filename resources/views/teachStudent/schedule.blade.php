@@ -43,8 +43,8 @@
                 @csrf
                 <input type="text" name="title" placeholder="Title Schedule" id="add-title" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <textarea name="content" placeholder="Description Schedule" id="add-content" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
-                <input type="datetime-local" name="start_datetime" id="add-start-datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                <input type="datetime-local" name="end_datetime" id="add-end-datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                <input type="datetime-local" name="start_datetime" id="add-start-datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required min="{{ now()->format('Y-m-d\TH:i') }}">
+                <input type="datetime-local" name="end_datetime" id="add-end-datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required min="{{ now()->format('Y-m-d\TH:i') }}">
                 <div class="flex justify-end gap-4">
                     <button type="button" onclick="close_add_modal()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
@@ -67,8 +67,8 @@
                 @csrf
                 <input type="text" id="title-update" name="title" placeholder="Title Schedule" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
                 <textarea name="content" id="content-update" placeholder="Description Schedule" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" rows="4" required></textarea>
-                <input type="datetime-local" id="start-update" name="start_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
-                <input type="datetime-local" id="end-update" name="end_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
+                <input type="datetime-local" id="start-update" name="start_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required min="{{ now()->format('Y-m-d\TH:i') }}">
+                <input type="datetime-local" id="end-update" name="end_datetime" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required min="{{ now()->format('Y-m-d\TH:i') }}">
                 <div class="flex justify-end gap-4">
                     <button type="button" onclick="close_update_modal_schedule()"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
@@ -125,6 +125,16 @@
         set_calendar(datas.calendar);
 
         schedules.forEach((data, index) => {
+            const date = new Date(data.created_at);
+            const formatted = date.toLocaleString('en-US', {
+                timezone: 'Asia/Jakarta',
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
             parent.innerHTML += `
             <div class="relative mb-3 border-b-2 border-emerald-400 pb-3 hover:border-emerald-600 hover:bg-emerald-50 transition-all duration-300 notelist">
                         <div class="block w-full">
@@ -132,7 +142,7 @@
                                 <h3 class="text-lg">${data.title}</h3>
                                 <p>${index + 1}</p>
                             </div>
-                            <p class="text-xs opacity-60">Created at ${ data.created_at }</p>
+                            <p class="text-xs opacity-60">Created at ${ formatted }</p>
                         </div>
                         <!-- Dropdown Menu -->
                         <div class="absolute right-7 top-0">

@@ -31,7 +31,7 @@
     @if($role === 'teacher')
         <div id="add-schedule-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md slide-down">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tambah Jadwal Baru</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Schedule</h3>
                 <form id="add-form" action="/schedules/add" method="POST">
                     @csrf
                     <input type="text" name="title" placeholder="Judul Jadwal" class="mb-2 p-2 border border-gray-200 rounded-lg w-full" required>
@@ -41,12 +41,12 @@
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeAddScheduleModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                            Batal
+                            Cancel
                         </button>
                         <button type="button"
                             onclick="insert_data()"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
-                            Simpan
+                            Submit
                         </button>
                     </div>
                 </form>
@@ -58,7 +58,7 @@
     @if($role === 'teacher')
         <div id="edit-schedule-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Edit Jadwal</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Update Schedule</h3>
                 <form id="edit-schedule-form" action="" method="POST">
                     @csrf
                     @method('PUT')
@@ -69,12 +69,12 @@
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="closeEditScheduleModal()"
                             class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
-                            Batal
+                            Cancel
                         </button>
                         <button type="button"
                             onclick="open_update_modal(false, update_data); closeEditScheduleModal();"
                             class="bg-emerald-400 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 transition">
-                            Simpan
+                            Save
                         </button>
                     </div>
                 </form>
@@ -86,9 +86,13 @@
     @if($role === 'teacher')
         <div id="delete-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus Jadwal</h3>
-                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus jadwal "<span id="delete-schedule-title"></span>"? Tindakan ini tidak dapat dibatalkan.</p>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirm Schedule Deletion</h3>
+                <p class="text-gray-600 mb-6">
+                    Are you sure you want to delete the schedule "<span id="delete-schedule-title"></span>"? 
+                    This action cannot be undone.
+                </p>
                 <form id="delete-schedule-form" action="" method="POST">
+
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-4">
@@ -181,8 +185,8 @@
                             @endif
                         </div>
                         <p class="text-sm text-gray-700">${schedule['content']}</p>
-                        <p class="text-sm text-gray-500">Mulai: ${schedule['start_datetime']}</p>
-                        <p class="text-sm text-gray-500">Selesai: ${schedule['end_datetime']}</p>
+                        <p class="text-sm text-gray-500">Start: ${schedule['start_datetime']}</p>
+                        <p class="text-sm text-gray-500">End: ${schedule['end_datetime']}</p>
                     </div>`
             });
         }
