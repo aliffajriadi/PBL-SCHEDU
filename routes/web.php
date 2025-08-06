@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\InstanceController;
 use App\Http\Controllers\MemberOfController;
@@ -63,6 +63,8 @@ Route::post('/logout', [PublicController::class, 'logout']);
     Route ini digunakan untuk semua user dengan role teacher / student dengan guard default 'web'
 */
 Route::middleware('auth:web')->prefix('/')->group(function () {
+
+    Route::post('/api/gemini', [ApiController::class, 'gemini_api'])->middleware('throttle:gemini');
     
     Route::get('/join_group/{group_code:group_code}', [MemberOfController::class, 'join_link']);
     

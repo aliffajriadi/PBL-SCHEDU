@@ -48,7 +48,8 @@
                                 <td class="px-3 py-2">{{ $userInstance->name }}</td>
                                 <td class="px-3 py-2 hidden md:table-cell">{{ $userInstance->email }}</td>
                                 <td class="px-3 py-2 hidden sm:table-cell">
-                                    {{ $userInstance->gender === 'M' ? 'Male' : 'Female' }}</td>
+                                    {{ $userInstance->gender === 'M' ? 'Male' : 'Female' }}
+                                </td>
                                 <td class="px-3 py-2">{{ $userInstance->is_teacher === 1 ? 'Teacher' : 'Student' }}</td>
                                 <td class="px-3 py-2 hidden lg:table-cell">{{ $userInstance->birth_date }}</td>
                                 <td class="py-2 px-3 flex gap-2">
@@ -190,15 +191,17 @@
                     <h3 class="text-md font-semibold mb-2">Change Password</h3>
                     <input type="password" name="current_password_instance" id="currentPassword"
                         placeholder="Current Password Instance" class="w-full px-4 py-2 border rounded" required />
-                    
+
                     <input type="password" name="new_password" id="newPassword" placeholder="New Password"
-                        class="w-full px-4 py-2 border rounded" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
-                        title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character."/>
-                    
+                        class="w-full px-4 py-2 border rounded" required
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                        title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character." />
+
                     <input type="password" name="new_password_confirmation" id="confirmPassword"
-                        placeholder="Confirm New Password" class="w-full px-4 py-2 border rounded" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
-                        title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character."/>
-                    
+                        placeholder="Confirm New Password" class="w-full px-4 py-2 border rounded" required
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                        title="Password must be at least 8 characters, include uppercase, lowercase, number, and special character." />
+
                     <p id="passwordError" class="text-red-500 text-sm hidden">Passwords do not match</p>
                     <div class="flex justify-end">
                         <button type="button" onclick="formUpdatePassword()"
@@ -250,6 +253,7 @@
             <form action="/staff/user" method="POST" class="space-y-4 lg:col-span-2">
                 @csrf
                 <input type="text" name="name" placeholder="Name" class="w-full px-4 py-2 border rounded" required />
+                <input type="text" name="no_telp" placeholder="Number Telphone" class="w-full px-4 py-2 border rounded" required />
                 <input type="email" name="email" placeholder="Email" class="w-full px-4 py-2 border rounded" required />
                 <input type="password" name="password" placeholder="Password" class="w-full px-4 py-2 border rounded"
                     required />
@@ -273,7 +277,7 @@
                     class="w-full sm:w-auto bg-emerald-400 text-white px-6 py-2 rounded hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     Create Account
                 </button>
-                
+
                 <a href="{{ asset('template_excel.xlsx') }}"
                     class="w-full sm:w-auto bg-emerald-400 text-white px-6 py-2 rounded hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     Download Excel Template
@@ -281,24 +285,24 @@
             </form>
 
             <!-- Upload Box (1/3 width) -->
-            <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 min-h-48 flex flex-col items-center justify-center text-center space-y-4 bg-white shadow-sm">
+            <div
+                class="border-2 border-dashed border-gray-300 rounded-xl p-6 min-h-48 flex flex-col items-center justify-center text-center space-y-4 bg-white shadow-sm">
                 <span class="material-icons text-5xl text-gray-400">upload_file</span>
                 <p class="text-sm text-gray-500">
                     Upload file here <br>
                     <span class="text-emerald-600 font-semibold">xlsx,xls,csv</span>
                 </p>
-            
-                <form action="/staff/account/insert-file" method="POST" enctype="multipart/form-data" class="w-full max-w-sm mx-auto">
+
+                <form action="/staff/account/insert-file" method="POST" enctype="multipart/form-data"
+                    class="w-full max-w-sm mx-auto">
                     @csrf
                     @method('POST')
-                
-                    <div 
-                        id="dropzone"
-                        class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition text-center px-4"
-                    >
+
+                    <div id="dropzone"
+                        class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition text-center px-4">
                         <div id="dropContent">
-                            <svg class="w-10 h-10 text-gray-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="w-10 h-10 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M12 16v-4m0 0v-4m0 4h4m-4 0H8m12 2a9 9 0 11-18 0 9 9 0 0118 0z">
                                 </path>
@@ -306,7 +310,7 @@
                             <p class="text-gray-500">Drag & drop your Excel file here</p>
                             <p class="text-sm text-gray-400">or click to browse</p>
                         </div>
-                
+
                         <div id="filePreview" class="hidden items-center space-x-2 mt-2">
                             <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -316,27 +320,19 @@
                             </svg>
                             <span id="fileName" class="text-sm text-gray-700"></span>
                         </div>
-                
-                        <input 
-                            id="fileInput"
-                            type="file" 
-                            name="student_list" 
-                            accept=".xls,.xlsx,.csv"
-                            class="hidden"
-                        />
+
+                        <input id="fileInput" type="file" name="student_list" accept=".xls,.xlsx,.csv" class="hidden" />
                     </div>
-                
-                    <button 
-                        type="submit"
-                        class="mt-4 w-full bg-emerald-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition duration-200"
-                    >
+
+                    <button type="submit"
+                        class="mt-4 w-full bg-emerald-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition duration-200">
                         Upload File
                     </button>
                 </form>
-                
-                
+
+
             </div>
-            
+
         </div>
     </div>
 
@@ -418,24 +414,24 @@
         const fileNameDisplay = document.getElementById('fileName');
         const filePreview = document.getElementById('filePreview');
         const dropContent = document.getElementById('dropContent');
-    
+
         // Fungsi untuk handle preview file
         function showFilePreview(file) {
             dropContent.classList.add('hidden');
             filePreview.classList.remove('hidden');
             fileNameDisplay.textContent = file.name;
         }
-    
+
         // Klik dropzone = buka file dialog
         dropzone.addEventListener('click', () => fileInput.click());
-    
+
         // File dari dialog
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
                 showFilePreview(fileInput.files[0]);
             }
         });
-    
+
         // Drag masuk
         ['dragenter', 'dragover'].forEach(eventName => {
             dropzone.addEventListener(eventName, (e) => {
@@ -443,7 +439,7 @@
                 dropzone.classList.add('bg-emerald-50', 'border-emerald-400');
             }, false);
         });
-    
+
         // Drag keluar
         ['dragleave', 'drop'].forEach(eventName => {
             dropzone.addEventListener(eventName, (e) => {
@@ -451,7 +447,7 @@
                 dropzone.classList.remove('bg-emerald-50', 'border-emerald-400');
             }, false);
         });
-    
+
         // Drop file langsung
         dropzone.addEventListener('drop', (e) => {
             e.preventDefault();
@@ -462,5 +458,5 @@
             }
         });
     </script>
-    
+
 </x-layout-staff>

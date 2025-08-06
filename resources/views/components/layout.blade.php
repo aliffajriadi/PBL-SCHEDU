@@ -62,11 +62,65 @@
 
         {{-- dinamis content --}}
         {{$slot}}
+        <x-modal.chat />
 
     </main>
 
 
 
+    <script>
+        function toggleChatModal() {
+            const modal = document.getElementById('chat-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        async function sendMessage(event) {
+            event.preventDefault();
+
+            const input = document.getElementById('chat-input');
+            const messages = document.getElementById('chat-messages');
+
+            const userMessage = input.value.trim();
+            if (!userMessage) return;
+
+            // Tampilkan pesan user
+            messages.innerHTML += `<div class="text-right"><span class="bg-blue-100 text-blue-900 px-3 py-1 rounded-md inline-block">${userMessage}</span></div>`;
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+
+            // Kirim ke API
+            try {
+                const response = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                });
+
+                if (response.status === 429) {
+                    const warning = "You only can chat 5x per minute. Please wait and try again.";
+                    messages.innerHTML += `<div><span class="text-yellow-700 bg-yellow-100 px-3 py-1 rounded-md inline-block">${warning}</span></div>`;
+                    messages.scrollTop = messages.scrollHeight;
+                    return; // stop di sini
+                }
+
+                const data = await response.json();
+
+                const result = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response.';
+                console.log(result);
+
+                messages.innerHTML += `<div><span class="bg-gray-100 text-gray-900 px-3 py-1 rounded-md inline-block">${result}</span></div>`;
+                messages.scrollTop = messages.scrollHeight;
+            } catch (error) {
+                console.error(error);
+                messages.innerHTML += `<div><span class="text-red-500 text-xs">Terjadi kesalahan. Coba lagi.</span></div>`;
+            }
+ 
+        }
+    </script>
 
     <script>
 
@@ -101,7 +155,7 @@
 
         }
     </script>
-   
+
 
 </body>
 

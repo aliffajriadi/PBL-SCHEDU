@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Http;
+
 use App\Models\NotificationStatus;
 use App\Models\Notification;
 use App\Models\MemberOf;
@@ -17,6 +19,27 @@ class NotificationController extends Controller
     public function __construct()
     {
         self::refresh_notification();
+    }
+
+    //FUNCTION BOT WHATSAPP
+    public static function botwa($pesan)
+    {
+        Auth::user()->no_telp;
+        try {
+            Http::withHeaders([
+                'x-api-key' => env('API_KEY_WHATSAPP'),
+                'Content' => 'application/json',
+            ])->post('https://api.aliffajriadi.my.id/botwa/api/kirim', [
+                'nomor' => Auth::user()->no_telp,
+                'pesan' => $pesan,
+            ]);
+            return response()->json([
+                'status' => true,
+                'message' => "success sending message on whatsapp"
+            ]);
+        } catch (\Throwable $th) {
+            return $th;
+        }
     }
 
     public static function refresh_notification()
@@ -35,6 +58,11 @@ class NotificationController extends Controller
     public static function store($title, $content, $type, $item_id, $is_reminder, $visible_schedule, $group_id = null, $target_id = null)
     {
         DB::beginTransaction();
+        //NOTIF TO WHATSAPP
+        if (Auth::user()->no_telp) {
+            $isi = "Hai " . Auth::user()->name . "👋\n\n*" . $title . "*\n\n" . $content;
+            self::botwa($isi);
+        }
 
         try {
             $notif = Notification::create([
@@ -80,7 +108,7 @@ class NotificationController extends Controller
                 'message' => 'Notifikasi berhasil dibuat'
             ];
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
             return [
                 'status' => false,
@@ -107,11 +135,11 @@ class NotificationController extends Controller
 
 
             $notifications = NotificationStatus::with('notification')->join('notifications', 'notification_statuses.notif_id', '=', 'notifications.id')->where('user_uuid', Auth::user()->uuid)->whereHas(
-                    'notification',
-                    function ($model) {
-                        $model->where('visible_schedule', '<=', Carbon::now('Asia/Jakarta')->toDateTimeString());
-                    }
-                );
+                'notification',
+                function ($model) {
+                    $model->where('visible_schedule', '<=', Carbon::now('Asia/Jakarta')->toDateTimeString());
+                }
+            );
 
             $keyword = $request->query('keyword') ?? false;
             $type = $request->query('type') ?? false;
@@ -221,7 +249,7 @@ class NotificationController extends Controller
                 'data' => $message
             ]);
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
             return response()->json([
                 'status' => false,

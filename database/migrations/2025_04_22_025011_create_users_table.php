@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('no_telp');
             $table->char('gender', 1);
             $table->date('birth_date');
             $table->boolean('is_teacher');

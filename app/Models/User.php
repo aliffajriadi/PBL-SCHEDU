@@ -43,6 +43,7 @@ class User extends Authenticatable
         'email',
         'password',
         'gender',
+        'no_telp',
         'birth_date',
         'is_teacher',
         'instance_uuid',

@@ -30,6 +30,7 @@ class InstanceSeeder extends Seeder
         User::create([
             'name' => 'Ahmad Soebarjo Jr.',
             'email' => 'a@gmail.com',
+            'no_telp' => '6282362052767',
             'password' => Hash::make('123'),
             'instance_uuid' => $staff->uuid,
             'is_teacher' => true,
@@ -44,6 +45,7 @@ class InstanceSeeder extends Seeder
             'instance_uuid' => $staff->uuid,
             'is_teacher' => false,
             'gender' => 'M',
+            'no_telp' => '6282362052767',
             'birth_date' => '2005-08-16'
         ]);
     }

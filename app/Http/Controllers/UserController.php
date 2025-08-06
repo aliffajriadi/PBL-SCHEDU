@@ -24,7 +24,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             NotificationController::refresh_notification();
         }
     }
@@ -92,12 +92,11 @@ class UserController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Add  '. count($participant_list) . ' User Successfuly.');
+            return redirect()->back()->with('success', 'Add  ' . count($participant_list) . ' User Successfuly.');
         } catch (\Exception $e) {
 
             DB::rollBack();
-            return redirect()->back()->with('error', 'Add User Failed: '. $e->getMessage());
-
+            return redirect()->back()->with('error', 'Add User Failed: ' . $e->getMessage());
         }
     }
 
@@ -109,38 +108,38 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function home()
-    {   
+    {
         $user = Auth::user();
         $user_data = [$user->name, $user->email];
-    
+
         $notif = NotificationStatus::with('notification')->where('user_uuid', $user->uuid)->where('is_read', 0)->latest()->get();
         $personal_task = PersonalTask::where('user_uuid', $user->uuid);
         // dd($notif);
-        if($user->is_teacher === 0){
+        if ($user->is_teacher === 0) {
             $total_group_task = GroupTask::whereIn('group_id', MemberOf::where('user_uuid', $user->uuid)->pluck('group_id'))->count();
             $finished_group_task = GroupTaskSubmission::where('user_uuid', $user->uuid)->count();
-    
+
             $data = [
-                'user' => $user, 
+                'user' => $user,
                 'role' => 'student',
                 'user_data' => $user_data,
                 'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
                 'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count() + $total_group_task - $finished_group_task,
                 'f_task_count' => (clone $personal_task)->where('is_finished', true)->count() + $finished_group_task,
                 'notifications' => $notif->take(3),
-                'count_notif' =>$notif->count()
-                
+                'count_notif' => $notif->count()
+
             ];
-        }else {
+        } else {
             $data = [
-                'user' => $user, 
+                'user' => $user,
                 'role' => 'teacher',
                 'user_data' => $user_data,
                 'schedules' => PersonalSchedule::where('user_uuid',  $user->uuid)->get(),
                 'uf_task_count' => (clone $personal_task)->where('is_finished', false)->count(),
                 'f_task_count' => (clone $personal_task)->where('is_finished', true)->count(),
                 'notifications' => $notif->take(3),
-                'count_notif' =>$notif->count()
+                'count_notif' => $notif->count()
             ];
         }
         // dd(Carbon::now()); 
@@ -198,8 +197,14 @@ class UserController extends Controller
                 'gender' => 'required|max:255',
                 'birth_date' => 'required|date',
                 'is_teacher' => 'required',
-                'password' => 'required'
+                'password' => 'required',
+                'no_telp' => 'required'
             ]);
+            // Ubah nomor telepon jika diawali 08 jadi 628
+            if (substr($field['no_telp'], 0, 2) === '08') {
+                $field['no_telp'] = '628' . substr($field['no_telp'], 2);
+            }
+
             $field['instance_uuid'] = Auth::guard('staff')->user()->uuid;
             $field['password'] = Hash::make($field['password']);
             $field['is_teacher'] = $field['is_teacher'] === 'teacher' ? 1 : 0;
@@ -209,7 +214,7 @@ class UserController extends Controller
 
             return redirect()->back()->with('success', 'Success Create Account');
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
             return redirect()->back()->with('success', 'Failed Create Account:' . $e);
         }
@@ -236,7 +241,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        
+
         DB::beginTransaction();
 
         try {
@@ -274,7 +279,7 @@ class UserController extends Controller
     {
 
         DB::beginTransaction();
-    
+
         try {
             $request->validate([
                 'old_password' => 'required',
@@ -301,11 +306,11 @@ class UserController extends Controller
                 'message' => 'Password Updated Successfully'
             ]);
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             return redirect()->back()->with('error', 'Failed to delete password: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -329,32 +334,31 @@ class UserController extends Controller
 
     public function update_profile(Request $request)
     {
-        try{
+        try {
             $request->validate([
                 'profile_pic' => 'file',
                 'email' => 'email|required'
             ]);
-    
+
             $file_name = '';
             $user = Auth::user();
 
-            if($request->hasFile('profile_pic')){
-                
+            if ($request->hasFile('profile_pic')) {
+
                 $file = $request->file('profile_pic');
 
                 $file_name = $user->uuid . '.' . $file->getClientOriginalExtension();
 
                 $file->storeAs($user->instance->folder_name, $file_name, 'public');
-            
+
                 $user->profile_pic = $file_name;
             }
-    
+
             $user->email = $request->input('email');
             $user->save();
 
             return redirect()->back();
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->back();
         }
     }
