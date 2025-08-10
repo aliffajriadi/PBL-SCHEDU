@@ -13,28 +13,26 @@
     </div>
     
 
-    <div class="flex gap-3">
-        {{-- BAGIAN KIRI --}}
-        <div class="bg-white p-3 hidden md:block w-5/12 shadow-md rounded-2xl">
-            <h2 class="text-lg mb-4">Note List</h2>
-            <div id="note-list" class="p-3 rounded-2xl h-72 overflow-auto">
-                {{-- isi datanya --}}
-            </div>
-
-            <x-pagination></x-pagination>
-
+   <div class="flex flex-col md:flex-row gap-3">
+    {{-- BAGIAN KIRI --}}
+    <div class="bg-white p-3 w-full md:w-5/12 shadow-md rounded-2xl">
+        <h2 class="text-lg mb-4">Note List</h2>
+        <div id="note-list" class="p-3 rounded-2xl h-72 overflow-auto active:bg-blue-700
+         focus:outline-none focus:ring-2 focus:ring-blue-400">
+            {{-- isi datanya --}}
         </div>
 
-        {{-- <button onclick="closeContent()">a</button> --}}
-
-        {{-- BAGIAN KANAN --}}
-        <div id="card-parent"
-            class="bg-white flex-col fade-in-right justify-center hidden md:flex items-center p-3 shadow-md rounded-2xl w-7/12 h-96">
-            <img src="/image/ilustr1.jpg" alt="ilustrator" class="w-40 h-auto">
-            <p class="text-gray-600">Click Note list for Preview</p>
-        </div>
-
+        <x-pagination></x-pagination>
     </div>
+
+    {{-- BAGIAN KANAN --}}
+    <div id="card-parent"
+        class="bg-white flex-col fade-in-right justify-center flex md:flex items-center p-3 shadow-md rounded-2xl w-full md:w-7/12 h-96 mt-4 md:mt-0">
+        <img src="/image/ilustr1.jpg" alt="ilustrator" class="w-40 h-auto">
+        <p class="text-gray-600">Click Note list for Preview</p>
+    </div>
+</div>
+
 
     <!-- Modal untuk Add Notes -->
     <div id="addNoteModal"

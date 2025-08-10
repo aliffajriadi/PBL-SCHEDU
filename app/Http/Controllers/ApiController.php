@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\PersonalNote;
 use App\Models\PersonalTask;
 use Illuminate\Http\Request;
-
+use App\Models\PersonalSchedule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -14,17 +15,49 @@ class ApiController extends Controller
     public function gemini_api(Request $request)
     {
         $user = Auth::user();
-        $basicPrompt = "This is an application named SchedU, developed by PBL-IF2D01, with Alif Fajriadi as the team leader, and team members Bastian, Rafif Ihsan, and Dwiky. SchedU is an application that provides note-taking and scheduling features that can be used both personally and in groups.
+        $now = Carbon::now()->format('Y-m-d H:i:s');
+        $basicPrompt = "
+Kamu adalah asisten SchedU.
 
-Students can create, view, edit, and delete their personal notes, tasks, and schedules. Additionally, in a group setting, teachers and students can collaborate to manage shared notes, tasks, and schedules. The application includes four roles: admin, institution staff, teacher, and student.
+⚠️ Penting: Balas HANYA dalam format JSON valid, tanpa teks tambahan, tanpa backtick, tanpa penjelasan. Waktu saat ini di aplikasi adalah $now.
 
-Please act as a customer service agent for this application and respond briefly. tidy up in normal writing, don't have symbols, Below is the user's biodata:
-Name: " . $user->name . "
-Role: " . ($user->is_teacher == 1 ? "Teacher" : "Student") . "
-he notes personal: " . PersonalNote::query()->where('user_uuid', $user->uuid)->get() . "
-he task personal: " . PersonalTask::query()->where('user_uuid', $user->uuid)->get() . "
+Format untuk membuat tugas:
+{
+  \"action\": \"create_task\",
+  \"title\": \"judul\",
+  \"description\": \"deskripsi\",
+  \"deadline\": \"Y-m-d H:i:s\"
+}
 
-And here is the question: " . $request->input('message');
+Format untuk membuat catatan:
+{
+  \"action\": \"create_note\",
+  \"title\": \"judul\",
+  \"content\": \"isi catatan\"
+}
+
+Format untuk membuat jadwal:
+{
+  \"action\": \"create_schedule\",
+  \"title\": \"judul\",
+  \"content\": \"deskripsi\",
+  \"start_datetime\": \"Y-m-d H:i:s\",
+  \"end_datetime\": \"Y-m-d H:i:s\"
+}
+
+Format untuk jawaban umum:
+{
+  \"action\": \"answer_only\",
+  \"message\": \"jawaban singkat\"
+}
+
+Data user:
+Name: {$user->name}
+Role: " . ($user->is_teacher ? "Teacher" : "Student") . "
+Catatan personal: " . PersonalNote::where('user_uuid', $user->uuid)->get() . "
+Tugas personal: " . PersonalTask::where('user_uuid', $user->uuid)->get() . "
+
+Pesan user: " . $request->input('message');
 
         try {
             $response = Http::withHeaders([
@@ -38,15 +71,74 @@ And here is the question: " . $request->input('message');
                         ]
                     ]
                 ]
-            ]), 'application/json')->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent');
+            ]), 'application/json')
+            ->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent');
 
+            $json = $response->json();
+            $textResult = $json['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
 
-            return response()->json($response->json());
+            $cleanJson = preg_replace('/```(json)?/', '', $textResult);
+            $cleanJson = str_replace('```', '', $cleanJson);
+            $cleanJson = trim($cleanJson, " \n\r\t\0\x0B");
+
+            $parsed = json_decode($cleanJson, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $parsed = [
+                    'action' => 'answer_only',
+                    'message' => $textResult
+                ];
+            }
+
+            if ($parsed['action'] === 'create_task') {
+                $deadline = $this->parseDate($parsed['deadline'] ?? $now, $now);
+
+                PersonalTask::create([
+                    'user_uuid'   => $user->uuid,
+                    'title'       => $parsed['title'] ?? 'Tugas Tanpa Judul',
+                    'content'     => $parsed['description'] ?? '',
+                    'deadline'    => $deadline,
+                    'is_finished' => 0
+                ]);
+            }
+
+            if ($parsed['action'] === 'create_note') {
+                PersonalNote::create([
+                    'user_uuid' => $user->uuid,
+                    'title'     => $parsed['title'] ?? 'Catatan Tanpa Judul',
+                    'content'   => $parsed['content'] ?? '',
+                ]);
+            }
+
+            if ($parsed['action'] === 'create_schedule') {
+                $start = $this->parseDate($parsed['start_datetime'] ?? $now, $now);
+                $end   = $this->parseDate($parsed['end_datetime'] ?? $now, $now);
+
+                PersonalSchedule::create([
+                    'user_uuid'      => $user->uuid,
+                    'title'          => $parsed['title'] ?? 'Jadwal Tanpa Judul',
+                    'content'        => $parsed['content'] ?? '',
+                    'start_datetime' => $start,
+                    'end_datetime'   => $end
+                ]);
+            }
+
+            return response()->json($parsed);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => true,
                 'message' => $th->getMessage()
             ]);
+        }
+    }
+
+    private function parseDate($dateString, $fallback)
+    {
+        try {
+            return Carbon::parse($dateString)->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+            return $fallback;
         }
     }
 }

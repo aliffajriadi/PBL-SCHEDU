@@ -104,21 +104,40 @@
                     const warning = "You only can chat 5x per minute. Please wait and try again.";
                     messages.innerHTML += `<div><span class="text-yellow-700 bg-yellow-100 px-3 py-1 rounded-md inline-block">${warning}</span></div>`;
                     messages.scrollTop = messages.scrollHeight;
-                    return; // stop di sini
+                    return;
+                }
+                const data = await response.json();
+                console.log(data)
+
+                let result = "";
+
+                if (data.action === "create_task") {
+                    result = `Berhasil Membuat tugas dengan Judul ${data.title} ✅`;
+                } else if (data.action === "create_note") {
+                    result = `Berhasil Membuat Catatan dengan Judul ${data.title} ✅`;
+                } else if (data.action === "create_schedule") {
+                    result = `Berhasil Membuat Jadwal dengan Judul ${data.title} ✅`;
+                } else {
+                    result = data.message;
                 }
 
-                const data = await response.json();
 
-                const result = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response.';
                 console.log(result);
 
-                messages.innerHTML += `<div><span class="bg-gray-100 text-gray-900 px-3 py-1 rounded-md inline-block">${result}</span></div>`;
+                messages.innerHTML += `
+    <div>
+        <span class="bg-gray-100 text-gray-900 px-3 py-1 rounded-md inline-block">
+            ${result}
+        </span>
+    </div>
+`;
                 messages.scrollTop = messages.scrollHeight;
+
             } catch (error) {
                 console.error(error);
                 messages.innerHTML += `<div><span class="text-red-500 text-xs">Terjadi kesalahan. Coba lagi.</span></div>`;
             }
- 
+
         }
     </script>
 
