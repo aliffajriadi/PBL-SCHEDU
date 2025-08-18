@@ -57,7 +57,6 @@ Route::post('/login', [PublicController::class, 'login'])->name('login');
 
 Route::post('/logout', [PublicController::class, 'logout']);
 
-
 // User Routes
 /* 
     Route ini digunakan untuk semua user dengan role teacher / student dengan guard default 'web'
